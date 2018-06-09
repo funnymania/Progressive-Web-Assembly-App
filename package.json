@@ -1,0 +1,21 @@
+{
+  "name": "shinepickaw",
+  "version": "1.0.0",
+  "description": "wip",
+  "main": "app.js",
+  "author": "M. M. Module",
+  "license": "MIT",
+  "scripts": {
+    "start": "node app.js",
+    "deploy": "gcloud app deploy"
+  },
+  "dependencies": {
+    "nodemon": "1.17.3",
+    "body-parser": "1.16.1",
+    "googleapis": "28.1.0",
+    "nconf": "0.10.0",
+    "mongodb": "3.0.6",
+    "connect-mongo": "2.0.1",
+    "lodash": "4.17.5"
+  }
+}
