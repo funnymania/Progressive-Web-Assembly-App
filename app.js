@@ -10,14 +10,14 @@ http.createServer( (req,res) => {
 				res.end();
 			});
 	} else { 
-		var reqExt = path.extname(req.url); console.log(reqExt);
+		var reqExt = path.extname(req.url);
 		if (reqExt == '.js') {
 			fs.readFile('./client/dist/' + req.url, (err,data) => {
 				res.writeHead(200, {'Content-Type': 'text/javascript'});
 				res.write(data);
 				res.end();
 			});
-		} else if (reqExt == '.css') { console.log('css');
+		} else if (reqExt == '.css') {
 			fs.readFile('./client/dist/' + req.url, (err,data) => {
 				res.writeHead(200, {'Content-Type': 'text/css'});
 				console.log(data);
