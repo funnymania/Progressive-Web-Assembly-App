@@ -1,28 +1,39 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
     <router-view/>
+    <div id="nav">
+      <router-link to="/">Control Theauxts</router-link><br><br>
+      <router-link to="/about">Unity App</router-link>  <br><br>    
+      <router-link to="/about">See in NoSCL</router-link>
+    </div>
+    
   </div>
 </template>
 
 <style lang="scss">
+body {
+  background-color:black;
+  overflow: hidden;
+}
+
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: "Monaco", "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  // color: #2c3e50;
+  width: 100%;
+  margin: 0 auto;
 }
 #nav {
   padding: 30px;
+  margin-top:-396px;
   a {
     font-weight: bold;
-    color: #2c3e50;
+    color: #060606;
+    text-decoration: none;
     &.router-link-exact-active {
-      color: #42b983;
+      color: #ececec;
     }
   }
 }
