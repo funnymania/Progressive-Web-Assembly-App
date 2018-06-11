@@ -9,4 +9,4 @@ First we will develop the PWA, then the Unity WebGl app, and more complicated th
 
 # Gotchas!
 1. Do not run `vue build`. 
-Instead, cd to project root and `npm run build`. 
+Instead, cd to client and `npm run build`. 
