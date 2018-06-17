@@ -2,6 +2,8 @@ const http = require('http')
 const fs = require('fs')
 const path = require('path')
 
+const port = process.env.PORT || 3000;
+console.log(port);
 http.createServer( (req,res) => { 
 	if (req.url == '/' || req.url == '/index.html') {
 			fs.readFile('./client/dist/index.html', (err,data) => {
@@ -17,10 +19,15 @@ http.createServer( (req,res) => {
 				res.write(data);
 				res.end();
 			});
+		} else if (reqExt == '.ico') {
+			fs.readFile('./client/dist/' + req.url, (err,data) => {
+				res.writeHead(200, {'Content-Type': 'image/x-icon'});
+				res.write(data);
+				res.end();
+			});
 		} else if (reqExt == '.css') {
 			fs.readFile('./client/dist/' + req.url, (err,data) => {
 				res.writeHead(200, {'Content-Type': 'text/css'});
-				console.log(data);
 				res.write(data);
 				res.end();
 			});
@@ -44,4 +51,4 @@ http.createServer( (req,res) => {
 			res.end();
 		}
 	}
-}).listen(8080);
+}).listen(port);

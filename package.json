@@ -2,12 +2,12 @@
   "name": "shinepickaw",
   "version": "1.0.0",
   "description": "wip",
+  "private": true,
   "main": "app.js",
   "author": "M. M. Module",
   "license": "MIT",
   "scripts": {
-    "start": "node app.js",
-    "deploy": "gcloud app deploy"
+    "start": "node app.js"
   },
   "dependencies": {
     "nodemon": "1.17.3",
