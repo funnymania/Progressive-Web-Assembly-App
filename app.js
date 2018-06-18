@@ -3,7 +3,6 @@ const fs = require('fs')
 const path = require('path')
 
 const port = process.env.PORT || 3000;
-console.log(port);
 http.createServer( (req,res) => { 
 	if (req.url == '/' || req.url == '/index.html') {
 			fs.readFile('./client/dist/index.html', (err,data) => {
@@ -34,8 +33,6 @@ http.createServer( (req,res) => {
 		} else if (reqExt == '.json') {
 			fs.readFile('./client/dist' + req.url, (err,data) => {
 				res.writeHead(200, {'Content-Type': 'application/json'});
-				console.log(err);
-				console.log(data);
 				res.write(data);
 				res.end();
 			});

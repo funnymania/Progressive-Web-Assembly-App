@@ -37,7 +37,6 @@ setInterval( () => {
     tmpY = -60 * Math.random() - 6; 
     square.style.transformX = "" + tmpX + "vw";
     square.style.transformY = "" + tmpY + "vh";
-    console.log(square.style.transformX);
   }
 }, 10000)
 </script>
