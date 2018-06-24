@@ -17,14 +17,8 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
-
 export default {
-  name: "home",
-  components: {
-    HelloWorld
-  }
+  name: "home"
 };
 
 let squares = document.getElementsByClassName("move-me");
@@ -47,6 +41,10 @@ setInterval( () => {
   -webkit-filter: drop-shadow(0 0 30px #eced);
   margin: auto;
   display: block;
+}
+
+.move-me {
+  height: 0;
 }
 
 .door-1 {
