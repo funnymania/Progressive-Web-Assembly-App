@@ -2,9 +2,11 @@
   <div id="app">
     <router-view/>
     <div id="nav">
-      <router-link to="/theauxts">Control Theauxts</router-link><br><br>
-      <router-link to="/jokL">2 am Slekshun: jokL</router-link>  <br><br>    
-      <router-link to="/noSCL">See in NoSCL</router-link>
+      <router-link to="/theauxts" class="menu-a">Control Theauxts</router-link>
+      <br><br>
+      <router-link to="/jokL" class="menu-a">2 am Slekshun: jokL</router-link>   
+      <br><br>
+      <router-link to="/noSCL" class="menu-a">See in NoSCL</router-link>
     </div>
     
     <div id="footer">
@@ -30,7 +32,6 @@ body {
 }
 #nav {
   padding: 30px;
-  margin-top:-396px;
   a {
     font-weight: bold;
     color: #060606;
@@ -38,6 +39,13 @@ body {
     &.router-link-exact-active {
       color: #ececec;
     }
+    &:hover {
+      color: #ececec;
+    }
+  }
+  .menu-a {
+    display: inline-block;
+    padding-bottom: 15px;
   }
 }
 #footer {
