@@ -2,11 +2,14 @@
   <div id="app">
     <router-view/>
     <div id="nav">
-      <router-link to="/">Control Theauxts</router-link><br><br>
-      <router-link to="/about">Unity App</router-link>  <br><br>    
-      <router-link to="/about">See in NoSCL</router-link>
+      <router-link to="/theauxts">Control Theauxts</router-link><br><br>
+      <router-link to="/jokL">2 am Slekshun: jokL</router-link>  <br><br>    
+      <router-link to="/noSCL">See in NoSCL</router-link>
     </div>
     
+    <div id="footer">
+      the shinepickaw creative ecosystem @ omon art
+    </div>
   </div>
 </template>
 
@@ -36,5 +39,11 @@ body {
       color: #ececec;
     }
   }
+}
+#footer {
+  color: #efefef;
+  font-weight: 600;
+  position: fixed;
+  bottom: 5%;
 }
 </style>
