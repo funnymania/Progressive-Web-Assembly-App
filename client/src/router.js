@@ -16,12 +16,12 @@ export default new Router({
       component: Home
     },
     {
-      path: "/2-am-slekshun-jokL",
-      name: "2am-slekshun-jokL",
+      path: "/jokL",
+      name: "jokL",
       component: jokL
     },
     {
-      path: "/status-effeckds",
+      path: "/statuseffeckds",
       name: "StatusEffeckd",
       Componenet: StatusEffeckd
     }
