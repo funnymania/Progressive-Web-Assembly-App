@@ -1,19 +1,22 @@
 <template>
   <div id="app">
     <router-view/>
-    <div id="nav">
-      <router-link to="/theauxts" class="menu-a">Control Theauxts</router-link>
-      <br><br>
-      <router-link to="/jokL" class="menu-a">2 am Slekshun: jokL</router-link>   
-      <br><br>
-      <router-link to="/noSCL" class="menu-a">See in NoSCL</router-link>
-    </div>
-    
     <div id="footer">
       the shinepickaw creative ecosystem @ omon art
     </div>
   </div>
 </template>
+
+<script>
+import HubMenu from './components/HubMenu.vue'
+
+export default {
+  name: 'app',
+  components: {
+    HubMenu
+  }
+}
+</script>
 
 <style lang="scss">
 body {
