@@ -12,13 +12,19 @@
     <br> 
     <div class="move-me">
       <div class="shadow-only door-1 animate-lb"></div>  
-    </div>  
+    </div>
+    <HubMenu></HubMenu>  
   </div>
 </template>
 
 <script>
+import HubMenu from '../components/HubMenu.vue'
+
 export default {
-  name: "home"
+  name: "home",
+  components: {
+    HubMenu
+  }
 };
 
 let squares = document.getElementsByClassName("move-me");
