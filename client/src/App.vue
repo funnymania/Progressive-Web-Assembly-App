@@ -8,13 +8,8 @@
 </template>
 
 <script>
-import HubMenu from './components/HubMenu.vue'
-
 export default {
-  name: 'app',
-  components: {
-    HubMenu
-  }
+  name: 'app'
 }
 </script>
 
