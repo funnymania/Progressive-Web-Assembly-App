@@ -20,7 +20,7 @@ body {
 }
 
 #app {
-  font-family: "Monaco", "Avenir", Helvetica, Arial, sans-serif;
+  font-family: "Monaco", "Fira Mono", "DejaVu Sans Mono", "Courier New", Courier, monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
