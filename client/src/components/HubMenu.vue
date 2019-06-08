@@ -1,11 +1,13 @@
 <template>
-    <div id="nav">
-      <router-link to="/theauxts" class="menu-a">Control Theauxts</router-link>
-      <br><br>
-      <router-link to="/jokL" class="menu-a">2 am Slekshun: jokL</router-link>   
-      <br><br>
-      <router-link to="/noSCL" class="menu-a">See in NoSCL</router-link>
-    </div>
+  <div id="nav">
+    <router-link to="/theauxts" class="menu-a">Control Theauxts</router-link>
+    <br>
+    <br>
+    <router-link to="/jokL" class="menu-a">2 am Slekshun: jokL</router-link>
+    <br>
+    <br>
+    <router-link to="/hirable" class="menu-a">Hirable!</router-link>
+  </div>
 </template>
 
 <script>
