@@ -1,6 +1,6 @@
 <template>
   <div class="about">
-    <h1>About</h1>
+    <h1 class="segment-header">About</h1>
     <p>
       &emsp;the goal is to get people
       <br>to stop applying for jobs obsessively
@@ -20,3 +20,20 @@
     </p>
   </div>
 </template>
+
+<script>
+export default {
+  name: "About"
+};
+</script>
+
+<style scoped>
+.about {
+  color: white;
+  text-align: left;
+}
+
+.segment-header {
+  border-bottom: 2px dashed white;
+}
+</style>

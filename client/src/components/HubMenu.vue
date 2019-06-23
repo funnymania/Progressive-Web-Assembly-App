@@ -7,6 +7,9 @@
     <br>
     <br>
     <router-link to="/hirable" class="menu-a">Hirable!</router-link>
+    <br>
+    <br>
+    <router-link to="/about" class="menu-a">About</router-link>
   </div>
 </template>
 

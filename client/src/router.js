@@ -3,6 +3,7 @@ import Router from "vue-router";
 import Home from "./views/Home.vue";
 import Hirable from "./views/Hirable.vue";
 import jokL from "./views/jokL.vue";
+import About from "./views/About.vue";
 
 Vue.use(Router);
 
@@ -22,6 +23,11 @@ export default new Router({
       path: "/hirable",
       name: "Hirable",
       component: Hirable
+    },
+    {
+      path: "/about",
+      name: "About",
+      component: About
     }
   ]
 });
