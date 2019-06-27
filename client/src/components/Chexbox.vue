@@ -17,13 +17,7 @@ export default {
     supportedGroups: Array
   },
   methods: {},
-  created() {
-    // TODO: Should pull this from cookie.
-    // Default set all companies to true.
-    this.supportedGroups.forEach(el => {
-      el.isSelected = true;
-    });
-  },
+  created() {},
   data() {
     return {};
   }

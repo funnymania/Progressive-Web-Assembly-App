@@ -4,7 +4,7 @@
       <span>Hirable!</span>
       ->
       <!-- TODO: make this a pop up -->
-      <a href="" @click="popDescription">What is This?</a>
+      <a href @click="popDescription">What is This?</a>
     </h3>
     <h1>Are You Hirable?</h1>
     <h1>:unicorn:</h1>
@@ -17,9 +17,7 @@
       autocomplete="on"
       @keyup.enter="searchCorns"
     >
-    <Chexbox 
-      :supportedGroups="this.supportedList"
-      @updateChex=updateChex></Chexbox>
+    <Chexbox :supportedGroups="this.supportedList"></Chexbox>
     <JobList></JobList>
   </div>
 </template>
@@ -38,28 +36,35 @@ export default {
   },
   data() {
     return {
-      // TODO: Pick up from axios talking to backend.
+      // TODO: get from /gather
       supportedList: []
     };
   },
   methods: {
-    updateChex: function(e) {},
     searchCorns: function(e) {
       // Gather input from search field
       let searchTerm = e.target.value;
 
       // Gather input from chexboxes
+      let desiredCorns = this.supportedList;
 
       // Package these to fetch /gather
       // trigger spinner saying 'ranging...'
       // on resolve / reject turn off spinner,
+      // Persist Chexbox.supportedGroups to localstorage,
+      localStorage.setItem("supportedGroups", JSON.stringify(desiredCorns));
+
       // set listResults backing data to results
       // these listResults being clicked will trigger card collection
     },
     popDescription: function(e) {}
   },
   mounted() {
-    // fetch("supported-corns")
+    // fetch("supported-corns", {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   }
+    // })
     //   .then(res => {
     //     if (res.ok) {
     //       return res.json;
@@ -74,13 +79,30 @@ export default {
     // in Chexbox
     let jsonRes = {
       orgs: [
-        { name: "google", isSelected: true },
-        { name: "amazon", isSelected: true },
-        { name: "apple", isSelected: true },
-        { name: "twitch", isSelected: true },
-        { name: "airbnb", isSelected: true }
+        { name: "google" },
+        { name: "amazon" },
+        { name: "apple" },
+        { name: "twitch" },
+        { name: "airbnb" }
       ]
     };
+    this.supportedGroups = JSON.parse(localStorage.getItem("supportedGroups"));
+    console.log(this.supportedGroups);
+
+    // Pull user's last searched for companies into chexbox.
+    jsonRes.orgs.forEach(el => {
+      for (let group of this.supportedGroups) {
+        if (el.name == group.name) {
+          el.isSelected = group.isSelected;
+          console.log(el);
+          break;
+        }
+      }
+      if (el.isSelected == undefined) {
+        el.isSelected = true;
+      }
+    });
+
     this.supportedList = jsonRes.orgs;
   }
 };
