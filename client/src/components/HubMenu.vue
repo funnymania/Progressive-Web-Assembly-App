@@ -9,7 +9,8 @@
     <router-link to="/hirable" class="menu-a">Hirable!</router-link>
     <br>
     <br>
-    <router-link to="/about" class="menu-a">About</router-link>
+    <router-link to="/ghosts" class="menu-a">Ghosts join room.</router-link>
+    <br>
   </div>
 </template>
 

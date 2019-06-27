@@ -1,11 +1,13 @@
 <template>
-  <table>
-    <tbody>
-      <tr v-for="entry in supportedGroups">
-        <td v-for="key in columns">{{entry[key]}}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div id="chex-grid">
+    <div v-for="entry in supportedGroups" :key="entry.id">
+      <div class="chex-child" 
+        @click="entry.isSelected = !entry.isSelected"
+        :class="{ 'selected': entry.isSelected }">
+          {{ entry.name }}
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -13,17 +15,48 @@ export default {
   name: "Chexbox",
   props: {
     supportedGroups: Array
+  },
+  methods: {},
+  created() {
+    // Default set all companies to true.
+    // TODO: Should pull this from cookie.
+    this.supportedGroups.forEach(el => {
+      el.isSelected = true;
+    });
+  },
+  data() {
+    return {};
   }
 };
-
-// TODO: chunk supportedGroups into sets of three, and insert each
-// set as a row into the grid.
 </script>
 
 <style lang="scss">
-.chex-grid {
+#chex-grid {
+  justify-items: center;
   display: grid;
-  grid-template-columns: 15% 15% 15%;
-  border: 1px white;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 40px;
+  gap: 40px;
+  margin-top: 100px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 25%;
+}
+
+.chex-child {
+  padding: 16px;
+  border-bottom-left-radius: 10%;
+  border-top-right-radius: 10%;
+  border-top-left-radius: 2%;
+  background-color: black;
+  color: white;
+  border: 1px dashed white;
+  cursor: pointer;
+}
+
+.selected {
+  color: black;
+  background-color: white;
+  border: none;
 }
 </style>
