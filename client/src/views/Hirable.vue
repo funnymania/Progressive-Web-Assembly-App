@@ -86,23 +86,24 @@ export default {
         { name: "airbnb" }
       ]
     };
-    this.supportedGroups = JSON.parse(localStorage.getItem("supportedGroups"));
-    console.log(this.supportedGroups);
+    let supportedGroups = JSON.parse(localStorage.getItem("supportedGroups"));
+    console.log(supportedGroups);
 
     // Pull user's last searched for companies into chexbox.
     jsonRes.orgs.forEach(el => {
-      for (let group of this.supportedGroups) {
-        if (el.name == group.name) {
-          el.isSelected = group.isSelected;
-          console.log(el);
-          break;
+      if (supportedGroups != null) {
+        for (let group of supportedGroups) {
+          if (el.name == group.name) {
+            el.isSelected = group.isSelected;
+            console.log(el);
+            break;
+          }
         }
       }
       if (el.isSelected == undefined) {
         el.isSelected = true;
       }
     });
-
     this.supportedList = jsonRes.orgs;
   }
 };
