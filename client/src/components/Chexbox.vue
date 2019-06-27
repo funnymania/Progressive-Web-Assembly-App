@@ -1,11 +1,11 @@
 <template>
   <div id="chex-grid">
     <div v-for="entry in supportedGroups" :key="entry.id">
-      <div class="chex-child" 
+      <div
+        class="chex-child"
         @click="entry.isSelected = !entry.isSelected"
-        :class="{ 'selected': entry.isSelected }">
-          {{ entry.name }}
-      </div>
+        :class="{ 'selected': entry.isSelected }"
+      >{{ entry.name }}</div>
     </div>
   </div>
 </template>
@@ -32,6 +32,7 @@ export default {
 
 <style lang="scss">
 #chex-grid {
+  justify-content: center;
   justify-items: center;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
