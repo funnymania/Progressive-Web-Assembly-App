@@ -16,7 +16,6 @@ export default {
   props: {
     supportedGroups: Array
   },
-  methods: {},
   created() {},
   data() {
     return {};

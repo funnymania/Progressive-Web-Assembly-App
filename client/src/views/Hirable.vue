@@ -95,7 +95,6 @@ export default {
         for (let group of supportedGroups) {
           if (el.name == group.name) {
             el.isSelected = group.isSelected;
-            console.log(el);
             break;
           }
         }
