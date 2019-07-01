@@ -18,7 +18,7 @@
       @keyup.enter="searchCorns"
     />
     <Chexbox :supportedGroups="this.supportedList"></Chexbox>
-    <JobList></JobList>
+    <JobList :listOfJobs="this.jobList"></JobList>
   </div>
 </template>
 
@@ -36,11 +36,13 @@ export default {
   },
   data() {
     return {
-      supportedList: []
+      supportedList: [],
+      jobList: []
     };
   },
   methods: {
     searchCorns: function(e) {
+      let searchedJobs = [];
       // Gather input from search field
       let searchTerm = e.target.value;
 
@@ -48,13 +50,19 @@ export default {
       let desiredCorns = this.supportedList;
 
       // Package these to fetch /gather
-      // trigger spinner saying 'ranging...'
-      // on resolve / reject turn off spinner,
-      // Persist Chexbox.supportedGroups to localstorage,
+      fetch("gather")
+        .then(res => res.json)
+        .then(results => (searchedJobs = results))
+        .catch(err => console.log(err.message));
+
+      // TODO: trigger spinner saying 'ranging...' while jobList.length == 0
+      // on resolve / reject turn off spinner, THEN
+
+      // Persist Chexbox.supportedGroups to localstorage, THEN
       localStorage.setItem("supportedGroups", JSON.stringify(desiredCorns));
 
       // set listResults backing data to results
-      // these listResults being clicked will trigger card collection
+      this.jobList = searchedJobs;
     },
     popDescription: function(e) {}
   },
