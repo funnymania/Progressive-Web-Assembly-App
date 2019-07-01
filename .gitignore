@@ -1,2 +1,8 @@
 /node_modules
 /client/node_modules
+
+# Config files
+.config
+
+# Scratch paper
+scratch

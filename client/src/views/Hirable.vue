@@ -16,7 +16,7 @@
       placeholder="Enter desired job title here."
       autocomplete="on"
       @keyup.enter="searchCorns"
-    >
+    />
     <Chexbox :supportedGroups="this.supportedList"></Chexbox>
     <JobList></JobList>
   </div>
@@ -36,7 +36,6 @@ export default {
   },
   data() {
     return {
-      // TODO: get from /gather
       supportedList: []
     };
   },
@@ -60,50 +59,37 @@ export default {
     popDescription: function(e) {}
   },
   mounted() {
-    // fetch("supported-corns", {
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   }
-    // })
-    //   .then(res => {
-    //     if (res.ok) {
-    //       return res.json;
-    //     }
-    //   })
-    //   .then(json => {
-    //     this.supportedList = json.orgs
-    //     console.log(JSON.stringify(json))
-    // });
-
-    // Package isSelected as property with orgs list to intiate reactivity
-    // in Chexbox
-    let jsonRes = {
-      orgs: [
-        { name: "google" },
-        { name: "amazon" },
-        { name: "apple" },
-        { name: "twitch" },
-        { name: "airbnb" }
-      ]
-    };
-    let supportedGroups = JSON.parse(localStorage.getItem("supportedGroups"));
-    console.log(supportedGroups);
-
-    // Pull user's last searched for companies into chexbox.
-    jsonRes.orgs.forEach(el => {
-      if (supportedGroups != null) {
-        for (let group of supportedGroups) {
-          if (el.name == group.name) {
-            el.isSelected = group.isSelected;
-            break;
-          }
+    fetch("/supported-corns")
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error("Response not OK.");
         }
-      }
-      if (el.isSelected == undefined) {
-        el.isSelected = true;
-      }
-    });
-    this.supportedList = jsonRes.orgs;
+      })
+      .then(json => json.orgs)
+      .then(orgs => {
+        let supportedGroups = JSON.parse(
+          localStorage.getItem("supportedGroups")
+        );
+        console.log(supportedGroups);
+        // Pull user's last searched for companies into chexbox.
+        orgs.forEach(el => {
+          if (supportedGroups != null) {
+            for (let group of supportedGroups) {
+              if (el.name == group.name) {
+                el.isSelected = group.isSelected;
+                break;
+              }
+            }
+          }
+          if (el.isSelected == undefined) {
+            el.isSelected = true;
+          }
+        });
+        this.supportedList = orgs;
+      })
+      .catch(err => console.log(err.message));
   }
 };
 
