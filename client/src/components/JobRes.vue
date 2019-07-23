@@ -1,4 +1,6 @@
-<template></template>
+<template>
+  <!-- TODO: On click catchUnicorn() -->
+</template>
 
 <script>
 export default {
