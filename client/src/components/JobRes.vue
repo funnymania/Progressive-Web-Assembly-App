@@ -2,7 +2,7 @@
   <!-- TODO: On click catchUnicorn() -->
   <div id="unicorn-harvest">
     <div v-for="entry in listOfJobs" :key="entry.id">
-      <div class="cornCard" @click="unicornCapture(entry)">
+      <div class="cornCard" @click="unicornCapture(entry, $event)">
         <div class="iconSegment">
           <div class="cornIcon">
             <img :src="iconDisplay(entry)" />
@@ -18,9 +18,9 @@
           <h3>{{ entry.title }}</h3>
           <p>{{ entry.desc }}</p>
         </div>
-        <span id="cornCaption"></span>
       </div>
     </div>
+    <span id="cornCaption"></span>
   </div>
 </template>
 
@@ -30,46 +30,64 @@ export default {
   props: {
     listOfJobs: Array
   },
+  watch: {
+    listOfJobs(val) {
+      // this.$nextTick(() => {
+      if (val.length > 0) {
+        let popup = document.getElementById("cornCaption");
+        let prefixes = ["webkit", "moz", "MS", "o", ""];
+
+        for (let entry of prefixes) {
+          popup.addEventListener(
+            entry + "animationend",
+            this.animationEndListener.bind(null, popup)
+          );
+        }
+      }
+      // });
+    }
+  },
   methods: {
     iconDisplay(e) {
       return require("../assets/" + e.compName + ".svg");
     },
-    // e is card
-    unicornCapture(e, entry) {
-      console.log(e);
-      console.log(entry);
-      this.playAnimation(e, entry);
+    unicornCapture(entry, event) {
+      this.playAnimation(entry, event);
       // this.saveThisToLocalStorage()
     },
-    playAnimation(e, entry) {
-      // Pop up little rectangle saying '+1 AppleCorn captured!' at cursor
 
+    // Pop up little rectangle saying '+1 AppleCorn captured!' at cursor
+    playAnimation(e, event) {
       // Get popup element, move to cursor location
       let popup = document.getElementById("cornCaption");
-      popup.style.left = e.offsetX;
-      popup.style.top = e.offsetY;
+      let popupText = document.createTextNode(
+        "+1 " +
+          e.compName[0].toUpperCase() +
+          e.compName.substr(1) +
+          "Corn captured!"
+      );
+      popup.append(popupText);
+      event.target.append(popup);
+
+      popup.style.left = event.offsetX;
+      popup.style.top = event.offsetY;
 
       // Animate it
       popup.classList.add("animate");
 
       // Get url, pass to open after some time passes
-      setTimeout(window.open(url, "_blank"), 500);
+      setTimeout(() => window.open(e.url, "_blank"), 700);
     },
     animationEndListener(e) {
       e.classList.remove("animate");
-    }
-  },
-  mounted() {
-    // Setup animation listeners
-    let popup = document.getElementById("cornCaption");
-    let prefixes = ["webkit", "moz", "MS", "o", ""];
 
-    prefixes.forEach(entry => {
-      popup.addEventListener(
-        entry + "animationend",
-        this.animationEndListener(popup)
-      );
-    });
+      // Remove all text nodes
+      e.childNodes.forEach(node => {
+        if (node.nodeType == 3) {
+          e.removeChild(node);
+        }
+      });
+    }
   }
 };
 </script>
@@ -100,7 +118,7 @@ export default {
 }
 
 #cornCaption.animate {
-  animation: 1s visible-to-invisible;
+  animation: 0.5s visible-to-invisible;
 }
 
 .cornHorn img {
