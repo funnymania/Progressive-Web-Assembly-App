@@ -90,7 +90,6 @@ export default {
     },
 
     saveThisToLocalStorage(corn) {
-      console.log(corn);
       let liveCorns = localStorage.getItem("liveUnicorns");
       if (liveCorns == null) {
         liveCorns = [];
@@ -98,8 +97,17 @@ export default {
         localStorage.setItem("liveUnicorns", JSON.stringify(liveCorns));
       } else {
         let addMe = JSON.parse(liveCorns);
-        addMe.push(corn);
-        localStorage.setItem("liveUnicorns", JSON.stringify(addMe));
+        let isPresent = false;
+        for (let el of addMe) {
+          if (el.desc == corn.desc && el.url == corn.url) {
+            isPresent = true;
+            break;
+          }
+        }
+        if (!isPresent) {
+          addMe.push(corn);
+          localStorage.setItem("liveUnicorns", JSON.stringify(addMe));
+        }
       }
     }
   }
