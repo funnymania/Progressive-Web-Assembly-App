@@ -4,6 +4,7 @@
     "desc": "Come build an island in our collective consciousness",
     "timestamp": "2019-07-23",
     "compID": "2",
+    "compName": "apple",
     "url": "https://www.google.com/"
   },
   {
@@ -11,6 +12,7 @@
     "desc": "Come build an island in our collective consciousness",
     "timestamp": "2019-07-23",
     "compID": "3",
+    "compName": "twitch",
     "url": "https://www.google.com/"
   },
   {
@@ -18,6 +20,7 @@
     "desc": "Come build an island in our collective consciousness",
     "timestamp": "2019-07-23",
     "compID": "1",
+    "compName": "amazon",
     "url": "https://www.google.com/"
   },
   {
@@ -25,6 +28,7 @@
     "desc": "Come build an island in our collective consciousness",
     "timestamp": "2019-07-23",
     "compID": "0",
+    "compName": "google",
     "url": "https://www.google.com/"
   }
 ]

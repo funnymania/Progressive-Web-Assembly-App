@@ -1,26 +1,32 @@
 <template>
   <div id="app">
-    <router-view/>
-    <div id="footer">
-      the shinepickaw creative ecosystem @ omon art
-    </div>
+    <router-view />
+    <!-- TODO: Footer should be fixed to bottom on /, but element should be a part
+          of the document flow on hirable
+    -->
+    <!-- <div id="footer">the shinepickaw creative ecosystem @ omon art</div> -->
   </div>
 </template>
 
 <script>
 export default {
-  name: 'app'
-}
+  name: "app"
+};
 </script>
 
 <style lang="scss">
+html {
+  height: 100%;
+}
+
 body {
-  background-color:black;
-  overflow: hidden;
+  background-color: black;
+  height: 100%;
 }
 
 #app {
-  font-family: "Monaco", "Fira Mono", "DejaVu Sans Mono", "Courier New", Courier, monospace;
+  font-family: "Monaco", "Fira Mono", "DejaVu Sans Mono", "Courier New", Courier,
+    monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

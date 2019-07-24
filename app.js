@@ -26,9 +26,18 @@ const port = process.env.PORT || 3000;
 // TODO: S3 bucket!
 app.use(express.static('./client/dist'))
 
-// TODO: Implement search. How to query and insert jobs into redis. 
-app.get('gather', (req, res) => {
+app.use(express.json())
 
+// TODO: Implement search. How to query and insert jobs into redis. 
+app.post('/gather', (req, res) => {
+  console.log(req.body)
+
+  fs.readFile('./test.json', 'utf8', (err, data) => {
+    console.log(data)
+    err != null
+      ? console.log(err)
+      : res.json(JSON.parse(data))
+  })
 })
 
 app.get('/supported-corns', (req, res) => {

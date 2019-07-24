@@ -8,7 +8,7 @@
     </h3>
     <h1>Are You Hirable?</h1>
     <h1>:unicorn:</h1>
-    <h2>you look to be a bit hirable..</h2>
+    <h2>you look to be a bit hirable.. :)</h2>
     <input
       class="search-field"
       type="text"
@@ -17,6 +17,7 @@
       autocomplete="on"
       @keyup.enter="searchCorns"
     />
+    <RangingSpinner :activate="this.activateSpinner"></RangingSpinner>
     <Chexbox :supportedGroups="this.supportedList"></Chexbox>
     <JobList :listOfJobs="this.jobList"></JobList>
   </div>
@@ -26,45 +27,72 @@
 import Chexbox from "../components/Chexbox.vue";
 import JobList from "../components/JobRes.vue";
 import AboutBox from "../components/AboutBox.vue";
+import RangingSpinner from "../components/RangingSpinner.vue";
 
 export default {
   name: "Hirable",
   components: {
     Chexbox,
     JobList,
-    AboutBox
+    AboutBox,
+    RangingSpinner
   },
   data() {
     return {
+      activateSpinner: false,
       supportedList: [],
       jobList: []
     };
   },
   methods: {
-    searchCorns: function(e) {
+    searchCorns(e) {
       let searchedJobs = [];
+
       // Gather input from search field
       let searchTerm = e.target.value;
 
       // Gather input from chexboxes
       let desiredCorns = this.supportedList;
 
+      // Set spinner resolve, run when results have been generated.
+      let spinnerResolve = function() {
+        console.log("Spinner done");
+
+        // Persist Chexbox.supportedGroups to localstorage
+        localStorage.setItem("supportedGroups", JSON.stringify(desiredCorns));
+      };
+
+      // Trigger spinner saying 'ranging...'
+      let spinnerPromise = new Promise((spinnerResolve, reject) => {
+        // Activate spinner
+        this.activateSpinner = true;
+      }).then(() => {
+        this.activateSpinner = false;
+      });
+
       // Package these to fetch /gather
-      fetch("gather")
-        .then(res => res.json)
-        .then(results => (searchedJobs = results))
+      fetch("gather", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(desiredCorns)
+      })
+        .then(res => {
+          let cornsGathered = res.json();
+          console.log(cornsGathered);
+          return cornsGathered;
+        })
+        .then(results => {
+          searchedJobs = results;
+          spinnerResolve();
+
+          // Set listResults backing data to results
+          this.jobList = searchedJobs;
+        })
         .catch(err => console.log(err.message));
-
-      // TODO: trigger spinner saying 'ranging...' while jobList.length == 0
-      // on resolve / reject turn off spinner, THEN
-
-      // Persist Chexbox.supportedGroups to localstorage, THEN
-      localStorage.setItem("supportedGroups", JSON.stringify(desiredCorns));
-
-      // set listResults backing data to results
-      this.jobList = searchedJobs;
     },
-    popDescription: function(e) {}
+    popDescription(e) {}
   },
   mounted() {
     fetch("/supported-corns")
@@ -113,6 +141,8 @@ function popDescription() {
 }
 #hirable-root {
   color: white;
+  height: 100%;
+  overflow: auto;
 }
 .search-field {
   background: black;
