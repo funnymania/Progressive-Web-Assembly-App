@@ -53,7 +53,7 @@ export default {
     },
     unicornCapture(entry, event) {
       this.playAnimation(entry, event);
-      // this.saveThisToLocalStorage()
+      this.saveThisToLocalStorage(entry);
     },
 
     // Pop up little rectangle saying '+1 AppleCorn captured!' at cursor
@@ -87,6 +87,20 @@ export default {
           e.removeChild(node);
         }
       });
+    },
+
+    saveThisToLocalStorage(corn) {
+      console.log(corn);
+      let liveCorns = localStorage.getItem("liveUnicorns");
+      if (liveCorns == null) {
+        liveCorns = [];
+        liveCorns.push(corn);
+        localStorage.setItem("liveUnicorns", JSON.stringify(liveCorns));
+      } else {
+        let addMe = JSON.parse(liveCorns);
+        addMe.push(corn);
+        localStorage.setItem("liveUnicorns", JSON.stringify(addMe));
+      }
     }
   }
 };
