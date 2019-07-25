@@ -17,3 +17,6 @@ Standard procedure, submit a pull request and be sure to provide a useful commen
 # Currently
 + Learning how to use AWS's mega suite properly. 
 + You can view the app's current state at http://shinepickaw.rip
+
+# Docs
+Implementation notes go in docs/
