@@ -1,9 +1,6 @@
 <template>
   <div id="app">
     <router-view />
-    <!-- TODO: Footer should be fixed to bottom on /, but element should be a part
-          of the document flow on hirable
-    -->
   </div>
 </template>
 
