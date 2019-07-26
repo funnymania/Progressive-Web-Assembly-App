@@ -1,6 +1,6 @@
 <template>
   <div class="loader">
-    <div v-bind:class="activeObject">
+    <div :class="activeObject">
       <div class="outer"></div>
       <div class="inner"></div>
       <div class="middle"></div>
