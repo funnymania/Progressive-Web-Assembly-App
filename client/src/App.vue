@@ -4,7 +4,6 @@
     <!-- TODO: Footer should be fixed to bottom on /, but element should be a part
           of the document flow on hirable
     -->
-    <!-- <div id="footer">the shinepickaw creative ecosystem @ omon art</div> -->
   </div>
 </template>
 
@@ -54,6 +53,9 @@ body {
 }
 #footer {
   color: #efefef;
+  background-color: black;
+  border-radius: 16px;
+  padding: 6px;
   font-weight: 600;
   position: fixed;
   bottom: 5%;

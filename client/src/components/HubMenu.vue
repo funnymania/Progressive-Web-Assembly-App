@@ -1,16 +1,17 @@
 <template>
   <div id="nav">
     <router-link to="/theauxts" class="menu-a">Control Theauxts</router-link>
-    <br>
-    <br>
+    <br />
+    <br />
     <router-link to="/jokL" class="menu-a">2 am Slekshun: jokL</router-link>
-    <br>
-    <br>
+    <br />
+    <br />
     <router-link to="/hirable" class="menu-a">Hirable!</router-link>
-    <br>
-    <br>
+    <br />
+    <br />
     <router-link to="/ghosts" class="menu-a">Ghosts join room.</router-link>
-    <br>
+    <br />
+    <div id="footer">the shinepickaw creative ecosystem @ omon art</div>
   </div>
 </template>
 

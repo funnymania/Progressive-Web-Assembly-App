@@ -20,6 +20,7 @@
     <RangingSpinner :activate="this.activateSpinner"></RangingSpinner>
     <Chexbox :supportedGroups="this.supportedList"></Chexbox>
     <JobList :listOfJobs="this.jobList"></JobList>
+    <div id="footer">the shinepickaw creative ecosystem @ omon art</div>
   </div>
 </template>
 
@@ -156,5 +157,15 @@ function popDescription() {
   &:not(:focus) {
     box-shadow: rgba(0, 251, 251, 0.3) 0px 1px;
   }
+}
+
+#footer {
+  color: #efefef;
+  background-color: black;
+  border-radius: 16px;
+  padding: 6px;
+  font-weight: 600;
+  position: relative;
+  margin-bottom: 5%;
 }
 </style>
