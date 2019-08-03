@@ -5,6 +5,7 @@ import Hirable from "./views/Hirable.vue";
 import jokL from "./views/jokL.vue";
 import About from "./views/About.vue";
 import Ghosts from "./views/Ghosts.vue";
+import mCclureEvents from "./views/mCclureEvents.vue";
 
 Vue.use(Router);
 
@@ -19,6 +20,11 @@ export default new Router({
       path: "/jokL",
       name: "jokL",
       component: jokL
+    },
+    {
+      path: "/mCclureEvents",
+      name: "mCclureEvents",
+      component: mCclureEvents
     },
     {
       path: "/hirable",

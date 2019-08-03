@@ -1,5 +1,8 @@
 <template>
   <div id="nav">
+    <router-link to="/mCclureEvents" class="menu-a">Helpful Personal Task Management</router-link>
+    <br />
+    <br />
     <router-link to="/theauxts" class="menu-a">Control Theauxts</router-link>
     <br />
     <br />
