@@ -1,18 +1,19 @@
 <template>
-  <div>
+  <div id="app-root">
     <h2>mCclure's task loop</h2>
     <!-- TODO: Currently only support growing capacity + 2 queues -->
-    <div class="flex-top">
+    <div id="flex-top">
       <div id="bit-segment">
-        <h3>bit: {{ this.bit }}</h3>
+        <div class="sm-heading">bit: {{ this.bit }}</div>
       </div>
       <div id="input-segment">
         <label>Enter your capacity:</label>
-        <input id="capacity-input" @keyDown(enter)="setUpQueues" />
+        <input id="capacity-input" type="text" @keyup.enter="setUpQueues" />
       </div>
     </div>
-    <div v-for="entry in queues" id="queue-encolusure" :key="entry.id">
-      <div id="queue-item">{{ entry.content }}</div>
+    <div id="queue-enclosure">
+      <div class="queue-item" v-for="entry in queues[0]" :key="entry.id">{{ entry.content }}</div>
+      <div class="queue-item" v-for="entry in queues[1]" :key="entry.id">{{ entry.content }}</div>
     </div>
     <div id="the-stack">
       <h2>The Stack</h2>
@@ -63,15 +64,18 @@ export default {
     this.bit = bitGrab == null ? 1 : bitGrab;
 
     let queuesGrab = JSON.parse(localStorage.getItem("queues"));
-    this.queues = queuesGrab == null ? [] : queuesGrab;
+    let queuesDefault = [];
+    queuesDefault.push([]);
+    queuesDefault.push([]);
+    this.queues = queuesGrab == null ? queuesDefault : queuesGrab;
 
     let stackGrab = JSON.parse(localStorage.getItem("stack"));
-    this.stack = stackGrab == null ? 0 : stackGrab;
+    this.stack = stackGrab == null ? { content: "I am empty" } : stackGrab;
   },
   methods: {
     setUpQueues(e) {
       // only support growing
-      if (e.value < this.boxNumber) {
+      if (e.target.value < this.boxNumber) {
         alert(
           "Only support growing capacity from this input. Individually remove boxes below."
         );
@@ -81,12 +85,19 @@ export default {
       const box = document.getElementById("invisible-box");
 
       // duplicate the box boxNumber - e.value times, append class queue-box
-      let boxList = createElements(e.value - boxNumber, box);
+      // let boxList = createElements(e.value - boxNumber, box);
 
+      for (let i = 0; i < e.target.value - this.boxNumber; i++) {
+        this.queues[0].push({
+          content: "I am empty"
+        });
+      }
+
+      this.boxNumber = e.target.value;
       // add boxList elements to queue-enclosure
-      let queueEnclosure = document.getElementById("queue-enclosure");
+      // let queueEnclosure = document.getElementById("queue-enclosure");
 
-      addBoxes(queueEnclosure, boxList);
+      // addBoxes(queueEnclosure, boxList);
 
       // Commit to localStorage
       localStorage.setItem("queues", JSON.stringify(this.queues));
@@ -151,17 +162,34 @@ export default {
 </script>
 
 <style scoped>
+input[type="text"] {
+  background-color: black;
+  color: white;
+  border: none;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  outline: none;
+  text-align: center;
+}
 #app-root {
   position: relative;
+  color: white;
+  height: 100%;
 }
 #flex-top {
   display: flex;
-  height: 40%;
-  padding-top: 10%;
-  /* needs to center elements */
+  justify-content: space-evenly;
+  margin-bottom: 20px;
   /* outer black border around every element */
   /* incomplete are blue bordered, conflicts are orange */
   /* every element needs to take up a minimal and maximal dimension 20% of screen is max... */
+}
+#queue-enclosure {
+  display: flex;
+  height: 200px;
+}
+.queue-item {
+  flex-grow: 1;
+  border: 1px solid white;
 }
 #invisible-box {
   visibility: hidden;
@@ -171,7 +199,8 @@ export default {
   height: 50%;
 }
 #new-thing-segment {
-  display: flex; /* run vertical */
+  display: flex;
+  flex-direction: column;
 }
 #the-spinner {
   /* circle with four gaps, two of the gaps have a rotatedbox-shadow to represent the arrow */
@@ -194,6 +223,10 @@ export default {
 }
 .in-and-out-z {
   /* move in and out of z OR scale x and y together */
+}
+.sm-heading {
+  font-size: 1em;
+  font-weight: bold;
 }
 #toast {
   visibility: hidden;

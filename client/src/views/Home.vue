@@ -52,6 +52,7 @@ setInterval(() => {
   -webkit-filter: drop-shadow(0 0 30px #eced);
   margin: auto;
   display: block;
+  /* #2c3e50 */
 }
 
 .move-me {
