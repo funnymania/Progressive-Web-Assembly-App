@@ -15,15 +15,21 @@
       <div class="queue-item" v-for="entry in queues[0]" :key="entry.id">{{ entry.content }}</div>
       <div class="queue-item" v-for="entry in queues[1]" :key="entry.id">{{ entry.content }}</div>
     </div>
-    <div id="the-stack">
-      <h2>The Stack</h2>
-      <h3 id="stack-content">{{ stack.content }}</h3>
-      <button id="pop-it" @click="taskComplete">Pop it!</button>
-      <button id="move-it" @click="moveToQueue">Move to Queue...</button>
-      <input type="radio" id="first-queue-1" name="status-1" value="0" />
-      <label for="first-queue-1">Conflicts</label>
-      <input type="radio" id="second-queue-1" name="status-1" value="1" checked />
-      <label for="second-queue-1">Incomplete</label>
+    <div id="bottom-sect">
+      <div id="the-stack">
+        <div class="sect-head">The Stack</div>
+        <div id="stack-flex">
+          <div>
+            <div id="stack-content">{{ stack.content }}</div>
+            <button id="pop-it" @click="taskComplete">Pop it!</button>
+          </div>
+          <button id="move-it" @click="moveToQueue">Move to Queue...</button>
+          <input type="radio" id="first-queue-1" name="status-1" value="0" />
+          <label for="first-queue-1">Conflicts</label>
+          <input type="radio" id="second-queue-1" name="status-1" value="1" checked />
+          <label for="second-queue-1">Incomplete</label>
+        </div>
+      </div>
       <div id="new-thing-segment">
         <h3>New Thing</h3>
         <textarea id="new-addon" />
@@ -183,6 +189,15 @@ input[type="text"] {
   /* incomplete are blue bordered, conflicts are orange */
   /* every element needs to take up a minimal and maximal dimension 20% of screen is max... */
 }
+.sect-head {
+  font-size: 1.5em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+#sect-bottom {
+  display: flex;
+  width: 100%;
+}
 #queue-enclosure {
   display: flex;
   height: 200px;
@@ -194,9 +209,16 @@ input[type="text"] {
 #invisible-box {
   visibility: hidden;
 }
+#bottom-sect {
+  display: flex;
+}
 #the-stack {
-  position: absolute;
-  height: 50%;
+}
+#stack-content {
+}
+#stack-flex {
+  display: flex;
+  align-items: flex-start;
 }
 #new-thing-segment {
   display: flex;
