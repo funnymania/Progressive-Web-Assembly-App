@@ -20,14 +20,17 @@
         <div class="sect-head">The Stack</div>
         <div id="stack-flex">
           <div>
-            <div id="stack-content">{{ stack.content }}</div>
+            <span id="stack-content">{{ stack.content }}</span>
             <button id="pop-it" @click="taskComplete">Pop it!</button>
           </div>
-          <button id="move-it" @click="moveToQueue">Move to Queue...</button>
-          <input type="radio" id="first-queue-1" name="status-1" value="0" />
-          <label for="first-queue-1">Conflicts</label>
-          <input type="radio" id="second-queue-1" name="status-1" value="1" checked />
-          <label for="second-queue-1">Incomplete</label>
+          <div>
+            <div id="move-it" @click="moveToQueue">Move to Queue...</div>
+            <br />
+            <input type="radio" id="first-queue-1" name="status-1" value="0" />
+            <label for="first-queue-1">Conflicts</label>
+            <input type="radio" id="second-queue-1" name="status-1" value="1" checked />
+            <label for="second-queue-1">Incomplete</label>
+          </div>
         </div>
       </div>
       <div id="new-thing-segment">
@@ -49,6 +52,7 @@
 </template>
 
 <script>
+const emptyText = "I am empty";
 export default {
   name: "mCclureEvents",
   data() {
@@ -57,7 +61,7 @@ export default {
       bit: 1,
       queues: [],
       stack: {
-        content: "I am empty"
+        content: emptyText
       }
     };
   },
@@ -75,8 +79,19 @@ export default {
     queuesDefault.push([]);
     this.queues = queuesGrab == null ? queuesDefault : queuesGrab;
 
+    // Sort such that empties are at the end.
+    for (let i = 0; i < this.queues.length; i++) {
+      this.queues[i].sort((one, other) => {
+        if (other.content == emptyText) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+    }
+
     let stackGrab = JSON.parse(localStorage.getItem("stack"));
-    this.stack = stackGrab == null ? { content: "I am empty" } : stackGrab;
+    this.stack = stackGrab == null ? { content: emptyText } : stackGrab;
   },
   methods: {
     setUpQueues(e) {
@@ -95,7 +110,7 @@ export default {
 
       for (let i = 0; i < e.target.value - this.boxNumber; i++) {
         this.queues[0].push({
-          content: "I am empty"
+          content: emptyText
         });
       }
 
@@ -110,11 +125,41 @@ export default {
       localStorage.setItem("boxNumber", this.boxNumber);
     },
     taskComplete(e) {
+      if (this.stack.content == emptyText) {
+        return;
+      }
+
       // remove item from stack
-      this.stack.content = "I am empty";
+      this.stack.content = emptyText;
+
+      // Pull from queue, if any is non-empty.
+      if (this.queues.flat().some(el => el.content != emptyText)) {
+        this.queueToStack();
+      }
 
       // commit to local storage
       localStorage.setItem("stack", JSON.stringify(this.stack));
+    },
+    queueToStack() {
+      if (this.queues[this.bit].every(el => el.content == emptyText)) {
+        let checkInstead = this.bit == 0 ? 1 : 0;
+        this.stack = this.queues[checkInstead].shift();
+        this.queues[checkInstead].push({
+          content: emptyText
+        });
+      } else {
+        this.stack = this.queues[this.bit].shift();
+        this.queues[this.bit].push({
+          content: emptyText
+        });
+
+        this.bit = this.bit == 0 ? 1 : 0;
+      }
+
+      // Commit to localStorage
+      localStorage.setItem("stack", JSON.stringify(this.stack));
+      localStorage.setItem("queues", JSON.stringify(this.queues));
+      localStorage.setItem("bit", this.bit);
     },
     moveToQueue(e) {
       let stackContent = document.getElementById("stack-content");
@@ -123,42 +168,94 @@ export default {
       let queueNum = document.querySelector('input[name="status-1"]:checked')
         .value;
 
-      // add entry to correct queue
-      queue[queueNum].push(stackContent);
+      // Add to end.
+      this.queues[queueNum].push({
+        content: stackContent.innerHTML
+      });
+
+      // Sort such that empties are at the end.
+      this.queues[queueNum].sort((one, other) => {
+        if (other.content == emptyText) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
 
       // now use bit to add to stack from correct queue
       // if one queue is empty, the other is, by virtue of above, necessarily non-empty
       // Flip bit if necessary.
-      if (queue[this.bit] == undefined || queue[this.bit].length == 0) {
+      this.moveToStack();
+    },
+    moveToStack() {
+      if (this.queues[this.bit].every(el => el.content == emptyText)) {
         let checkInstead = this.bit == 0 ? 1 : 0;
-        this.stack.content = queue[checkInstead].shift();
+        this.stack = this.queues[checkInstead].shift();
       } else {
-        this.stack.content = queue[this.bit].shift();
+        this.stack = this.queues[this.bit].shift();
         this.bit = this.bit == 0 ? 1 : 0;
       }
 
       // Commit to localStorage
       localStorage.setItem("stack", JSON.stringify(this.stack));
-      localStorage.setItem("queue", JSON.stringify(this.queue));
+      localStorage.setItem("queues", JSON.stringify(this.queues));
       localStorage.setItem("bit", this.bit);
     },
     addToQueue(e) {
-      if (stack.content == "I am empty") {
+      if (this.stack.content == emptyText) {
         this.stack.content = document.getElementById("new-addon").value;
         localStorage.setItem("stack", JSON.stringify(this.stack));
-      } else if (isCapacityAtMax()) {
+      } else if (!this.isCapacityAtMax()) {
         let queueNum = document.querySelector('input[name="status-2"]:checked')
           .value;
-        queue[queueNum].push(document.getElementById("new-addon").value);
-        localStorage.setItem("queue", JSON.stringify(this.queue));
+        this.queues[queueNum].push({
+          content: document.getElementById("new-addon").value
+        });
+
+        let emptyToRemove = this.queues[queueNum].findIndex(
+          el => el.content == emptyText
+        );
+        if (emptyToRemove == -1) {
+          queueNum = queueNum == 0 ? 1 : 0;
+          emptyToRemove = this.queues[queueNum].findIndex(
+            el => el.content == emptyText
+          );
+          this.queues[queueNum].splice(emptyToRemove, 1);
+        } else {
+          this.queues[queueNum].splice(emptyToRemove, 1);
+        }
+
+        // Sort such that empties are at the end.
+        this.queues[queueNum].sort((one, other) => {
+          if (one.content == emptyText) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+
+        localStorage.setItem("queues", JSON.stringify(this.queues));
       } else {
-        toast("You've already got your hands full.");
+        this.toast("You've already got yours hands full.");
       }
+    },
+    isCapacityAtMax() {
+      return (
+        this.queues.flat().filter(el => el.content != emptyText).length ==
+        this.boxNumber
+      );
     },
     toast(msg) {
       let toastEl = document.getElementById("toast");
 
       toastEl.classList.remove("toast-up");
+
+      // Remove all text nodes
+      toastEl.childNodes.forEach(node => {
+        if (node.nodeType == 3) {
+          toastEl.removeChild(node);
+        }
+      });
 
       toastEl.append(document.createTextNode(msg));
       toastEl.classList.add("toast-up");
@@ -205,20 +302,41 @@ input[type="text"] {
 .queue-item {
   flex-grow: 1;
   border: 1px solid white;
+  min-width: 200px;
 }
 #invisible-box {
   visibility: hidden;
 }
 #bottom-sect {
   display: flex;
+  justify-content: space-around;
 }
 #the-stack {
 }
 #stack-content {
+  margin-left: 14px;
+  margin-right: 14px;
+  padding: 8px;
+  min-width: 300px;
+  display: inline-block;
+  border: white 1px solid;
 }
 #stack-flex {
   display: flex;
   align-items: flex-start;
+  flex-direction: column;
+}
+#move-it {
+  color: white;
+  background-color: black;
+  padding-left: 8px;
+  padding-right: 8px;
+  min-width: 300px;
+  margin-left: 14px;
+  border-left: white 1px solid;
+  border-right: white 1px solid;
+  border-bottom: white 1px solid;
+  cursor: pointer;
 }
 #new-thing-segment {
   display: flex;
@@ -256,10 +374,28 @@ input[type="text"] {
   margin: 0 auto;
   top: 50%;
   position: absolute;
-}
-.toast-up {
-  transition: opacity, visibility;
-  transition-duration: 1s, 0s;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  border: lightgrey 1px solid;
   transition-timing-function: ease-in-out, linear;
+}
+#toast.toast-up {
+  animation: toast-up 2s;
+}
+@keyframes toast-up {
+  0% {
+    opacity: 0;
+    visibility: visible;
+  }
+  50% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 </style>
