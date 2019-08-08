@@ -6,6 +6,8 @@ import jokL from "./views/jokL.vue";
 import About from "./views/About.vue";
 import Ghosts from "./views/Ghosts.vue";
 import mCclureEvents from "./views/mCclureEvents.vue";
+import Warts from "./views/Warts.vue";
+import SwitchArt from "./views/warts/Switch-Art.vue";
 
 Vue.use(Router);
 
@@ -40,6 +42,16 @@ export default new Router({
       path: "/ghosts",
       name: 'ghosts',
       component: Ghosts
+    },
+    {
+      path: "/warts",
+      name: 'warts',
+      component: Warts
+    },
+    {
+      path: "/switchArt",
+      name: 'switchArt',
+      component: SwitchArt
     },
   ]
 });

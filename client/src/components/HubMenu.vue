@@ -3,6 +3,9 @@
     <router-link to="/mCclureEvents" class="menu-a">Helpful Personal Task Management</router-link>
     <br />
     <br />
+    <router-link to="/warts" class="menu-a">web arts (warts)</router-link>
+    <br />
+    <br />
     <router-link to="/theauxts" class="menu-a">Control Theauxts</router-link>
     <br />
     <br />
@@ -29,10 +32,13 @@ export default {
 
 <style lang="scss" scoped>
 #nav {
-  padding: 30px;
+  margin: 30px;
+  z-index: 2;
+  background-color: rgba(23, 23, 23, 0.4);
+  backdrop-filter: blur(5px);
   a {
     font-weight: bold;
-    color: #060606;
+    color: #777777;
     text-decoration: none;
     &.router-link-exact-active {
       color: #ececec;

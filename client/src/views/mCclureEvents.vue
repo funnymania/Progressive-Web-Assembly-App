@@ -43,7 +43,7 @@
         <button id="new-thing-submit" @click="addToQueue">Add to queue</button>
       </div>
     </div>
-    <div id="the-spinner" class="spinney gowing-green in-and-out-z">
+    <div id="the-spinner" class="spinney glowing-green in-and-out-z">
       <span id="arrow-top"></span>
       <span id="arrow-bottom"></span>
     </div>
@@ -360,6 +360,8 @@ input[type="text"] {
 }
 .glowing-green {
   /* glow radius enlarge to shrink animation */
+  -webkit-box-shadow: 0 0 201px 0 #eceecd;
+  box-shadow: 0 0 201px 0 #eceecd;
 }
 .in-and-out-z {
   /* move in and out of z OR scale x and y together */
