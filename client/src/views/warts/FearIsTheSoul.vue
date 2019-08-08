@@ -1,18 +1,24 @@
 <template>
   <div id="flex-wart">
     <h2 style="padding-right:1em;">Fear is the soul.</h2>
+    <div id="wart-cont">
+      <div id="scroll">
+        <h3>The soul is the end of you.</h3>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Switch-Art"
+  name: "FearIsTheSoul"
 };
 </script>
 
 <style>
 #flex-wart {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100%;
