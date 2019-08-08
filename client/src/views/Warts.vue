@@ -1,6 +1,11 @@
 <template>
   <div id="nav">
     <router-link to="/switchArt" class="menu-a">switch-art</router-link>
+    <br />
+    <br />
+    <router-link to="/fearisthesoul" class="menu-a">fear is the soul</router-link>
+    <br />
+    <br />
   </div>
 </template>
 

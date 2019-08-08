@@ -8,6 +8,7 @@ import Ghosts from "./views/Ghosts.vue";
 import mCclureEvents from "./views/mCclureEvents.vue";
 import Warts from "./views/Warts.vue";
 import SwitchArt from "./views/warts/Switch-Art.vue";
+import FearIsTheSoul from "./views/warts/FearIsTheSoul.vue";
 
 Vue.use(Router);
 
@@ -52,6 +53,11 @@ export default new Router({
       path: "/switchArt",
       name: 'switchArt',
       component: SwitchArt
+    },
+    {
+      path: "/fearisthesoul",
+      name: 'fearisthesoul',
+      component: FearIsTheSoul
     },
   ]
 });
