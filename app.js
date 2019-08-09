@@ -3,6 +3,15 @@ const redis = require('redis')
 const express = require('express')
 const config = require('./.config/config.json')
 
+const { Client } = require('pg')
+const pgClient = new Client()
+
+pgClient.connect().then(() =>
+  pgClient.query('SELECT $1::text as message', ['Hello world!'])
+).then(pgTest => console.log(pgTest.rows[0].message))
+  .then(() => pgClient.end())
+  .catch(err => console.log(err))
+
 const client = redis.createClient({
   auth_pass: config.cacheAuth,
   // tls: { checkServerIdentity: () => undefined }
