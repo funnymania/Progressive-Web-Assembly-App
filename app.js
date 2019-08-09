@@ -1,9 +1,6 @@
-const http = require('http')
 const fs = require('fs')
-const path = require('path')
 const redis = require('redis')
 const express = require('express')
-const prom = require('./scratch/prom-meth').promMeth
 const config = require('./.config/config.json')
 
 const client = redis.createClient({
