@@ -82,7 +82,7 @@ app.post('/forgot-pass', (req, res) => {
     isUnique = isURLUnique(URL)
   }
 
-  // Persist special url.
+  // Persist special url to pass_reset_urls.
   insertSpecialURL(URL)
 
   // Send email.
@@ -101,6 +101,18 @@ app.get('/forgotIt/[TOKEN]', (req, res) => {
   }
 })
 
+app.get('/share-stack', (req, res) => {
+  // Get user's share_url from mCclureevents. If share_url is empty, 
+  // create one. 
+  let shareUrl = getShareStackURL()
+
+  if (shareUrl.msg == undefined) {
+    res.json({ share_url: shareUrl })
+  } else {
+    res.status(500).send({ msg: 'Something went wrong :dizzyface:' })
+  }
+
+})
 
 app.post('/become-ghost', (req, res) => {
   // Check if email exists.
