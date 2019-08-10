@@ -53,9 +53,62 @@ app.get('/supported-corns', (req, res) => {
   // });
 })
 
+app.post('/phase-in', (req, res) => {
+  // Authenticate user
+  let user = getUserCred(req.body.username, req.body.password)
+  if (user.msg == undefined) {
+    // Start a session with user.
+    let tokenID = startSession()
+
+    // Send cookie to user.
+    res.send(magicOptionsBox)
+  } else {
+    res.json({ msg: 'Incorrect ghost creds.' })
+  }
+})
+
+app.post('/forgot-pass', (req, res) => {
+  // Look up email.
+  let user = getUserFromEmail(req.body.email)
+
+  let isUnique = false
+
+  while (!isUnique) {
+    // Generate a *special url*, which we will have a route to cover all of
+    // URL will be like /forgotIt/[TOKEN]
+    let URL = genRandURL()
+
+    // check if URL is actually unique with a look up on some table in DB
+    isUnique = isURLUnique(URL)
+  }
+
+  // Persist special url.
+  insertSpecialURL(URL)
+})
+
+app.get('/forgotIt/[TOKEN]', (req, res) => {
+  // Check if link is active. 
+  let url = getURL(req.baseUrl).msg
+  if (url.msg == undefined) {
+    res.sendStatus(200)
+  } else {
+    res.json({ msg: 'Link is inactive.' })
+  }
+})
+
+app.post('/become-ghost', (req, res) => {
+  // Check if email exists.
+  let query = emailExists(req.body)
+  if (query.msg != undefined) {
+    res.json({ msg: query.msg })
+  } else {
+    // Insert into DB.
+    addUser(req.body)
+  }
+})
+
 app.get('/', (req, res) => {
   res.set('Content-Type', 'text/html')
-  // MAYBE: Store this in redis. Get it from Redis
   fs.readFile('./client/dist/index.html', (err, data) => {
     err != null
       ? console.log(err)
