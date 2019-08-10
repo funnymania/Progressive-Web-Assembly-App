@@ -12,18 +12,18 @@ pgClient.connect().then(() =>
   .then(() => pgClient.end())
   .catch(err => console.log(err))
 
-const client = redis.createClient({
-  auth_pass: config.cacheAuth,
-  // tls: { checkServerIdentity: () => undefined }
-})
+// const client = redis.createClient({
+// auth_pass: config.cacheAuth,
+// // tls: { checkServerIdentity: () => undefined }
+// })
 
-client.on('connect', () => {
-  console.log('Redis connected')
-})
+// client.on('connect', () => {
+// console.log('Redis connected')
+// })
 
-client.on('error', (err) => {
-  console.log('Redis error: ' + err)
-})
+// client.on('error', (err) => {
+// console.log('Redis error: ' + err)
+// })
 
 const app = express()
 
@@ -47,10 +47,10 @@ app.post('/gather', (req, res) => {
 })
 
 app.get('/supported-corns', (req, res) => {
-  client.get('supported-corns', (err, reply) => {
-    console.log("redis.get ", reply);
-    res.json(JSON.parse(reply))
-  });
+  // client.get('supported-corns', (err, reply) => {
+  // console.log("redis.get ", reply);
+  // res.json(JSON.parse(reply))
+  // });
 })
 
 app.get('/', (req, res) => {

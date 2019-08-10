@@ -12,7 +12,10 @@
     <router-link to="/jokL" class="menu-a">2 am Slekshun: jokL</router-link>
     <br />
     <br />
-    <router-link to="/hirable" class="menu-a">Hirable!</router-link>
+    <a href="#" class="menu-a">
+      <s>Hirable!</s>
+      <br />Not Ready Yet!
+    </a>
     <br />
     <br />
     <router-link to="/ghosts" class="menu-a">Ghosts join room.</router-link>
