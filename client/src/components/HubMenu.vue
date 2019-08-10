@@ -18,22 +18,70 @@
     </a>
     <br />
     <br />
-    <router-link to="/ghosts" class="menu-a">Ghosts join room.</router-link>
+    <!-- <router-link to="/ghosts" class="menu-a">Ghosts join room.</router-link> -->
     <br />
-    <div id="footer">the shinepickaw creative ecosystem @ omon art</div>
+    <div id="footer">
+      <div id="footer-branding">the shinepickaw creative ecosystem @ omon art</div>
+      <div id="ghost-entry-link" @click="callGhost">Ghosts enter here.</div>
+    </div>
+    <GhostEntry :triggerAnim="this.ghostCalled"></GhostEntry>
   </div>
 </template>
 
 <script>
+import GhostEntry from "./GhostEntry.vue";
 export default {
   name: "HubMenu",
+  components: {
+    GhostEntry
+  },
+  data() {
+    return {
+      ghostCalled
+    };
+  },
   props: {
     msg: String
+  },
+  methods: {
+    callGhost() {
+      this.ghostCalled = true;
+    }
+  },
+  mounted() {
+    this.ghostCalled = false;
   }
 };
 </script>
 
 <style lang="scss" scoped>
+#footer {
+  border-radius: 16px;
+  padding: 6px;
+  position: fixed;
+  bottom: 5%;
+  color: #efefef;
+  background-color: black;
+  display: flex;
+  justify-content: space-between;
+  #footer-branding {
+    font-weight: 600;
+    border-left: white 2px solid;
+    border-right: white 2px solid;
+    border-radius: 40px;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+  #ghost-entry-link {
+    font-weight: 600;
+    border-left: white 2px solid;
+    border-right: white 2px solid;
+    border-radius: 40px;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+}
+
 #nav {
   margin: 30px;
   z-index: 2;

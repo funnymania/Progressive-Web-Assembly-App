@@ -49,13 +49,4 @@ body {
     padding-bottom: 15px;
   }
 }
-#footer {
-  color: #efefef;
-  background-color: black;
-  border-radius: 16px;
-  padding: 6px;
-  font-weight: 600;
-  position: fixed;
-  bottom: 5%;
-}
 </style>
