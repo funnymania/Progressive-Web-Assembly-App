@@ -84,17 +84,23 @@ app.post('/forgot-pass', (req, res) => {
 
   // Persist special url.
   insertSpecialURL(URL)
+
+  // Send email.
+  sendEmail(URL)
 })
 
+// This gets sent on submitting updated password from the clientside forgot-my-password route  
 app.get('/forgotIt/[TOKEN]', (req, res) => {
   // Check if link is active. 
   let url = getURL(req.baseUrl).msg
   if (url.msg == undefined) {
     res.sendStatus(200)
+    updatePassword(req.body.password)
   } else {
     res.json({ msg: 'Link is inactive.' })
   }
 })
+
 
 app.post('/become-ghost', (req, res) => {
   // Check if email exists.
