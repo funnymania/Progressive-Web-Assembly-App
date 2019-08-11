@@ -1,12 +1,32 @@
 <template>
   <div id="app">
     <router-view />
+    <div id="footer">
+      <!-- <div id="footer-branding">the shinepickaw creative ecosystem @ omon art</div> -->
+      <div id="ghost-entry-link" @click="callGhost">Ghosts enter here.</div>
+    </div>
+    <GhostEntry :triggerAnim="this.ghostCalled"></GhostEntry>
   </div>
 </template>
 
 <script>
+import GhostEntry from "./components/GhostEntry.vue";
 export default {
-  name: "app"
+  name: "app",
+  components: {
+    GhostEntry
+  },
+  data() {
+    return {
+      ghostCalled: false
+    };
+  },
+  methods: {
+    callGhost() {
+      this.ghostCalled = true;
+    }
+  },
+  mounted() {}
 };
 </script>
 
@@ -47,6 +67,46 @@ body {
   .menu-a {
     display: inline-block;
     padding-bottom: 15px;
+  }
+}
+#footer {
+  border-radius: 16px;
+  padding: 6px;
+  position: fixed;
+  bottom: 3%;
+  color: #efefef;
+  background-color: black;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-content: center;
+  #footer-branding {
+    font-weight: 600;
+    border: white 1px solid;
+    border-radius: 40px;
+    padding-top: 2px;
+    padding-right: 4px;
+    padding-left: 4px;
+    &:hover,
+    &:focus,
+    &:active {
+      border: white 1px dashed;
+      cursor: pointer;
+    }
+  }
+  #ghost-entry-link {
+    font-weight: 600;
+    border: white 1px solid;
+    border-radius: 40px;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 2px;
+    &:focus,
+    &:active,
+    &:hover {
+      border: white 1px dashed;
+      cursor: pointer;
+    }
   }
 }
 </style>
