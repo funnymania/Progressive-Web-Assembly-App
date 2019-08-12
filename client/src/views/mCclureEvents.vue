@@ -15,6 +15,9 @@
       <div class="queue-item" v-for="entry in queues[0]" :key="entry.id">{{ entry.content }}</div>
       <div class="queue-item" v-for="entry in queues[1]" :key="entry.id">{{ entry.content }}</div>
     </div>
+    <div id="stack-share-belt">
+      <div id="stack-share-button" @click="shareYourStack">Share your stack!</div>
+    </div>
     <div id="bottom-sect">
       <div id="the-stack">
         <div class="sect-head">The Stack</div>
@@ -43,10 +46,10 @@
         <button id="new-thing-submit" @click="addToQueue">Add to queue</button>
       </div>
     </div>
-    <div id="the-spinner" class="spinney glowing-green in-and-out-z">
+    <!-- <div id="the-spinner" class="spinney glowing-green in-and-out-z">
       <span id="arrow-top"></span>
       <span id="arrow-bottom"></span>
-    </div>
+    </div>-->
     <span id="toast"></span>
   </div>
 </template>
@@ -239,6 +242,26 @@ export default {
         this.toast("You've already got yours hands full.");
       }
     },
+    shareYourStack() {
+      // grab everything.
+      let theStack = {
+        stack: this.stack,
+        queues: this.queues,
+        bit: this.bit,
+        boxNumber: this.boxNumber
+      };
+
+      // ship it.
+      fetch("share-stack", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(theStack)
+      })
+        .then(res => this.popUpBoxWithURL(res.json()))
+        .catch(err => this.popUpError());
+    },
     isCapacityAtMax() {
       return (
         this.queues.flat().filter(el => el.content != emptyText).length ==
@@ -298,6 +321,7 @@ input[type="text"] {
 #queue-enclosure {
   display: flex;
   height: 200px;
+  margin-bottom: 10px;
 }
 .queue-item {
   flex-grow: 1;
@@ -306,6 +330,12 @@ input[type="text"] {
 }
 #invisible-box {
   visibility: hidden;
+}
+#stack-share-button {
+  padding: 5px 4px;
+  border: white 1px solid;
+  cursor: pointer;
+  font-weight: bold;
 }
 #bottom-sect {
   display: flex;

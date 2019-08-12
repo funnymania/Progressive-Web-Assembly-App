@@ -101,7 +101,7 @@ app.get('/forgotIt/[TOKEN]', (req, res) => {
   }
 })
 
-app.get('/share-stack', (req, res) => {
+app.post('/share-stack', (req, res) => {
   // Get user's share_url from mCclureevents. If share_url is empty, 
   // create one. 
   let shareUrl = getShareStackURL()
