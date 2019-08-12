@@ -115,6 +115,7 @@ app.get('/share-stack', (req, res) => {
 })
 
 app.post('/become-ghost', (req, res) => {
+  console.log('Adding user ' + req.body.email)
   // Check if email exists.
   let query = emailExists(req.body)
   if (query.msg != undefined) {

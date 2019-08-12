@@ -88,8 +88,8 @@ export default {
       console.log("phasing in");
       // Grab values of input.
       let signin = {
-        email: document.querySelector("input[name:ghost-email]"),
-        pass: document.querySelector("input[name:ghost-pass]")
+        email: document.querySelector("input[name='ghost-email']").value,
+        pass: document.querySelector("input[name='ghost-pass']").value
       };
 
       // validate.
@@ -111,9 +111,9 @@ export default {
     becomeGhost() {
       console.log("becoming ghost");
       // Grab values of input.
-      let signup = {
-        email: document.querySelector("input[name:ghost-email]"),
-        pass: document.querySelector("input[name:ghost-pass]")
+      let signUp = {
+        email: document.querySelector("input[name='ghost-email']").value,
+        pass: document.querySelector("input[name='ghost-pass']").value
       };
 
       // validate.
