@@ -5,6 +5,10 @@
         <div class="ghost-eye-left"></div>
         <div class="ghost-eye-right"></div>
         <div id="ghost-body"></div>
+        <div id="ghost-close">
+          <div id="ghost-close-close">Close</div>
+          <span id="ghost-close-button" @click="fadeBack">X</span>
+        </div>
         <div id="ghost-arm-left"></div>
         <div id="ghost-arm-right"></div>
       </div>
@@ -81,18 +85,57 @@ export default {
   },
   methods: {
     phaseIn() {
+      console.log("phasing in");
       // Grab values of input.
-      // Validate.
-      // Pass to server, on positive response sign user in.
+      let signin = {
+        email: document.querySelector("input[name:ghost-email]"),
+        pass: document.querySelector("input[name:ghost-pass]")
+      };
+
+      // validate.
+      this.validate();
+      fetch("phase-in", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(signUp)
+      })
+        .then(res => res.json())
+        .then(jsonres => {
+          // Welcome!
+          // Update relevant data where needed.
+        })
+        .catch(err => this.popUpError(err));
     },
     becomeGhost() {
+      console.log("becoming ghost");
       // Grab values of input.
-      // Validate.
-      // Pass to server, on positive response sign user in.
+      let signup = {
+        email: document.querySelector("input[name:ghost-email]"),
+        pass: document.querySelector("input[name:ghost-pass]")
+      };
+
+      // validate.
+
+      // pass to server, on positive response sign user in.
+      fetch("become-ghost", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(signUp)
+      })
+        .then(res => res.json())
+        .then(jsonres => {
+          // Welcome!
+          // Update relevant data where needed.
+        })
+        .catch(err => this.popUpError(err));
     },
     forgotPass(e) {
       // Animation of ghost moving card aside to new one.
-      this.ghostSwitchCard(e.target);
+      // this.ghostSwitchCard(e.target);
     },
     ghostSwitchCard(e) {
       if (e.innerHTML == "Forgot Ghost Pass.") {
@@ -102,6 +145,41 @@ export default {
         // Flip card.
         // Hide current fields, replace with sign up fields.
       }
+    },
+    fadeBack() {
+      let prefixes = ["webkit", "moz", "MS", "o", ""];
+
+      let ghostCanal = document.getElementById("ghost-canal");
+      let ghostAndCard = document.getElementById("ghost-and-card");
+
+      for (let entry of prefixes) {
+        ghostAndCard.addEventListener(
+          entry + "animationend",
+          this.backToAppFromLogin.bind(null, ghostAndCard, ghostCanal)
+        );
+      }
+      // add class fade-opacity to black-bg
+      ghostCanal.classList.add("fade-opacity-to-80", "anim-reverse");
+      console.log("fade begins");
+
+      // add class scale-up to ghost-and-card
+      ghostAndCard.classList.add("fade-in-scaleXY-bounce", "anim-reverse");
+    },
+    backToAppFromLogin(ghostCard, ghostCanal) {
+      this.allowSubmits = false;
+      this.triggerAnim = false;
+      // ghostCard.classList.add("ghost-and-card-finished-rev");
+      ghostCard.classList.remove(
+        "fade-in-scaleXY-bounce",
+        "ghost-and-card-finished",
+        "anim-reverse"
+      );
+      // ghostCanal.classList.add("ghost-canal-finished-rev");
+      ghostCanal.classList.remove(
+        "fade-opacity-to-80",
+        "ghost-canal-finished",
+        "anim-reverse"
+      );
     },
     animationEndListener(ghostCard, ghostCanal) {
       console.log("anime over");
@@ -132,7 +210,8 @@ input:not(:focus) {
   box-shadow: rgba(0, 251, 251, 0.3) 0px 1px;
 }
 ::placeholder {
-  color: slategray;
+  color: white;
+  font-size: 0.9em;
   text-align: center;
 }
 
@@ -185,6 +264,9 @@ input:not(:focus) {
   animation: 2s fade-opacity-to-100, 2s scale-up-while-bouncing;
   animation-fill-mode: forwards;
 }
+.anim-reverse {
+  animation-direction: reverse;
+}
 
 .fade-opacity-to-80 {
   animation: 2s fade-opacity-to-80;
@@ -213,6 +295,34 @@ input:not(:focus) {
   transform: translate(-50%, 0);
   position: absolute;
   width: 400px;
+}
+#ghost-close {
+  position: absolute;
+  z-index: 10000000;
+  top: 200px;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+#ghost-close-close {
+  font-size: 2em;
+  border-bottom: white 2px solid;
+}
+
+#ghost-close-button {
+  color: red;
+  font-weight: bold;
+  font-size: 3em;
+  border: white 3px solid;
+  margin-top: 5px;
+  display: block;
+  cursor: pointer;
+  /* border-radius: 100%; */
+}
+
+#ghost-close-button:hover {
+  box-shadow: 0px 0px 60px;
+  color: black;
 }
 
 .ghost-eye-right {
