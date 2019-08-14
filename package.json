@@ -15,7 +15,10 @@
     "nconf": "0.10.0",
     "lodash": "4.17.5",
     "express": "latest",
+    "nodemailer": "latest",
     "pg": "latest",
+    "bcrypt": "latest",
+    "uuid": "latest",
     "redis": "latest"
   }
 }
