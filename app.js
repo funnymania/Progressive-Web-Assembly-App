@@ -4,6 +4,8 @@ const express = require('express')
 const mCcEvents = require('./apis/mCclureEvents')
 const emails = require('./apis/emails')
 
+mCcEvents.api.connectToDb()
+
 // const { Client } = require('pg')
 // const pgClient = new Client()
 
@@ -56,17 +58,24 @@ app.get('/supported-corns', (req, res) => {
 
 app.post('/phase-in', (req, res) => {
   // Authenticate user, returns true or false
-  mCcEvents.Authenticate(req.body.username, req.body.password)
+  mCcEvents.api.authenticate(req.body.email, req.body.password)
     .then(authRes => {
-      if (authRes.isAuth) {
+      if (!authRes.isAuth) {
         throw 'Incorrect ghost creds.'
       } else {
         // Start a session with user, unless they are already logged in.
-        mCcEvents.startSession(authRes.userData)
-          .then(sessRes => res.setHeader(
-            'Set-Cookie',
-            'sid=' + sessRes.rows[0].sess_hash + '; Secure; HttpOnly; Expires=Wed, 21 Oct 2015 07:28:00 GMT'))
-          .then(() => res.json({ msg: 'You are freely phasing. :)' }))
+        // Returns session id.
+        mCcEvents.api.startSession(authRes.userData)
+          .then(sessRes => {
+            if (!sessRes.loggedIn) {
+              res.set(
+                {
+                  'Content-Type': 'application/json',
+                  'Set-Cookie': 'sid=' + sessRes.userToken + '; Secure; HttpOnly; Expires=Wed, 21 Oct 2015 07:28:00 GMT',
+                })
+            }
+            res.json({ msg: 'You are freely phasing. :)' })
+          })
           .catch(err => console.log(err))
       }
     })
@@ -75,10 +84,10 @@ app.post('/phase-in', (req, res) => {
 
 app.post('/forgot-pass', (req, res) => {
   // Look up email.
-  mCcEvents.GetUserEmail(req.body.email)
+  mCcEvents.api.GetUserEmail(req.body.email)
     .then(emailRes => {
       if (emailRes.rows.length > 0) {
-        mCcEvents.InsertPassResetUrl()
+        mCcEvents.api.InsertPassResetUrl()
           .then(forgetRes => emails.sendEmail(emailRes.rows[0].email, forgetRes.rows[0].url))
       }
     }).then(() =>
@@ -90,9 +99,9 @@ app.post('/forgot-pass', (req, res) => {
 // This gets sent on submitting updated password from the clientside forgot-my-password route  
 app.get('/amnesia/*', (req, res) => {
   // Check if link is active. 
-  mCcEvents.isPassUrlActive(req.baseUrl).then(urlRes => {
+  mCcEvents.api.isPassUrlActive(req.baseUrl).then(urlRes => {
     if (urlRes.rows.length > 0) {
-      mCcEvents.updatePassword(req.body.password, urlRes.rows[0].uid)
+      mCcEvents.api.updatePassword(req.body.password, urlRes.rows[0].uid)
         .then(upRes => res.json({ msg: 'Ghost pass is now official' }))
     } else {
       res.json({ msg: 'Link is inactive.' })
@@ -101,14 +110,16 @@ app.get('/amnesia/*', (req, res) => {
 })
 
 app.post('/save-stack', (req, res) => {
-  let sessId = grabSessIdFromString(req.cookies)
-  mCcEvents.GetUserSession(sessId)
+  let cookie = req.get('Cookie')
+  let sessId = cookie.slice(cookie.indexOf('=') + 1)
+  mCcEvents.api.getUserSession(sessId)
     .then(sessRes => {
+      console.log(sessRes)
       if (sessRes.rows.length > 0) {
-        mCcEvents.updateStack(req.body, userId)
+        mCcEvents.api.updateStack(req.body, sessRes.rows[0].uid)
           .then(updateRes => {
             if (updateRes.rows[0].share_url == null) {
-              mCcEvents.createStackShareUrl(updateRes.rows[0].uid)
+              mCcEvents.api.createStackShareUrl(updateRes.rows[0].uid)
                 .then(createRes => res.json({ msg: 'Stack saved.' }))
             } else {
               res.json({ msg: 'Stack saved.' })
@@ -121,16 +132,17 @@ app.post('/save-stack', (req, res) => {
 
 app.post('/share-stack', (req, res) => {
   let sessId = grabSessIdFromString(req.cookies)
-  mCcEvents.GetUserSession(sessId)
+  let cookie = req.get('Cookie')
+  mCcEvents.api.GetUserSession(sessId)
     .then(sessRes => {
       if (sessRes.rows.length > 0) {
-        mCcEvents.GetStack(sessRes.rows[0].uid)
+        mCcEvents.api.GetStack(sessRes.rows[0].uid)
           .then(stackRes => res.json({ url: stackRes.share_url }))
       } else {
         // User is not logged in, save stack to public, inform user that link will be discarded
         // the day after next. URL will persist forever if you have an account
         // Validate if user is allowed to do this.
-        mCcEvents.insertPubStackShareUrl(req.body.stack)
+        mCcEvents.api.insertPubStackShareUrl(req.body.stack)
           .then(stackRes => res.json({
             url: stackRes.rows[0].share_url,
             msg: 'Not a user.'
@@ -141,15 +153,19 @@ app.post('/share-stack', (req, res) => {
 
 app.post('/become-ghost', (req, res) => {
   // Check if email exists.
-  mCcEvents.GetUserEmail(req.body.email)
+  mCcEvents.api.getUserEmail(req.body.email)
     .then(emailRes => {
+      console.log(emailRes)
       if (emailRes.rows.length > 0) {
         res.json({ msg: 'This email is already in possession of someone else, likely yourself' })
       } else {
         // Insert into DB.
-        mCcEvents.addUser(emailRes.rows[0].email, req.body.password)
-          .then(res => res.json({ msg: 'Welcome haunted. Welcome haunted whole.' }))
-          .catch(err => res.json({ msg: err }))
+        mCcEvents.api.addUser(req.body.email, req.body.password)
+          .then(() => res.json({ msg: 'Welcome haunted. Welcome haunted whole.' }))
+          .catch(err => {
+            console.log(err)
+            res.json({ msg: err })
+          })
       }
     })
     .catch(err => res.json({ msg: err }))

@@ -1,8 +1,8 @@
 const nodemailer = require('nodemailer')
 const defFromName = 'ghosts@shinepickaw.rip'
-const config = require('./.config/config.json')
+const config = require('../.config/config.json')
 
-let emails = (function () {
+let api = (function () {
   function SendPasswordResetMail(email, url) {
     let mailOpts = {
       from: config.ghostHubEmail,
@@ -28,8 +28,8 @@ let emails = (function () {
     })
   }
   return {
-    sendEmail: SendPasswordResetMail(email, url)
+    sendEmail: SendPasswordResetMail
   }
 })()
 
-module.exports = { emails }
+module.exports = { api }

@@ -1,29 +1,30 @@
 const { Client } = require('pg')
 const bcrypt = require('bcrypt')
+const crypto = require('crypto');
 const uuidv4 = require('uuid/v4')
 const saltRounds = 10;
 const baseUrl = 'https://shinepickaw.rip/'
 
-let mCclureEvents = (function () {
-  function Connect() {
-    const pgClient = new Client()
+let api = (function () {
+  const pgClient = new Client()
 
+  let Connect = function () {
     pgClient.connect().then(() =>
       pgClient.query('SELECT $1::text as message', ['Hello world!'])
     ).then(pgTest => console.log(pgTest.rows[0].message))
-      .then(() => pgClient.end())
       .catch(err => console.log(err))
   }
 
-  function GetUserEmail(email) {
+  let GetUserEmail = function (email) {
+    console.log("adding user")
     return pgClient.query("SELECT email from user_cred where email='" + email + "'")
   }
 
-  function GetUser(email) {
+  let GetUser = function (email) {
     return pgClient.query("SELECT * from user_cred where email='" + email + "'")
   }
 
-  function InsertUser(email, pass) {
+  let InsertUser = function (email, pass) {
     // Generate a random, unique UID.
     let uid = uuidv4()
 
@@ -39,36 +40,56 @@ let mCclureEvents = (function () {
         + "'" + email + "',"
         + "'" + name + "')"
       )).then(insRes => {
-        if (insRes.rows.length == 0) {
+        if (insRes.rowCount == 0) {
           InsertUser(email, pass)
+        } else {
+          console.log('User inserted.')
         }
       });
   }
 
-  function Authenticate(email, pass) {
+  let Authenticate = function (email, pass) {
+    let userData
     // Get hash, compare with user submitted pass. 
     return pgClient.query("SELECT phash,uid FROM user_cred WHERE email = "
       + "'" + email + "'"
-    ).then(authRes => ({
-      isAuth: bcrypt.compare(pass, authRes.rows[0].phash),
-      userData: authRes.rows[0]
-    }))
-  }
-
-  function InsertSession(userData) {
-    return pgClient.query("INSERT INTO sessions VALUES ("
-      + "'" + true + "',"
-      + "'" + new Date().toISOString + "',"
-      + "'" + userData.uid + "',"
-      + "'" + uuidv4() + "')"
     )
+      .then(authRes => {
+        userData = authRes
+        return bcrypt.compare(pass, authRes.rows[0].phash)
+      })
+      .then(isCorrect => ({ isAuth: isCorrect, userData: userData.rows[0] }))
   }
 
-  function GetPassUrl(url) {
+  let InsertSession = function (userData) {
+    const userToken = uuidv4()
+    const hashToken = crypto.createHash('sha1').update(userToken).digest('hex')
+    return pgClient.query("SELECT sess_hash FROM sessions WHERE uid='" + userData.uid + "'")
+      .then(selRes => {
+        if (selRes.rows.length == 1) {
+          console.log('Session already exists')
+          selRes.loggedIn = true
+          return selRes
+        } else {
+          return pgClient.query("INSERT INTO sessions VALUES ("
+            + "'" + true + "',"
+            + "'" + new Date().toISOString() + "',"
+            + "'" + userData.uid + "',"
+            + "'" + hashToken + "')"
+          )
+        }
+      })
+      .then(selRes => {
+        selRes.userToken = userToken
+        return selRes
+      })
+  }
+
+  let GetPassUrl = function (url) {
     return pgClient.query("SELECT * FROM pass_reset_urls where url="
       + "'" + url + "'")
   }
-  function UpdateStack(stack, uid) {
+  let UpdateStack = function (stack, uid) {
     return pgClient.query("UPDATE mccevents SET " +
       "bit=" + stack.bit + "," +
       "stack=" + stack.stack + "," +
@@ -77,7 +98,7 @@ let mCclureEvents = (function () {
       " WHERE uid=" + uid
     )
   }
-  function InsertPubStackShareUrl(stack) {
+  let InsertPubStackShareUrl = function (stack) {
     let newUrl = baseUrl + 'mCclureEvents/' + uuidv4()
     return pgClient.query("INSERT INTO mccevents_pub VALUES (" +
       "'" + newUrl + "'," +
@@ -88,7 +109,7 @@ let mCclureEvents = (function () {
       + " )"
     )
   }
-  function InsertPassResetUrl() {
+  let InsertPassResetUrl = function () {
     let newUrl = baseUrl + 'amnesia/' + uuidv4()
 
     return pgClient.query("INSERT INTO pass_reset_urls VALUES (" +
@@ -97,7 +118,7 @@ let mCclureEvents = (function () {
     );
   }
 
-  function UpdatePassword(pass, uid) {
+  let UpdatePassword = function (pass, uid) {
     return bcrypt.genSalt(saltRounds)
       .then(salt => bcrypt.hash(pass, salt))
       .then(hash => pgClient.query("UPDATE user_cred SET " +
@@ -108,19 +129,18 @@ let mCclureEvents = (function () {
         " WHERE uid=" + uid
       ))
   }
-  function GetSession(sessid) {
-    return bcrypt.genSalt(saltRounds)
-      .then(salt => bcrypt.hash(pass, salt))
-      .then(hash => pgClient.query("SELECT uid FROM sessions WHERE sess_hash = "
-        + "'" + hash + "'"
-        + " AND active=TRUE"
-      ))
+  let GetSession = function (sessid) {
+    const hashToken = crypto.createHash('sha256').update(sessid).digest('hex')
+    return pgClient.query("SELECT uid FROM sessions WHERE sess_hash = "
+      + "'" + hashToken + "'"
+      + " AND active=TRUE"
+    )
   }
-  function GetStack(uid) {
+  let GetStack = function (uid) {
     return pgClient.query("SELECT * from mccevents WHERE uid="
       + "'" + uid + "'")
   }
-  function CreateStackShareUrl(uid) {
+  let CreateStackShareUrl = function (uid) {
     let stackShareUrl = baseUrl + 'mCclureEvents/' + uuidv4()
     return pgClient.query("UPDATE mccevents SET " +
       "share_url='" + stackShareUrl + "'" +
@@ -129,21 +149,20 @@ let mCclureEvents = (function () {
   }
 
   return {
-    connectToDb: Connect(),
-    doesEmailExist: GetUserEmail(email),
-    addUser: InsertUser(email, pass),
-    authenticate: Authenticate(email, pass),
-    startSession: InsertSession(token),
-    isPassUrlActive: GetPassUrl(url),
-    updateStack: UpdateStack(stack, uid),
-    insertPubStackShareUrl: InsertPubStackShareUrl(stack, url),
-    insertPassResetUrl: InsertPassResetUrl(),
-    sendEmail: SendEmail(email, url),
-    updatePassword: UpdatePassword(pass),
-    getSession: GetSession(token),
-    getStack: GetStack(uid),
-    createStackShareUrl: CreateStackShareUrl(uid),
+    connectToDb: Connect,
+    getUserEmail: GetUserEmail,
+    addUser: InsertUser,
+    authenticate: Authenticate,
+    startSession: InsertSession,
+    isPassUrlActive: GetPassUrl,
+    updateStack: UpdateStack,
+    insertPubStackShareUrl: InsertPubStackShareUrl,
+    insertPassResetUrl: InsertPassResetUrl,
+    updatePassword: UpdatePassword,
+    getUserSession: GetSession,
+    getStack: GetStack,
+    createStackShareUrl: CreateStackShareUrl,
   }
 })()
 
-module.exports = { mCclureEvents }
+module.exports = { api }
