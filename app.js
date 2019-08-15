@@ -99,9 +99,12 @@ app.post('/forgot-pass', (req, res) => {
 })
 
 // This gets sent on submitting updated password from the clientside forgot-my-password route  
-app.get('/amnesia/*', (req, res) => {
+app.post('/amnesia/*', (req, res) => {
+  let url = 'https://' + 'shinepickaw.rip' + req.originalUrl
+  console.log(url)
   // Check if link is active. 
-  mCcEvents.api.isPassUrlActive(req.baseUrl).then(urlRes => {
+  mCcEvents.api.isPassUrlActive(url).then(urlRes => {
+    console.log(urlRes)
     if (urlRes.rows.length > 0) {
       mCcEvents.api.updatePassword(req.body.password, urlRes.rows[0].uid)
         .then(upRes => res.json({ msg: 'Ghost pass is now official' }))

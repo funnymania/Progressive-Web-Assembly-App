@@ -146,7 +146,7 @@ let api = (function () {
         "phash='" + hash + "'," +
         "email=email," +
         "name=name" +
-        " WHERE uid=" + uid
+        " WHERE uid='" + uid + "'"
       ))
   }
   let GetSession = function (sessid) {
