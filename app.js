@@ -114,13 +114,14 @@ app.post('/save-stack', (req, res) => {
   let sessId = cookie.slice(cookie.indexOf('=') + 1)
   mCcEvents.api.getUserSession(sessId)
     .then(sessRes => {
-      console.log(sessRes)
       if (sessRes.rows.length > 0) {
         mCcEvents.api.updateStack(req.body, sessRes.rows[0].uid)
           .then(updateRes => {
+            console.log(updateRes)
             if (updateRes.rows[0].share_url == null) {
               mCcEvents.api.createStackShareUrl(updateRes.rows[0].uid)
                 .then(createRes => res.json({ msg: 'Stack saved.' }))
+                .catch(err => console.log(err))
             } else {
               res.json({ msg: 'Stack saved.' })
             }
@@ -131,18 +132,20 @@ app.post('/save-stack', (req, res) => {
 })
 
 app.post('/share-stack', (req, res) => {
-  let sessId = grabSessIdFromString(req.cookies)
   let cookie = req.get('Cookie')
-  mCcEvents.api.GetUserSession(sessId)
+  let sessId = cookie.slice(cookie.indexOf('=') + 1)
+  mCcEvents.api.getUserSession(sessId)
     .then(sessRes => {
       if (sessRes.rows.length > 0) {
-        mCcEvents.api.GetStack(sessRes.rows[0].uid)
-          .then(stackRes => res.json({ url: stackRes.share_url }))
+        mCcEvents.api.getStack(sessRes.rows[0].uid)
+          .then(stackRes =>
+            res.json({ url: stackRes.rows[0].share_url })
+          )
       } else {
         // User is not logged in, save stack to public, inform user that link will be discarded
         // the day after next. URL will persist forever if you have an account
         // Validate if user is allowed to do this.
-        mCcEvents.api.insertPubStackShareUrl(req.body.stack)
+        mCcEvents.api.insertPubStackShareUrl(req.body)
           .then(stackRes => res.json({
             url: stackRes.rows[0].share_url,
             msg: 'Not a user.'

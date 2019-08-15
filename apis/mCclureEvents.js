@@ -90,23 +90,41 @@ let api = (function () {
       + "'" + url + "'")
   }
   let UpdateStack = function (stack, uid) {
+    console.log(uid)
     return pgClient.query("UPDATE mccevents SET " +
       "bit=" + stack.bit + "," +
-      "stack=" + stack.stack + "," +
-      "queue=" + stack.queues + "," +
+      "stack='" + JSON.stringify(stack.stack) + "'," +
+      "queue='" + JSON.stringify(stack.queues) + "'," +
       "boxnumber=" + stack.boxNumber +
-      " WHERE uid=" + uid
+      " WHERE uid='" + uid + "'" +
+      " RETURNING *"
     )
+      .then(upRes => {
+        if (upRes.rows.length > 0) {
+          return upRes
+        } else {
+          return pgClient.query("INSERT INTO mccevents VALUES ("
+            + "'" + uid + "',"
+            + stack.bit + ","
+            + "'" + JSON.stringify(stack.stack) + "',"
+            + "'" + JSON.stringify(stack.queues) + "',"
+            + stack.boxNumber + ")"
+            + " RETURNING *"
+          )
+        }
+      })
   }
   let InsertPubStackShareUrl = function (stack) {
     let newUrl = baseUrl + 'mCclureEvents/' + uuidv4()
-    return pgClient.query("INSERT INTO mccevents_pub VALUES (" +
-      "'" + newUrl + "'," +
-      "'" + new Date().toISOString() + "'," +
-      "'" + stack.stack + "'," +
-      "'" + stack.queues + "'," +
-      "'" + stack.boxNumber + "'"
+    return pgClient.query("INSERT INTO mccevents_pub VALUES ("
+      + "'" + newUrl + "',"
+      + "'" + new Date().toISOString() + "',"
+      + stack.bit + ","
+      + "'" + JSON.stringify(stack.stack) + "',"
+      + "'" + JSON.stringify(stack.queues) + "',"
+      + "'" + stack.boxNumber + "'"
       + " )"
+      + " RETURNING *"
     )
   }
   let InsertPassResetUrl = function () {
@@ -130,7 +148,7 @@ let api = (function () {
       ))
   }
   let GetSession = function (sessid) {
-    const hashToken = crypto.createHash('sha256').update(sessid).digest('hex')
+    const hashToken = crypto.createHash('sha1').update(sessid).digest('hex')
     return pgClient.query("SELECT uid FROM sessions WHERE sess_hash = "
       + "'" + hashToken + "'"
       + " AND active=TRUE"
@@ -144,7 +162,7 @@ let api = (function () {
     let stackShareUrl = baseUrl + 'mCclureEvents/' + uuidv4()
     return pgClient.query("UPDATE mccevents SET " +
       "share_url='" + stackShareUrl + "'" +
-      " WHERE uid=" + uid
+      " WHERE uid='" + uid + "'"
     )
   }
 
