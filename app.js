@@ -84,11 +84,13 @@ app.post('/phase-in', (req, res) => {
 
 app.post('/forgot-pass', (req, res) => {
   // Look up email.
-  mCcEvents.api.GetUserEmail(req.body.email)
+  mCcEvents.api.getUser(req.body.email)
     .then(emailRes => {
       if (emailRes.rows.length > 0) {
-        mCcEvents.api.InsertPassResetUrl()
-          .then(forgetRes => emails.sendEmail(emailRes.rows[0].email, forgetRes.rows[0].url))
+        mCcEvents.api.insertPassResetUrl(emailRes.rows[0].uid)
+          .then(forgetRes => {
+            emails.api.sendEmail(emailRes.rows[0].email, forgetRes.rows[0].url)
+          })
       }
     }).then(() =>
       res.json({ msg: 'We\'ll be in touch. Doublecheck you sent the right email' })

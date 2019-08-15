@@ -3,7 +3,7 @@ const defFromName = 'ghosts@shinepickaw.rip'
 const config = require('../.config/config.json')
 
 let api = (function () {
-  function SendPasswordResetMail(email, url) {
+  let SendPasswordResetMail = function (email, url) {
     let mailOpts = {
       from: config.ghostHubEmail,
       to: email,

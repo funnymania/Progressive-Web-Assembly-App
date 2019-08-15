@@ -127,12 +127,14 @@ let api = (function () {
       + " RETURNING *"
     )
   }
-  let InsertPassResetUrl = function () {
+  let InsertPassResetUrl = function (uid) {
     let newUrl = baseUrl + 'amnesia/' + uuidv4()
 
     return pgClient.query("INSERT INTO pass_reset_urls VALUES (" +
       "'" + newUrl + "'," +
-      "'" + new Date().toISOString() + "'"
+      "'" + uid + "'," +
+      "'" + new Date().toISOString() + "')"
+      + " RETURNING *"
     );
   }
 
@@ -169,6 +171,7 @@ let api = (function () {
   return {
     connectToDb: Connect,
     getUserEmail: GetUserEmail,
+    getUser: GetUser,
     addUser: InsertUser,
     authenticate: Authenticate,
     startSession: InsertSession,
