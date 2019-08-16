@@ -5,7 +5,11 @@
       <!-- <div id="footer-branding">the shinepickaw creative ecosystem @ omon art</div> -->
       <div id="ghost-entry-link" @click="callGhost">{{ logInText }}</div>
     </div>
-    <GhostEntry @phaseIn="changeToPhaseUi" :triggerAnim="this.ghostCalled"></GhostEntry>
+    <GhostEntry
+      @retractGhost="ghostCalled = false"
+      @phaseIn="changeToPhaseUi"
+      :triggerAnim="this.ghostCalled"
+    ></GhostEntry>
   </div>
 </template>
 
@@ -31,6 +35,7 @@ export default {
       localStorage.setItem("userName", uname);
       this.userName = uname;
       this.logInText = "WELCOME, " + this.userName;
+      this.ghostCalled = false;
     }
   },
   mounted() {

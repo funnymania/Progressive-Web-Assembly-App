@@ -7,7 +7,7 @@
         <div id="ghost-body"></div>
         <div id="ghost-close">
           <div id="ghost-close-close">Close</div>
-          <span id="ghost-close-button" @click="fadeBack">X</span>
+          <span id="ghost-close-button" @click="$emit('retractGhost')">X</span>
         </div>
         <div id="ghost-arm-left"></div>
         <div id="ghost-arm-right"></div>
@@ -64,26 +64,41 @@ export default {
   },
   watch: {
     triggerAnim(val) {
-      console.log("anim triggered");
-      this.allowSubmits = false;
-
       let prefixes = ["webkit", "moz", "MS", "o", ""];
 
       let ghostCanal = document.getElementById("ghost-canal");
       let ghostAndCard = document.getElementById("ghost-and-card");
 
-      for (let entry of prefixes) {
-        ghostAndCard.addEventListener(
-          entry + "animationend",
-          this.animationEndListener.bind(null, ghostAndCard, ghostCanal)
-        );
-      }
-      // add class fade-opacity to black-bg
-      ghostCanal.classList.add("fade-opacity-to-80");
-      console.log("fade begins");
+      if (val) {
+        console.log("anim triggered");
+        this.allowSubmits = false;
 
-      // add class scale-up to ghost-and-card
-      ghostAndCard.classList.add("fade-in-scaleXY-bounce");
+        for (let entry of prefixes) {
+          ghostAndCard.addEventListener(
+            entry + "animationend",
+            this.animationEndListener.bind(null, ghostAndCard, ghostCanal)
+          );
+        }
+        // add class fade-opacity to black-bg
+        ghostCanal.classList.toggle("fade-opacity-to-80");
+        console.log("fade begins");
+
+        // add class scale-up to ghost-and-card
+        ghostAndCard.classList.add("fade-in-scaleXY-bounce");
+      } else {
+        for (let entry of prefixes) {
+          ghostAndCard.addEventListener(
+            entry + "animationend",
+            this.backToAppFromLogin.bind(null, ghostAndCard, ghostCanal)
+          );
+        }
+        // add class fade-opacity to black-bg
+        ghostCanal.classList.toggle("fade-opacity-to-80");
+        console.log("fade begins");
+
+        // add class scale-up to ghost-and-card
+        ghostAndCard.classList.add("fade-in-scaleXY-bounce", "anim-reverse");
+      }
     }
   },
   methods: {
@@ -118,7 +133,7 @@ export default {
             // 'Ghosts enter here.'
             // to 'WELCOME, jsonres.name'
             this.cardSubtitle = "Welcome.";
-            this.fadeBack();
+            // this.fadeBack();
             this.$emit("phaseIn", jsonres.name);
           }
         })
@@ -202,7 +217,6 @@ export default {
     },
     backToAppFromLogin(ghostCard, ghostCanal) {
       this.allowSubmits = false;
-      this.triggerAnim = false;
       // ghostCard.classList.add("ghost-and-card-finished-rev");
       ghostCard.classList.remove(
         "fade-in-scaleXY-bounce",
@@ -210,20 +224,19 @@ export default {
         "anim-reverse"
       );
       // ghostCanal.classList.add("ghost-canal-finished-rev");
-      ghostCanal.classList.remove(
-        "fade-opacity-to-80",
-        "ghost-canal-finished",
-        "anim-reverse"
-      );
+      // ghostCanal.classList.remove(
+      //   "fade-opacity-to-80",
+      //   "ghost-canal-finished",
+      //   "anim-reverse"
+      // );
     },
     animationEndListener(ghostCard, ghostCanal) {
       console.log("anime over");
       this.allowSubmits = true;
-      this.triggerAnim = false;
       ghostCard.classList.add("ghost-and-card-finished");
       ghostCard.classList.remove("fade-in-scaleXY-bounce");
-      ghostCanal.classList.add("ghost-canal-finished");
-      ghostCanal.classList.remove("fade-opacity-to-80");
+      // ghostCanal.classList.add("ghost-canal-finished");
+      // ghostCanal.classList.remove("fade-opacity-to-80");
     }
   }
 };
@@ -293,6 +306,7 @@ input:not(:focus) {
   top: 0%;
   left: 0%;
   position: absolute;
+  transition: visibility 2s ease 0s, opacity 2s ease 0s;
 }
 
 .fade-in-scaleXY-bounce {
@@ -303,9 +317,10 @@ input:not(:focus) {
   animation-direction: reverse;
 }
 
-.fade-opacity-to-80 {
-  animation: 2s fade-opacity-to-80;
-  animation-fill-mode: forwards;
+#ghost-canal.fade-opacity-to-80 {
+  opacity: 0.7;
+  visibility: visible;
+  transition: visibility 0s ease 0s, opacity 2s ease 0s;
 }
 #ghost-and-card.ghost-and-card-finished {
   transform: translate(-50%, -50%) scale(1, 1);
@@ -487,11 +502,11 @@ input:not(:focus) {
   }
 }
 @keyframes fade-opacity-to-80 {
-  from {
+  0% {
     opacity: 0;
     visibility: visible;
   }
-  to {
+  100% {
     opacity: 0.8;
     visibility: visible;
   }
