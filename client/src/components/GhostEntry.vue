@@ -310,7 +310,7 @@ input:not(:focus) {
 }
 
 #ghost-canal.fade-opacity-to-80 {
-  opacity: 0.7;
+  opacity: 0.92;
   visibility: visible;
   transition: visibility 0s ease 0s, opacity 2s ease 0s;
 }
