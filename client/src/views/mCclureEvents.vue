@@ -133,6 +133,9 @@ export default {
       // Commit to localStorage
       localStorage.setItem("queues", JSON.stringify(this.queues));
       localStorage.setItem("boxNumber", this.boxNumber);
+
+      // Persist change to server
+      this.saveYourStack();
     },
     taskComplete(e) {
       if (this.stack.content == emptyText) {
@@ -149,6 +152,9 @@ export default {
 
       // commit to local storage
       localStorage.setItem("stack", JSON.stringify(this.stack));
+
+      // Persist change to server
+      this.saveYourStack();
     },
     queueToStack() {
       if (this.queues[this.bit].every(el => el.content == emptyText)) {
@@ -170,6 +176,9 @@ export default {
       localStorage.setItem("stack", JSON.stringify(this.stack));
       localStorage.setItem("queues", JSON.stringify(this.queues));
       localStorage.setItem("bit", this.bit);
+
+      // Persist change to server
+      this.saveYourStack();
     },
     moveToQueue(e) {
       let stackContent = document.getElementById("stack-content");
@@ -210,11 +219,17 @@ export default {
       localStorage.setItem("stack", JSON.stringify(this.stack));
       localStorage.setItem("queues", JSON.stringify(this.queues));
       localStorage.setItem("bit", this.bit);
+
+      // Persist change to server
+      this.saveYourStack();
     },
     addToQueue(e) {
       if (this.stack.content == emptyText) {
         this.stack.content = document.getElementById("new-addon").value;
         localStorage.setItem("stack", JSON.stringify(this.stack));
+
+        // Persist change to server
+        this.saveYourStack();
       } else if (!this.isCapacityAtMax()) {
         let queueNum = document.querySelector('input[name="status-2"]:checked')
           .value;
@@ -245,9 +260,39 @@ export default {
         });
 
         localStorage.setItem("queues", JSON.stringify(this.queues));
+
+        // Persist change to server
+        this.saveYourStack();
       } else {
         this.toast("You've already got yours hands full.");
       }
+    },
+    saveYourStack() {
+      // grab everything.
+      let theStack = {
+        stack: this.stack,
+        queues: this.queues,
+        bit: this.bit,
+        boxNumber: this.boxNumber
+      };
+
+      // ship it.
+      fetch("save-stack", {
+        method: "POST",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(theStack)
+      })
+        .then(res => res.json())
+        .then(json => {
+          if (json.error) {
+            console.log(json.error);
+          }
+        })
+        .catch(err => console.log(json.error));
     },
     shareYourStack() {
       // grab everything.

@@ -3,6 +3,7 @@
 
 # Config files
 .config
+.ebextensions
 
 # Scratch paper
 scratch
