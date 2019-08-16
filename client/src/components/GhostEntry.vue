@@ -223,20 +223,12 @@ export default {
         "ghost-and-card-finished",
         "anim-reverse"
       );
-      // ghostCanal.classList.add("ghost-canal-finished-rev");
-      // ghostCanal.classList.remove(
-      //   "fade-opacity-to-80",
-      //   "ghost-canal-finished",
-      //   "anim-reverse"
-      // );
     },
     animationEndListener(ghostCard, ghostCanal) {
       console.log("anime over");
       this.allowSubmits = true;
       ghostCard.classList.add("ghost-and-card-finished");
       ghostCard.classList.remove("fade-in-scaleXY-bounce");
-      // ghostCanal.classList.add("ghost-canal-finished");
-      // ghostCanal.classList.remove("fade-opacity-to-80");
     }
   }
 };

@@ -40,6 +40,9 @@ export default {
   },
   mounted() {
     this.userName = localStorage.getItem("userName");
+    if (this.userName != null) {
+      this.logInText = "WELCOME, " + this.userName;
+    }
   }
 };
 </script>

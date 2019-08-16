@@ -31,13 +31,9 @@
 <script>
 export default {
   name: "HubMenu",
-  components: {},
-  data() {},
   props: {
     msg: String
-  },
-  methods: {},
-  mounted() {}
+  }
 };
 </script>
 
