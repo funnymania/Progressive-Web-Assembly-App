@@ -51,12 +51,17 @@ let api = (function () {
   let Authenticate = function (email, pass) {
     let userData
     // Get hash, compare with user submitted pass. 
-    return pgClient.query("SELECT phash,uid FROM user_cred WHERE email = "
+    return pgClient.query("SELECT phash,uid,name FROM user_cred WHERE email = "
       + "'" + email + "'"
     )
       .then(authRes => {
-        userData = authRes
-        return bcrypt.compare(pass, authRes.rows[0].phash)
+        if (authRes.rows.length > 0) {
+          userData = authRes
+          return bcrypt.compare(pass, authRes.rows[0].phash)
+        }
+        else {
+          throw 'Incorrect ghost creds.'
+        }
       })
       .then(isCorrect => ({ isAuth: isCorrect, userData: userData.rows[0] }))
   }

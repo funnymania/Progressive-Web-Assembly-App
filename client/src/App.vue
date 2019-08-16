@@ -3,9 +3,9 @@
     <router-view />
     <div id="footer">
       <!-- <div id="footer-branding">the shinepickaw creative ecosystem @ omon art</div> -->
-      <div id="ghost-entry-link" @click="callGhost">Ghosts enter here.</div>
+      <div id="ghost-entry-link" @click="callGhost">{{ logInText }}</div>
     </div>
-    <GhostEntry :triggerAnim="this.ghostCalled"></GhostEntry>
+    <GhostEntry @phaseIn="changeToPhaseUi" :triggerAnim="this.ghostCalled"></GhostEntry>
   </div>
 </template>
 
@@ -18,15 +18,24 @@ export default {
   },
   data() {
     return {
-      ghostCalled: false
+      ghostCalled: false,
+      logInText: "Ghosts enter here.",
+      userName: ""
     };
   },
   methods: {
     callGhost() {
       this.ghostCalled = true;
+    },
+    changeToPhaseUi(uname) {
+      localStorage.setItem("userName", uname);
+      this.userName = uname;
+      this.logInText = "WELCOME, " + this.userName;
     }
   },
-  mounted() {}
+  mounted() {
+    this.userName = localStorage.getItem("userName");
+  }
 };
 </script>
 

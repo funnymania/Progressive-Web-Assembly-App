@@ -13,7 +13,7 @@
         <div id="ghost-arm-right"></div>
       </div>
       <div id="id-card">
-        <p>Life is looking ...</p>
+        <p>{{ cardSubtitle }}</p>
         <label>U</label>
         <input
           type="text"
@@ -34,7 +34,9 @@
         <br />
         <div id="button-row">
           <div>
-            <span class="id-button" @click="forgotPass">Forgot Ghost Pass.</span>
+            <span class="id-button" @click="forgotPass">
+              <s>Forgot Ghost Pass.</s>
+            </span>
             <br />
             <span class="id-button" @click="becomeGhost">Become a Ghost.</span>
           </div>
@@ -52,7 +54,8 @@ export default {
   name: "GhostEntry",
   data() {
     return {
-      allowSubmits: true
+      allowSubmits: true,
+      cardSubtitle: "Life is looking ..."
     };
   },
   props: {
@@ -85,7 +88,6 @@ export default {
   },
   methods: {
     phaseIn() {
-      console.log("phasing in");
       // Grab values of input.
       let signin = {
         email: document.querySelector("input[name='ghost-email']").value,
@@ -93,20 +95,47 @@ export default {
       };
 
       // validate.
-      this.validate();
-      fetch("phase-in", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(signUp)
-      })
+      this.validate(signin.email, signin.pass)
+        .then(() =>
+          fetch("/phase-in", {
+            method: "POST",
+            mode: "same-origin",
+            credentials: "same-origin",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(signin)
+          })
+        )
         .then(res => res.json())
         .then(jsonres => {
-          // Welcome!
-          // Update relevant data where needed.
+          if (jsonres.msg == "Incorrect ghost creds.") {
+            this.cardSubtitle = jsonres.msg;
+          } else {
+            // Paint 'WELCOME' vertically while screen rearranges
+            // Hide 'WELCOME' when screen is finished.
+            // For now just fadeBack(), update username variable, and change
+            // 'Ghosts enter here.'
+            // to 'WELCOME, jsonres.name'
+            this.cardSubtitle = "Welcome.";
+            this.fadeBack();
+            this.$emit("phaseIn", jsonres.name);
+          }
         })
-        .catch(err => this.popUpError(err));
+        .catch(err => {
+          this.cardSubtitle = err;
+        });
+    },
+    validate(email, pass) {
+      return new Promise((res, rej) => {
+        if (!email.includes("@")) {
+          throw "Email address must be valid and corporeal";
+        }
+        if (pass == "") {
+          throw "Pass must be non-empty.";
+        }
+        res();
+      });
     },
     becomeGhost() {
       console.log("becoming ghost");
@@ -117,21 +146,27 @@ export default {
       };
 
       // validate.
-
-      // pass to server, on positive response sign user in.
-      fetch("become-ghost", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(signUp)
-      })
+      this.validate(signUp.email, signUp.pass)
+        .then(() =>
+          fetch("become-ghost", {
+            method: "POST",
+            credentials: "same-origin",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(signUp)
+          })
+        )
         .then(res => res.json())
         .then(jsonres => {
-          // Welcome!
-          // Update relevant data where needed.
+          if (jsonres.error) {
+            throw jsonres.msg;
+          }
+          this.phaseIn();
         })
-        .catch(err => this.popUpError(err));
+        .catch(err => {
+          this.cardSubtitle = err;
+        });
     },
     forgotPass(e) {
       // Animation of ghost moving card aside to new one.

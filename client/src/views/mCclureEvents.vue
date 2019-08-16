@@ -51,6 +51,12 @@
       <span id="arrow-bottom"></span>
     </div>-->
     <span id="toast"></span>
+    <span id="share-url-box">
+      <h3>Ghost Stack Url</h3>
+      <span id="copy-field">{{ popUpText }}</span>
+      <br />
+      <button @click="copyToClipboard">copy</button>
+    </span>
   </div>
 </template>
 
@@ -65,7 +71,8 @@ export default {
       queues: [],
       stack: {
         content: emptyText
-      }
+      },
+      popUpText: ""
     };
   },
   mounted() {
@@ -254,19 +261,40 @@ export default {
       // ship it.
       fetch("share-stack", {
         method: "POST",
+        mode: "cors",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify(theStack)
       })
-        .then(res => this.popUpBoxWithURL(res.json()))
-        .catch(err => this.popUpError());
+        .then(res => res.json())
+        .then(json => {
+          if (json.error) {
+            throw json.msg;
+          }
+          this.popUpBoxWithContent(json.url);
+        })
+        .catch(err => this.popUpBoxWithContent(err));
     },
     isCapacityAtMax() {
       return (
         this.queues.flat().filter(el => el.content != emptyText).length ==
         this.boxNumber
       );
+    },
+    popUpBoxWithContent(text) {
+      this.popUpText = text;
+      let modal = document.getElementById("share-url-box");
+      modal.classList.toggle("show-modal");
+    },
+    copyToClipboard() {
+      let toCopy = document.createElement("INPUT");
+      document.body.appendChild(toCopy);
+      toCopy.setAttribute("value", this.popUpText);
+      toCopy.select();
+      document.execCommand("copy");
+      document.body.removeChild(toCopy);
     },
     toast(msg) {
       let toastEl = document.getElementById("toast");
@@ -413,6 +441,24 @@ input[type="text"] {
 }
 #toast.toast-up {
   animation: toast-up 2s;
+}
+#share-url-box {
+  visibility: hidden;
+  opacity: 0;
+  margin: 0 auto;
+  transform: translate(-50%, -100%);
+  background-color: rgba(0, 0, 0, 1);
+  color: white;
+  border: skyblue 6px solid;
+  top: 50%;
+  position: absolute;
+  transition: visibility 0s linear 0.25s, opacity 0.25s 0s;
+  padding: 0 10px 20px;
+}
+#share-url-box.show-modal {
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 0s linear 0s, opacity 0.25s 0s;
 }
 @keyframes toast-up {
   0% {
