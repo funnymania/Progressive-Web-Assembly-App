@@ -295,6 +295,9 @@ export default {
       toCopy.select();
       document.execCommand("copy");
       document.body.removeChild(toCopy);
+
+      let modal = document.getElementById("share-url-box");
+      modal.classList.toggle("show-modal");
     },
     toast(msg) {
       let toastEl = document.getElementById("toast");
