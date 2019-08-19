@@ -112,12 +112,6 @@ export default {
         );
       }
 
-      // search for invisible-box
-      const box = document.getElementById("invisible-box");
-
-      // duplicate the box boxNumber - e.value times, append class queue-box
-      // let boxList = createElements(e.value - boxNumber, box);
-
       for (let i = 0; i < e.target.value - this.boxNumber; i++) {
         this.queues[0].push({
           content: emptyText
@@ -125,10 +119,6 @@ export default {
       }
 
       this.boxNumber = e.target.value;
-      // add boxList elements to queue-enclosure
-      // let queueEnclosure = document.getElementById("queue-enclosure");
-
-      // addBoxes(queueEnclosure, boxList);
 
       // Commit to localStorage
       localStorage.setItem("queues", JSON.stringify(this.queues));
