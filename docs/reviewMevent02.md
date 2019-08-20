@@ -3,6 +3,7 @@ Fixes
       Instead, when cycling, 'I am empty' moves to stack. 
       Popping 'I am empty' does nothing
 [] - ExplainationBox: Click outside to hide
+[] - capacity should be displaying current capacity
 
 Design
 [] - Need a global logo / something to click back to home

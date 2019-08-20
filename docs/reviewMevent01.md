@@ -19,7 +19,7 @@ to move to queue buttton)
 
 [X] spinner needs to work
 
-[] add a clear everything button
+[X] add a clear everything button
 
 [] clear contents from each queue entry
 also expose some 'x' button of sorts to REMOVE a queue item itself
@@ -33,7 +33,7 @@ orange slightly reddish border around queue entries which are conflicts
 
 Code
 
-✔️ Remove invisible box code from setUpQueues
+[X] Remove invisible box code from setUpQueues
 
 [] queues should be linked lists.
 
@@ -45,9 +45,9 @@ Code
 
 [] queueToStack would not exist, replaced by:
 
- [] moveToStack()
+[] moveToStack()
 
- [] addEmptyToEnd(stackToAddTo)
+[] addEmptyToEnd(stackToAddTo)
 
 
  

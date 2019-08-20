@@ -17,7 +17,10 @@
       <div class="queue-item" v-for="entry in queues[1]" :key="entry.id">{{ entry.content }}</div>
     </div>
     <div id="stack-share-belt">
-      <div id="stack-share-button" @click="shareYourStack">Share your stack!</div>
+      <div id="stack-share-button" @click="shareYourStack">&#x1F95e; Share your stack!</div>
+    </div>
+    <div>
+      <div id="clear-button" @click="clearEverything">&#x274C; Clear Everything</div>
     </div>
     <div id="bottom-sect">
       <div id="the-stack">
@@ -60,6 +63,11 @@
         <span v-html="verbosePopUpText"></span>
       </span>
     </span>
+    <span id="popup-dialog">
+      <h3>Are you sure?</h3>
+      <span class="butt-yes" @click="popUpDialogChoice">It's gone.</span>
+      <span class="butt-no" @click="popUpDialogChoice">It's not.</span>
+    </span>
     <span id="share-url-box">
       <h3>Ghost Stack Url</h3>
       <span id="copy-field">{{ popUpText }}</span>
@@ -77,7 +85,7 @@ export default {
     return {
       boxNumber: 0,
       bit: 1,
-      queues: [],
+      queues: [[], []],
       stack: {
         content: emptyText
       },
@@ -136,6 +144,39 @@ export default {
 
       // Persist change to server
       this.saveYourStack();
+    },
+    clearEverything() {
+      // Are you sure?
+      this.popUpDialog();
+    },
+    popUpDialog() {
+      let modal = document.getElementById("popup-dialog");
+      modal.classList.toggle("show-modal");
+    },
+    popUpDialogChoice(e) {
+      let modal = document.getElementById("popup-dialog");
+      if (e.target.classList.contains("butt-yes")) {
+        let initialState = this.$options.data.call(this);
+
+        // then Clear backing data to default
+        Object.assign(this.$data, initialState);
+
+        // then clear local storage
+        localStorage.setItem("queues", JSON.stringify(initialState.queues));
+        localStorage.setItem("stack", JSON.stringify(initialState.stack));
+        localStorage.setItem("bit", JSON.stringify(initialState.bit));
+        localStorage.setItem(
+          "boxNumber",
+          JSON.stringify(initialState.boxNumber)
+        );
+
+        // and then save this.
+        this.saveYourStack();
+
+        modal.classList.toggle("show-modal");
+      } else {
+        modal.classList.toggle("show-modal");
+      }
     },
     taskComplete(e) {
       if (this.stack.content == emptyText) {
@@ -270,12 +311,12 @@ export default {
     saveYourStack() {
       // grab everything.
       let theStack = {
-        stack: this.stack,
-        queues: this.queues,
-        bit: this.bit,
-        boxNumber: this.boxNumber
+        stack: JSON.parse(localStorage.getItem("stack")),
+        queues: JSON.parse(localStorage.getItem("queues")),
+        bit: JSON.parse(localStorage.getItem("bit")),
+        boxNumber: JSON.parse(localStorage.getItem("boxNumber"))
       };
-
+      console.log(theStack);
       // ship it.
       fetch("save-stack", {
         method: "POST",
@@ -292,7 +333,7 @@ export default {
             console.log(json.error);
           }
         })
-        .catch(err => console.log(json.error));
+        .catch(err => console.log(err));
     },
     shareYourStack() {
       // grab everything.
@@ -470,16 +511,29 @@ input[type="radio"] {
 #invisible-box {
   visibility: hidden;
 }
-#stack-share-button {
+#stack-share-button,
+#clear-button,
+.butt-yes,
+.butt-no {
   padding: 5px 4px;
   border: white 1px solid;
   cursor: pointer;
   border-radius: 10px;
   font-weight: bold;
+  margin-bottom: 6px;
 }
 #stack-share-button:hover,
 #stack-share-button:focus,
-#stack-share-button:active {
+#stack-share-button:active,
+#clear-button:hover,
+#clear-button:focus,
+#clear-button:active,
+.butt-yes:hover,
+.butt-yes:focus,
+.butt-yes:active,
+.butt-no:hover,
+.butt-no:focus,
+.butt-no:active {
   color: black;
   background-color: white;
 }
@@ -631,7 +685,8 @@ input[type="radio"] {
 #toast.toast-up {
   animation: toast-up 2s;
 }
-#share-url-box {
+#share-url-box,
+#popup-dialog {
   visibility: hidden;
   opacity: 0;
   margin: 0 auto;
@@ -645,7 +700,8 @@ input[type="radio"] {
   padding: 0 10px 20px;
 }
 #share-url-box.show-modal,
-#verbose-text-box.show-modal {
+#verbose-text-box.show-modal,
+#popup-dialog.show-modal {
   visibility: visible;
   opacity: 1;
   transition: visibility 0s linear 0s, opacity 0.25s 0s;
