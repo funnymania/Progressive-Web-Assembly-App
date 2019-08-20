@@ -47,12 +47,12 @@
           <label for="second-queue">Incomplete</label>
           <div id="new-thing-submit" @click="addToQueue">Add to queue</div>
         </div>
+        <div id="the-spinner" class="spinney glowing-green in-and-out-z">
+          <span id="arrow-top"></span>
+          <span id="arrow-bottom"></span>
+        </div>
       </div>
     </div>
-    <!-- <div id="the-spinner" class="spinney glowing-green in-and-out-z">
-      <span id="arrow-top"></span>
-      <span id="arrow-bottom"></span>
-    </div>-->
     <span id="toast"></span>
     <span id="verbose-text-box">
       <h2>The Game</h2>
@@ -544,7 +544,7 @@ input[type="radio"] {
   display: flex;
   flex-direction: column;
   min-width: 300px;
-  width: 75%;
+  width: 50%;
 }
 #new-thing-submit {
   color: white;
@@ -575,28 +575,44 @@ input[type="radio"] {
 
 #the-spinner {
   /* circle with four gaps, two of the gaps have a rotatedbox-shadow to represent the arrow */
-  border: 3px solid transparent;
+  border: 9px solid transparent;
   border-radius: 50%;
   border-top-color: lightgrey;
   border-bottom-color: lightgrey;
+  margin: 30px auto;
+  height: 117px;
+  transform: rotateZ(45deg);
+  width: 117px;
+  animation-name: rotateZ-scale-xy-in-out;
+  animation-timing-function: linear;
+  animation-direction: reverse;
+  animation-duration: 8s;
+  animation-iteration-count: infinite;
 }
 #arrow-top {
-  box-shadow: -2px -2px 0 rgba(255, 255, 255, 0.5);
+  border: solid lightgrey;
+  border-width: 0 9px 9px 0;
+  display: inline-block;
+  position: absolute;
+  padding: 9px;
+  bottom: 84px;
+  left: -7px;
+  transform: rotate(90deg);
 }
 #arrow-bottom {
-  box-shadow: -2px -2px 0 rgba(255, 255, 255, 0.5);
+  border: solid lightgrey;
+  border-width: 0 9px 9px 0;
+  display: inline-block;
+  top: 84px;
+  right: -7px;
+  padding: 9px;
+  position: absolute;
+  transform: rotate(270deg);
 }
-.spinney {
-  /* rotates slowly */
-}
-.glowing-green {
-  /* glow radius enlarge to shrink animation */
-  -webkit-box-shadow: 0 0 201px 0 #eceecd;
-  box-shadow: 0 0 201px 0 #eceecd;
-}
-.in-and-out-z {
-  /* move in and out of z OR scale x and y together */
-}
+/* .glowing-green {
+  -webkit-box-shadow: 0 0 60px 0 #eceecd;
+  box-shadow: 0 0 60px 0 #eceecd;
+} */
 .sm-heading {
   font-size: 1em;
   font-weight: bold;
@@ -633,6 +649,32 @@ input[type="radio"] {
   visibility: visible;
   opacity: 1;
   transition: visibility 0s linear 0s, opacity 0.25s 0s;
+}
+@keyframes rotateZ {
+  0%,
+  100% {
+    transform: rotateZ(45deg);
+  }
+  50% {
+    transform: rotateZ(235deg);
+  }
+}
+@keyframes rotateZ-scale-xy-in-out {
+  0% {
+    transform: scale(1, 1) rotateZ(0deg);
+  }
+  25% {
+    transform: scale(0.9, 0.9) rotateZ(135deg);
+  }
+  50% {
+    transform: scale(1, 1) rotateZ(225deg);
+  }
+  75% {
+    transform: scale(1.1, 1.1) rotateZ(315deg);
+  }
+  100% {
+    transform: scale(1, 1) rotateZ(360deg);
+  }
 }
 @keyframes toast-up {
   0% {

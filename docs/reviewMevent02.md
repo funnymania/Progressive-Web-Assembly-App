@@ -13,6 +13,8 @@ Design
 [] - Limit capacity from 3 - 5
 [] - Stylize scrollbar on explanationbox
 [] - Stylize scrollbars an queue items
+[] - Plasma lamp inside spinner
+[] - spinner timing is off, arrows don't look correct
 
 Code
 [] - Read from localStorage to save values, not the backingData. 

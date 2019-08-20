@@ -17,7 +17,7 @@ to move to queue buttton)
 
 [X] new thing text box should at least be taller
 
-[] spinner needs to work
+[X] spinner needs to work
 
 [] add a clear everything button
 
