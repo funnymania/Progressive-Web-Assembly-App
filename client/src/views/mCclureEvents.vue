@@ -470,7 +470,6 @@ input[type="text"] {
 }
 #stack-content {
   margin-left: 14px;
-  margin-right: 14px;
   padding: 8px;
   min-width: 300px;
   display: inline-block;
@@ -480,14 +479,15 @@ input[type="text"] {
 }
 #stack-flex {
   display: flex;
-  align-items: flex-start;
   flex-direction: column;
+  width: 75%;
+  margin: 0 auto;
+  min-width: 325px;
 }
 #pop-it {
   color: white;
   background-color: black;
   padding: 5px 4px;
-  min-width: 300px;
   font-weight: 600;
   margin-left: 14px;
   border: white 1px solid;
@@ -497,7 +497,6 @@ input[type="text"] {
   color: white;
   background-color: black;
   padding: 5px 4px;
-  min-width: 300px;
   font-weight: 600;
   margin-left: 14px;
   border: white 1px solid;
