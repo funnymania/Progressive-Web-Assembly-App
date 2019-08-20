@@ -40,11 +40,13 @@
       <div id="new-thing-segment">
         <h3>New Thing</h3>
         <textarea id="new-addon" />
-        <input type="radio" id="first-queue" name="status-2" value="0" />
-        <label for="first-queue">Conflicts</label>
-        <input type="radio" id="second-queue" name="status-2" value="1" checked />
-        <label for="second-queue">Incomplete</label>
-        <div id="new-thing-submit" @click="addToQueue">Add to queue</div>
+        <div>
+          <input type="radio" id="first-queue" name="status-2" value="0" />
+          <label for="first-queue" style="margin-right:35px;">Conflicts</label>
+          <input type="radio" id="second-queue" name="status-2" value="1" checked />
+          <label for="second-queue">Incomplete</label>
+          <div id="new-thing-submit" @click="addToQueue">Add to queue</div>
+        </div>
       </div>
     </div>
     <!-- <div id="the-spinner" class="spinney glowing-green in-and-out-z">
@@ -550,7 +552,7 @@ input[type="radio"] {
   padding: 5px 4px;
   font-weight: 600;
   margin-left: 14px;
-  margin-top: 8px;
+  margin-top: 13px;
   border: white 1px solid;
   border-radius: 10px;
   cursor: pointer;
@@ -568,6 +570,7 @@ input[type="radio"] {
   background-color: black;
   color: white;
   padding: 10px;
+  margin-bottom: 8px;
 }
 
 #the-spinner {
