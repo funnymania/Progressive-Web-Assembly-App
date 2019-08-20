@@ -25,7 +25,7 @@
         <div id="stack-flex">
           <div>
             <span id="stack-content">{{ stack.content }}</span>
-            <button id="pop-it" @click="taskComplete">Pop it!</button>
+            <div id="pop-it" @click="taskComplete">Pop it!</div>
           </div>
           <div>
             <div id="move-it" @click="moveToQueue">Move to Queue...</div>
@@ -450,6 +450,8 @@ input[type="text"] {
   flex-grow: 1;
   border: 1px solid white;
   min-width: 200px;
+  overflow: hidden;
+  white-space: pre-wrap;
 }
 #invisible-box {
   visibility: hidden;
@@ -473,22 +475,32 @@ input[type="text"] {
   min-width: 300px;
   display: inline-block;
   border: white 1px solid;
+  white-space: pre-wrap;
+  overflow: hidden;
 }
 #stack-flex {
   display: flex;
   align-items: flex-start;
   flex-direction: column;
 }
+#pop-it {
+  color: white;
+  background-color: black;
+  padding: 5px 4px;
+  min-width: 300px;
+  font-weight: 600;
+  margin-left: 14px;
+  border: white 1px solid;
+  cursor: pointer;
+}
 #move-it {
   color: white;
   background-color: black;
-  padding-left: 8px;
-  padding-right: 8px;
+  padding: 5px 4px;
   min-width: 300px;
+  font-weight: 600;
   margin-left: 14px;
-  border-left: white 1px solid;
-  border-right: white 1px solid;
-  border-bottom: white 1px solid;
+  border: white 1px solid;
   cursor: pointer;
 }
 #new-thing-segment {

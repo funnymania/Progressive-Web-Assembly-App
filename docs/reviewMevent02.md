@@ -12,6 +12,7 @@ Design
 [] - Add 'Why' explanation url for why this only provides limited options
 [] - Limit capacity from 3 - 5
 [] - Stylize scrollbar on explanationbox
+[] - Stylize scrollbars an queue items
 
 Code
 [] - Read from localStorage to save values, not the backingData. 
