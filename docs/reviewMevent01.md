@@ -15,6 +15,8 @@ same with the stack (move to queue button should be same size as stack display)
 (balckbackground on text area and white text, add to queue button visually identical
 to move to queue buttton)
 
+[] new thing text box should at least be taller
+
 [] spinner needs to work
 
 [] add a clear everything button
