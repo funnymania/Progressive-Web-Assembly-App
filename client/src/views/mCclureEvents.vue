@@ -31,7 +31,7 @@
             <div id="move-it" @click="moveToQueue">Move to Queue...</div>
             <br />
             <input type="radio" id="first-queue-1" name="status-1" value="0" />
-            <label for="first-queue-1">Conflicts</label>
+            <label for="first-queue-1" style="margin-right:35px;">Conflicts</label>
             <input type="radio" id="second-queue-1" name="status-1" value="1" checked />
             <label for="second-queue-1">Incomplete</label>
           </div>
@@ -44,7 +44,7 @@
         <label for="first-queue">Conflicts</label>
         <input type="radio" id="second-queue" name="status-2" value="1" checked />
         <label for="second-queue">Incomplete</label>
-        <button id="new-thing-submit" @click="addToQueue">Add to queue</button>
+        <div id="new-thing-submit" @click="addToQueue">Add to queue</div>
       </div>
     </div>
     <!-- <div id="the-spinner" class="spinney glowing-green in-and-out-z">
@@ -391,6 +391,18 @@ input[type="text"] {
   outline: none;
   text-align: center;
 }
+input[type="radio"] {
+  background-color: #222;
+  color: #ddd;
+  height: 20px;
+  width: 20px;
+  cursor: pointer;
+  outline: none;
+  border-radius: 20%;
+  border: 3px solid #002211;
+  vertical-align: bottom;
+}
+
 #app-root {
   position: relative;
   color: white;
@@ -460,8 +472,16 @@ input[type="text"] {
   padding: 5px 4px;
   border: white 1px solid;
   cursor: pointer;
+  border-radius: 10px;
   font-weight: bold;
 }
+#stack-share-button:hover,
+#stack-share-button:focus,
+#stack-share-button:active {
+  color: black;
+  background-color: white;
+}
+
 #bottom-sect {
   display: flex;
   justify-content: space-around;
@@ -491,21 +511,65 @@ input[type="text"] {
   font-weight: 600;
   margin-left: 14px;
   border: white 1px solid;
+  border-radius: 10px;
   cursor: pointer;
+}
+#pop-it:hover,
+#pop-it:focus,
+#pop-it:active {
+  color: black;
+  background-color: white;
 }
 #move-it {
   color: white;
   background-color: black;
   padding: 5px 4px;
   font-weight: 600;
+  margin-top: 8px;
   margin-left: 14px;
+  border-radius: 10px;
   border: white 1px solid;
   cursor: pointer;
 }
+#move-it:hover,
+#move-it:focus,
+#move-it:active {
+  color: black;
+  background-color: white;
+}
+
 #new-thing-segment {
   display: flex;
   flex-direction: column;
+  min-width: 300px;
+  width: 75%;
 }
+#new-thing-submit {
+  color: white;
+  background-color: black;
+  padding: 5px 4px;
+  font-weight: 600;
+  margin-left: 14px;
+  margin-top: 8px;
+  border: white 1px solid;
+  border-radius: 10px;
+  cursor: pointer;
+}
+#new-thing-submit:hover,
+#new-thing-submit:focus,
+#new-thing-submit:active {
+  color: black;
+  background-color: white;
+}
+
+#new-addon {
+  height: 160px;
+  overflow-y: auto;
+  background-color: black;
+  color: white;
+  padding: 10px;
+}
+
 #the-spinner {
   /* circle with four gaps, two of the gaps have a rotatedbox-shadow to represent the arrow */
   border: 3px solid transparent;

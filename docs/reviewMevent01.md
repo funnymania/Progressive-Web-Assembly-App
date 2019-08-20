@@ -4,19 +4,18 @@ Aesthetic
 
 [X] Add a 'How does this work?' link at the top which will explain to the user how this functions (explain bit, capacity generating a queue, etc)
 
-[] text in each queue entry needs to wrap at some point (~265)
+[X] text in each queue entry needs to wrap at some point (~265)
 same with the stack (move to queue button should be same size as stack display)
 
-[] move to queue button should stand out more as a button
+[X] move to queue button should stand out more as a button
 
+[X] space out conflicts and incomplete bett
 
-[] space out conflicts and incomplete bett
-
-[] need a design decision: should New Thing look like The Stack?
+[X] need a design decision: should New Thing look like The Stack?
 (balckbackground on text area and white text, add to queue button visually identical
 to move to queue buttton)
 
-[] new thing text box should at least be taller
+[X] new thing text box should at least be taller
 
 [] spinner needs to work
 

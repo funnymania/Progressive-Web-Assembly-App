@@ -17,4 +17,4 @@ Design
 Code
 [] - Read from localStorage to save values, not the backingData. 
 [] - share-url-box should be a general box for pop-up dialogs
-
+[] - scss for setting variables (like background-color = black, etc)
