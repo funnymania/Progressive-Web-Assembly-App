@@ -328,20 +328,21 @@ export default {
     },
     popUpBoxOnElementClick(e) {
       this.verbosePopUpText = `This is a simple personal task management solution built with a focus on providing only limited control over its behavior.
-        <br><br>Add any <b>New Thing</b> you come up with to complete. If the <b>Stack</b> is empty, then your <b>New Thing</b> is added to it, otherwise it goes into one of the 2 <b>Queues</b>.
-        <br><br>Both <b>Queues</b> behave identically, only coloring those items marked as <span style="color:skyblue;"><b>Incomplete</b></span> and <span style="color:darkorange;"><b>Conflicts</b></span> respectively.
-      <br><br>The distinction is for yourself to consider. <span style="color:skyblue;"><b>Incomplete</b></span> items are meant to be those which you have not completed. A <span style="color:darkorange;"><b>Conflicts</b></span> item behaves exactly as <span style="color:skyblue;"><b>Incomplete</b></span>, except that you are currently unable to handle it. They both behave identically in the system.
-      <br><br>You only work on what is on the <b>Stack</b>, without question. If the item is that of <span style="color:darkorange;"><b>Conflicts</b></span> you MUST address it. That is the game we are playing.
-      <br><br>If the <span style="color:darkorange;"><b>Conflicts</b></span> is unresolved after addressing it, you may then <b>Move to Queue</b>. <span style="color:skyblue;"><b>Incomplete</b></span> items should always be completed when they are on the <b>Stack</b>. <b>No swapping for a better card</b>, that is the game we are playing here.
-      <br><br>The <b>bit</b> value, 0 or 1, determines which of the two <b>Queues</b> are pulled from. This value flips between <span style="color:skyblue;"><b>Incomplete</b></span> and <span style="color:darkorange;"><b>Conflicts</b></span>, so that you must address <span style="color:darkorange;"><b>Conflicts</b></span> without bias towards lower hanging fruit. That is the game we are playing here.
-      <br><br>The <b>capacity</b> item determines the size allowed of both <b>Queues</b> combined. Currently the default of 4 is recommended, on the next update, only 3-5 will be allowed.
-      <br><br>If you find yourself wanting to take on more <b>New Things</b> while at full capacity, instead of increasing the capacity, complete what is in <b>Stack</b> if you can. It is recommended that you only increase capacity if all items are in the Queues are <span style="color:darkorange;"><b>Conflicts</b></span>.
-      <br><br>Only three legal moves are allowed in the <b>Stack</b>. Popping the task (completing it), Moving to Queue when in a <span style="color:darkorange;"><b>Conflicts</b></span> state, and changing state to the task. <span style="color:skyblue;"><b>Incomplete</b></span> items cannot be moved back into the <b>Queues</b>, they must be completed, unless they become <span style="color:darkorange;"><b>Conflicts</b></span>.
-      <br><br>If you are a registered <b>Ghost</b>, the stack will save automatically, and can be loaded from any device on login.
-      <br><br>If you unregistered, it will persist to your device, and will be removed upon clearing cache.
-      <br><br>If registered a unique link is associated with your shared stacks and will remain active forever.
-      <br><br>If unregistered, it will only last until the next day's end.
-      <br><br>Please tweet your comments or hopes and dreams or if you just want a ghost to talk to @shinepickaw`;
+        <br><br><h4><u><b>In short</b>:</u></h4> Add to queue, only work on what/s in the stack, pop off the stack when something is finished.
+        <br><br><h4><u><b>More Detail</b></u></h4>Add any <b>New Thing</b> you come up with. If the <b>Stack</b> is empty, then your <b>New Thing</b> is added to it, otherwise it goes into one of the 2 <b>Queues</b>.
+        <br><br>Both <b>Queues</b> behave identically, only coloring their items differently as <span style="color:skyblue;"><b>Incomplete</b></span> and <span style="color:darkorange;"><b>Conflicts</b></span> respectively.
+        <br><br>The distinction between the two is for yourself to establish. <span style="color:skyblue;"><b>Incomplete</b></span> items are default, those which you have not completed. A <span style="color:darkorange;"><b>Conflicts</b></span> is something you are currently unable to take care of, because of something which is out of your control completely.
+        <br><br>You only work on that which is on the <b>Stack</b>. <b><u>That's it</u></b>. If the item on the Stack is that of <span style="color:darkorange;"><b>Conflicts</b></span> you <b>MUST</b> address it. That is the game we are playing.
+        <br><br>If the <span style="color:darkorange;"><b>Conflicts</b></span> is unresolved after addressing it, you may then <b>Move to Queue</b>. <span style="color:skyblue;"><b>Incomplete</b></span> items should always be completed when they are on the <b>Stack</b>. <b>No swapping for a better card</b>, that is the game we are playing here.
+        <br><br>The <b>bit</b> value, 0 or 1, determines which of the two <b>Queues</b> are pulled from. This value flips between <span style="color:skyblue;"><b>Incomplete</b></span> and <span style="color:darkorange;"><b>Conflicts</b></span>, so that you must address <span style="color:darkorange;"><b>Conflicts</b></span> without bias towards lower hanging fruit. That is the game we are playing here.
+        <br><br>The <b>capacity</b> item determines the size allowed of both <b>Queues</b> combined. Currently the default of 4 is recommended, on the next update, only 3-5 will be allowed.
+        <br><br>If you find yourself wanting to take on more <b>New Things</b> while at full capacity, instead of increasing the capacity, complete what is in the <b>Stack</b> if you can. It is recommended that you only increase capacity if all items in the Queues are <span style="color:darkorange;"><b>Conflicts</b></span>.
+        <br><br>Only three legal moves are allowed in the <b>Stack</b>. You can complete a task in the Stack by popping it, you can click <b>Moving to Queue</b> when in a <span style="color:darkorange;"><b>Conflicts</b></span> state, and a task/s state can be changed. <span style="color:skyblue;"><b>Incomplete</b></span> items cannot be moved back into the <b>Queues</b>, they must be completed, unless they become <span style="color:darkorange;"><b>Conflicts</b></span>.
+        <br><br>If you are a registered <b>Ghost</b>, the stack will save automatically, and can be loaded from any device on login.
+        <br><br>If you are unregistered, it will persist to your device, and will be removed upon clearing cache.
+        <br><br>If you are registered, a unique link is associated with your shared stacks and will remain active forever.
+        <br><br>If unregistered, it will only last until the next day's end.
+        <br><br>Please tweet your comments or hopes and dreams or if you just want a ghost to talk to <a href="https://twitter.com/shinepickaw" style="color:white;font-weight:600;"><b>@shinepickaw</b></a>`;
 
       let modal = document.getElementById("verbose-text-box");
       modal.classList.toggle("show-modal");
@@ -411,6 +412,7 @@ input[type="text"] {
   opacity: 0;
   overflow-y: auto;
   height: 90%;
+  min-width: 480px;
   margin: 0 auto;
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 1);

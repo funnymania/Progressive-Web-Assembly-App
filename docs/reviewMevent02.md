@@ -2,6 +2,7 @@ Fixes
 [] - 'Conflicts' does not (visibally?) move to queue from stack
       Instead, when cycling, 'I am empty' moves to stack. 
       Popping 'I am empty' does nothing
+[] - ExplainationBox: Click outside to hide
 
 Design
 [] - Need a global logo / something to click back to home

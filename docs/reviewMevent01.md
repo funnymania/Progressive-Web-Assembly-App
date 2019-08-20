@@ -2,7 +2,7 @@ Review Notes
 
 Aesthetic
 
-[] Add a 'How does this work?' link at the top which will explain to the user how this functions (explain bit, capacity generating a queue, etc)
+[X] Add a 'How does this work?' link at the top which will explain to the user how this functions (explain bit, capacity generating a queue, etc)
 
 [] text in each queue entry needs to wrap at some point (~265)
 same with the stack (move to queue button should be same size as stack display)
