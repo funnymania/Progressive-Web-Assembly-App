@@ -32,16 +32,3 @@ orange slightly reddish border around queue entries which are conflicts
 Code
 
 [X] Remove invisible box code from setUpQueues
-
-[] queues should be linked lists.
-   sorted similarly with empty on the right
-
-[] moveToStack would simply take from front
-    and flip bit
-
-[] queueToStack would not exist, replaced by:
-    moveToStack()
-    addEmptyToEnd(stackToAddTo)
-
-
- 
