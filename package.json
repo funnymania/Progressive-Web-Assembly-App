@@ -13,7 +13,6 @@
     "nodemon": "latest",
     "body-parser": "1.16.1",
     "nconf": "0.10.0",
-    "lodash": "4.17.5",
     "express": "latest",
     "nodemailer": "latest",
     "pg": "latest",
