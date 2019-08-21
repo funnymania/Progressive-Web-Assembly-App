@@ -20,6 +20,7 @@ Design
 [] - queue entry should not grow completely freely (will take up most of screen if other entries are empty
 
 Code
+[] - Push updates to user from PWA
 [] - Read from localStorage to save values, not the backingData. 
 [] - share-url-box should be a general box for pop-up dialogs
 [] - scss for setting variables (like background-color = black, etc)
