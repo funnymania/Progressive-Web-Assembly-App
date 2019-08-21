@@ -2,7 +2,6 @@
   <div id="app-root">
     <span id="help-top" @click="popUpBoxOnElementClick">How does this work?</span>
     <h2>mCclure's task loop</h2>
-    <!-- TODO: Currently only support growing capacity + 2 queues -->
     <div id="flex-top">
       <div id="bit-segment">
         <div class="sm-heading">bit: {{ this.bit }}</div>
@@ -13,8 +12,18 @@
       </div>
     </div>
     <div id="queue-enclosure">
-      <div class="queue-item" v-for="entry in queues[0]" :key="entry.id">{{ entry.content }}</div>
-      <div class="queue-item" v-for="entry in queues[1]" :key="entry.id">{{ entry.content }}</div>
+      <div class="queue-item" v-for="entry in queues[0]" :key="entry.id">
+        <div class="queue-content-box conflicts">{{ entry.content }}</div>
+        <div class="queue-entry-tb">
+          <span class="close-textbox" @click="removeContentFromEntry(entry, $event)"></span>
+        </div>
+      </div>
+      <div class="queue-item" v-for="entry in queues[1]" :key="entry.id">
+        <div class="queue-content-box incomplete">{{ entry.content }}</div>
+        <div class="queue-entry-tb">
+          <span class="close-textbox" @click="removeContentFromEntry(entry, $event)"></span>
+        </div>
+      </div>
     </div>
     <div id="stack-share-belt">
       <div id="stack-share-button" @click="shareYourStack">&#x1F95e; Share your stack!</div>
@@ -143,6 +152,11 @@ export default {
       localStorage.setItem("boxNumber", this.boxNumber);
 
       // Persist change to server
+      this.saveYourStack();
+    },
+    removeContentFromEntry(entry, event) {
+      entry.content = emptyText;
+      localStorage.setItem("queues", JSON.stringify(this.queues));
       this.saveYourStack();
     },
     clearEverything() {
@@ -498,15 +512,49 @@ input[type="radio"] {
 }
 #queue-enclosure {
   display: flex;
+  flex-wrap: wrap;
   height: 200px;
   margin-bottom: 10px;
 }
 .queue-item {
   flex-grow: 1;
   border: 1px solid white;
-  min-width: 200px;
+  min-width: 170px;
   overflow: hidden;
+  height: 200px;
+  overflow-y: hidden;
   white-space: pre-wrap;
+  position: relative;
+}
+.queue-content-box {
+  margin: 3px 4px 3px 4px;
+  height: 100%;
+}
+.incomplete {
+  box-shadow: 0px 0px 12px 2px skyblue;
+}
+.conflicts {
+  box-shadow: 0px 0px 12px 2px darkorange;
+}
+.queue-entry-tb {
+  position: absolute;
+  height: 15px;
+  right: 10px;
+  bottom: 10px;
+}
+.close-textbox {
+  cursor: pointer;
+  height: 17px;
+  width: 17px;
+  display: inline-block;
+  background-color: white;
+  border-radius: 50%;
+  border: 1px solid black;
+}
+.close-textbox::before {
+  content: "X";
+  font-weight: 600;
+  color: black;
 }
 #invisible-box {
   visibility: hidden;
@@ -712,7 +760,7 @@ input[type="radio"] {
     transform: rotateZ(45deg);
   }
   50% {
-    transform: rotateZ(235deg);
+    transform: rotateZ(225deg);
   }
 }
 @keyframes rotateZ-scale-xy-in-out {
@@ -720,13 +768,13 @@ input[type="radio"] {
     transform: scale(1, 1) rotateZ(0deg);
   }
   25% {
-    transform: scale(0.9, 0.9) rotateZ(135deg);
+    transform: scale(0.8, 0.8) rotateZ(90deg);
   }
   50% {
-    transform: scale(1, 1) rotateZ(225deg);
+    transform: scale(1, 1) rotateZ(180deg);
   }
   75% {
-    transform: scale(1.1, 1.1) rotateZ(315deg);
+    transform: scale(1.1, 1.1) rotateZ(270deg);
   }
   100% {
     transform: scale(1, 1) rotateZ(360deg);

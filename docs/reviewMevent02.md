@@ -16,6 +16,8 @@ Design
 [] - Stylize scrollbars an queue items
 [] - Plasma lamp inside spinner
 [] - spinner timing is off, arrows don't look correct
+[] on lowering capcity, which will be via + and - buttons, capcity cannot be lowered unless there is something empty in the queue. 
+[] - queue entry should not grow completely freely (will take up most of screen if other entries are empty
 
 Code
 [] - Read from localStorage to save values, not the backingData. 

@@ -21,14 +21,12 @@ to move to queue buttton)
 
 [X] add a clear everything button
 
-[] clear contents from each queue entry
-also expose some 'x' button of sorts to REMOVE a queue item itself
-(queue capacity decreases from 4 to 3 for instance on clicking x)
+[X] remove an item for the queue (accomplished by setting content  == emptyTe. this is for just after you add something, but it's not correct)
 
-[] adding capacity beyond window width should wrap 
+[X] adding capacity beyond window width should wrap 
 (ideally without bringing up scroll bars)
 
-[] light blue border around queue entries that are incomplete
+[X] light blue border around queue entries that are incomplete
 orange slightly reddish border around queue entries which are conflicts
 
 Code
@@ -36,18 +34,14 @@ Code
 [X] Remove invisible box code from setUpQueues
 
 [] queues should be linked lists.
-
-[] sorted similarly with empty on the right
+   sorted similarly with empty on the right
 
 [] moveToStack would simply take from front
-
-[] and flip bit
+    and flip bit
 
 [] queueToStack would not exist, replaced by:
-
-[] moveToStack()
-
-[] addEmptyToEnd(stackToAddTo)
+    moveToStack()
+    addEmptyToEnd(stackToAddTo)
 
 
  
