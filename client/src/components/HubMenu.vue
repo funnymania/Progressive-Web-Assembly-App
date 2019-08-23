@@ -1,5 +1,8 @@
 <template>
   <div id="nav">
+    <router-link to="/events" class="menu-a">Capitol Hill Art Exhibition</router-link>
+    <br />
+    <br />
     <router-link to="/mCclureEvents" class="menu-a">Helpful Personal Task Management</router-link>
     <br />
     <br />

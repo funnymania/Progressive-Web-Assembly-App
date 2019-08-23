@@ -9,6 +9,7 @@ import mCclureEvents from "./views/mCclureEvents.vue";
 import Warts from "./views/Warts.vue";
 import SwitchArt from "./views/warts/Switch-Art.vue";
 import FearIsTheSoul from "./views/warts/FearIsTheSoul.vue";
+import Events from "./views/Events.vue";
 
 Vue.use(Router);
 
@@ -43,6 +44,11 @@ export default new Router({
       path: "/ghosts",
       name: 'ghosts',
       component: Ghosts
+    },
+    {
+      path: "/events",
+      name: 'events',
+      component: Events
     },
     {
       path: "/warts",
