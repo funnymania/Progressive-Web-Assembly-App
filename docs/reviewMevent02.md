@@ -24,3 +24,6 @@ Code
 [] - Read from localStorage to save values, not the backingData. 
 [] - share-url-box should be a general box for pop-up dialogs
 [] - scss for setting variables (like background-color = black, etc)
+
+Cloud
+[] - vue apps should not need to be shipped from our backend. They should be shipped in something like S3
