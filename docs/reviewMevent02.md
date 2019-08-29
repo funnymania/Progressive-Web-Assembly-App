@@ -1,4 +1,10 @@
 Fixes
+[] - Sessions will persist until they are cleared by cronjob. 
+    On Log-in, if we do NOT have the session cookie, we must create 
+    a new session. initially, we will allow countless sessions. 
+    But in the NEXT update, we will only allow one session per device. 
+[] - saving stack on changes should only occur when logged in 
+[] - Because we are dealing with multiple devices, with potentially different local storage representing stacks, we must get directly from DB on mounted. We can have a loading spinner, and reveal stack when a connection is made.  
 [] - 'Conflicts' does not (visibally?) move to queue from stack
       Instead, when cycling, 'I am empty' moves to stack. 
       Popping 'I am empty' does nothing
@@ -11,6 +17,7 @@ Design
       pop up
 [] - New Thing text box needs sleeker styling
 [] - Add 'Why' explanation url for why this only provides limited options
+[] - 'You are Offline.' onclick="changes will not be persisted until we are connected"
 [] - Limit capacity from 3 - 5
 [] - Stylize scrollbar on explanationbox
 [] - Stylize scrollbars an queue items

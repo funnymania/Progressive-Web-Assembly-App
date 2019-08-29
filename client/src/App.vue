@@ -30,6 +30,7 @@ export default {
   methods: {
     callGhost() {
       this.ghostCalled = true;
+      this.logInText = "Ghosts enter here.";
     },
     changeToPhaseUi(uname) {
       localStorage.setItem("userName", uname);

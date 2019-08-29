@@ -25,7 +25,7 @@
         <br />
         <label>p</label>
         <input
-          type="text"
+          type="password"
           name="ghost-pass"
           placeholder="Ghost pass here."
           autocomplete="on"

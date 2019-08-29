@@ -6,15 +6,6 @@ const emails = require('./apis/emails')
 
 mCcEvents.api.connectToDb()
 
-// const { Client } = require('pg')
-// const pgClient = new Client()
-
-// pgClient.connect().then(() =>
-//   pgClient.query('SELECT $1::text as message', ['Hello world!'])
-// ).then(pgTest => console.log(pgTest.rows[0].message))
-//   .then(() => pgClient.end())
-//   .catch(err => console.log(err))
-
 // const client = redis.createClient({
 // auth_pass: config.cacheAuth,
 // // tls: { checkServerIdentity: () => undefined }
@@ -26,18 +17,16 @@ mCcEvents.api.connectToDb()
 
 // client.on('error', (err) => {
 // console.log('Redis error: ' + err)
-// })
+// }
 
 const app = express()
 
 const port = process.env.PORT || 3000;
 
-// TODO: S3 bucket!
 app.use(express.static('./client/dist'))
 
 app.use(express.json())
 
-// TODO: Implement search. How to query and insert jobs into redis. 
 app.post('/gather', (req, res) => {
   console.log(req.body)
 
@@ -67,17 +56,14 @@ app.post('/phase-in', (req, res) => {
         // Returns session id.
         mCcEvents.api.startSession(authRes.userData)
           .then(sessRes => {
-            if (!sessRes.loggedIn) {
-              res.set(
-                {
-                  'Content-Type': 'application/json',
-                  'Set-Cookie': 'sid=' + sessRes.userToken + '; Expires=Wed, 21 Oct 2030 07:28:00 GMT',
-                })
-              console.log('setting cookie')
-            }
+            res.set(
+              {
+                'Content-Type': 'application/json',
+                'Set-Cookie': 'sid=' + sessRes.userToken + '; Expires=Wed, 21 Oct 2030 07:28:00 GMT',
+              })
+            console.log('setting cookie')
             console.log('jsoning')
             res.json({ msg: 'You are freely phasing. :)', name: authRes.userData.name })
-
           })
           .catch(err => {
             console.log(err)
@@ -125,50 +111,53 @@ app.post('/amnesia/*', (req, res) => {
 
 app.post('/save-stack', (req, res) => {
   let cookie = req.get('Cookie')
-  let sessId = cookie.slice(cookie.indexOf('=') + 1)
-  mCcEvents.api.getUserSession(sessId)
-    .then(sessRes => {
-      if (sessRes.rows.length > 0) {
-        mCcEvents.api.updateStack(req.body, sessRes.rows[0].uid)
-          .then(updateRes => {
-            console.log(updateRes)
-            if (updateRes.rows[0].share_url == null) {
-              mCcEvents.api.createStackShareUrl(updateRes.rows[0].uid)
-                .then(createRes => res.json({ msg: 'Stack saved.' }))
-                .catch(err => console.log(err))
-            } else {
-              res.json({ msg: 'Stack saved.' })
-            }
-          })
-          .catch(err => console.log(err))
-      }
-    })
+  if (cookie != undefined) {
+    let sessId = cookie.slice(cookie.indexOf('=') + 1)
+    mCcEvents.api.getUserSession(sessId)
+      .then(sessRes => {
+        if (sessRes.rows.length > 0) {
+          mCcEvents.api.updateStack(req.body, sessRes.rows[0].uid)
+            .then(updateRes => {
+              console.log(updateRes)
+              if (updateRes.rows[0].share_url == null) {
+                mCcEvents.api.createStackShareUrl(updateRes.rows[0].uid)
+                  .then(createRes => res.json({ msg: 'Stack saved.' }))
+                  .catch(err => console.log(err))
+              } else {
+                res.json({ msg: 'Stack saved.' })
+              }
+            })
+            .catch(err => console.log(err))
+        } else {
+          res.json({ error: 1, msg: 'Your session has ended, please log-in.' })
+        }
+      })
+  }
 })
 
 app.post('/share-stack', (req, res) => {
-  // console.log(req.headers)
   let cookie = req.get('Cookie')
-  let sessId = cookie.slice(cookie.indexOf('=') + 1)
-  mCcEvents.api.getUserSession(sessId)
-    .then(sessRes => {
-      if (sessRes.rows.length > 0) {
-        mCcEvents.api.getStack(sessRes.rows[0].uid)
-          .then(stackRes => {
-            console.log(stackRes)
-            res.json({ url: stackRes.rows[0].share_url })
-          }
-          )
-      } else {
-        // User is not logged in, save stack to public, inform user that link will be discarded
-        // the day after next. URL will persist forever if you have an account
-        // Validate if user is allowed to do this.
-        mCcEvents.api.insertPubStackShareUrl(req.body)
-          .then(stackRes => res.json({
-            url: stackRes.rows[0].share_url,
-            msg: 'Not a user.'
-          })).catch(() => res.status(500).send({ error: 1, msg: 'Something went wrong :dizzyface:' }))
-      }
-    })
+  if (cookie != undefined) {
+    let sessId = cookie.slice(cookie.indexOf('=') + 1)
+    mCcEvents.api.getUserSession(sessId)
+      .then(sessRes => {
+        if (sessRes.rows.length > 0) {
+          mCcEvents.api.getStack(sessRes.rows[0].uid)
+            .then(stackRes => {
+              console.log(stackRes)
+              res.json({ url: stackRes.rows[0].share_url })
+            })
+        } else {
+          res.json({ error: 1, msg: 'Your session has ended, please log-in.' })
+        }
+      })
+  } else {
+    mCcEvents.api.insertPubStackShareUrl(req.body)
+      .then(stackRes => res.json({
+        url: stackRes.rows[0].share_url,
+        msg: 'Not a user.'
+      })).catch(() => res.status(500).send({ error: 1, msg: 'Something went wrong :dizzyface:' }))
+  }
 })
 
 app.post('/become-ghost', (req, res) => {

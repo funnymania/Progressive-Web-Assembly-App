@@ -74,15 +74,14 @@ let api = (function () {
         if (selRes.rows.length == 1) {
           console.log('Session already exists')
           selRes.loggedIn = true
-          return selRes
-        } else {
-          return pgClient.query("INSERT INTO sessions VALUES ("
-            + "'" + true + "',"
-            + "'" + new Date().toISOString() + "',"
-            + "'" + userData.uid + "',"
-            + "'" + hashToken + "')"
-          )
+          // return selRes
         }
+        return pgClient.query("INSERT INTO sessions VALUES ("
+          + "'" + true + "',"
+          + "'" + new Date().toISOString() + "',"
+          + "'" + userData.uid + "',"
+          + "'" + hashToken + "')"
+        )
       })
       .then(selRes => {
         selRes.userToken = userToken
@@ -155,6 +154,9 @@ let api = (function () {
       ))
   }
   let GetSession = function (sessid) {
+    if (sessid == 0) {
+      sessid = uuidv4()
+    }
     const hashToken = crypto.createHash('sha1').update(sessid).digest('hex')
     return pgClient.query("SELECT uid FROM sessions WHERE sess_hash = "
       + "'" + hashToken + "'"
