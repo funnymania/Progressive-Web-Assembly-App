@@ -119,7 +119,7 @@ let api = (function () {
       })
   }
   let InsertPubStackShareUrl = function (stack) {
-    let newUrl = baseUrl + 'mCclureEvents/' + uuidv4()
+    let newUrl = uuidv4()
     return pgClient.query("INSERT INTO mccevents_pub VALUES ("
       + "'" + newUrl + "',"
       + "'" + new Date().toISOString() + "',"
@@ -168,11 +168,19 @@ let api = (function () {
       + "'" + uid + "'")
   }
   let CreateStackShareUrl = function (uid) {
-    let stackShareUrl = baseUrl + 'mCclureEvents/' + uuidv4()
+    let stackShareUrl = uuidv4()
     return pgClient.query("UPDATE mccevents SET " +
       "share_url='" + stackShareUrl + "'" +
       " WHERE uid='" + uid + "'"
     )
+  }
+  let GetPublicSharedStack = function (uuid) {
+    return pgClient.query("SELECT * from mccevents_pub WHERE share_url = "
+      + "'" + uuid + "'")
+  }
+  let GetUserSharedStack = function (uuid) {
+    return pgClient.query("SELECT * from mccevents WHERE share_url = "
+      + "'" + uuid + "'")
   }
 
   return {
@@ -187,8 +195,10 @@ let api = (function () {
     insertPubStackShareUrl: InsertPubStackShareUrl,
     insertPassResetUrl: InsertPassResetUrl,
     updatePassword: UpdatePassword,
-    getUserSession: GetSession,
     getStack: GetStack,
+    getUserSession: GetSession,
+    getUserSharedStack: GetUserSharedStack,
+    getPublicSharedStack: GetPublicSharedStack,
     createStackShareUrl: CreateStackShareUrl,
   }
 })()

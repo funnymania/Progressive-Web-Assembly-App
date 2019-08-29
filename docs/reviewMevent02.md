@@ -10,6 +10,8 @@ Fixes
       Popping 'I am empty' does nothing
 [] - ExplainationBox: Click outside to hide
 [] - capacity should be displaying current capacity
+[] - do not store hardcoded urls in db, only store the unique UUID,
+use application code to piece together where the user should go
 
 Design
 [] - Need a global logo / something to click back to home

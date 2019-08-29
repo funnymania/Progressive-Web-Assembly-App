@@ -26,8 +26,13 @@ export default new Router({
       component: jokL
     },
     {
-      path: "/mCclureEvents",
+      path: "/mCclureEvents/",
       name: "mCclureEvents",
+      component: mCclureEvents
+    },
+    {
+      path: "/mCclureEvents/:user/:id",
+      name: "sharedmCclureEvents",
       component: mCclureEvents
     },
     {

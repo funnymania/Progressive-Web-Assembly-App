@@ -103,32 +103,55 @@ export default {
     };
   },
   mounted() {
-    // load from localStorage into data.
-    let boxNumGrab = localStorage.getItem("boxNumber");
-    this.boxNumber = boxNumGrab == null ? 0 : boxNumGrab;
-
-    let bitGrab = localStorage.getItem("bit");
-    this.bit = bitGrab == null ? 1 : bitGrab;
-
-    let queuesGrab = JSON.parse(localStorage.getItem("queues"));
-    let queuesDefault = [];
-    queuesDefault.push([]);
-    queuesDefault.push([]);
-    this.queues = queuesGrab == null ? queuesDefault : queuesGrab;
-
-    // Sort such that empties are at the end.
-    for (let i = 0; i < this.queues.length; i++) {
-      this.queues[i].sort((one, other) => {
-        if (other.content == emptyText) {
-          return -1;
-        } else {
-          return 0;
+    console.log(this.$route.params);
+    if (this.$route.params.id && this.$route.params.user) {
+      let reqStr =
+        "seeSharedStack/" +
+        this.$route.params.user +
+        "/" +
+        this.$route.params.id;
+      fetch(reqStr, {
+        credentials: "include",
+      })
+      .then(res => res.json())
+      .then(resJ => {
+        if (resJ.error) {
+          throw resJ.msg
         }
-      });
-    }
+        this.boxNumber = resJ.the_stack.boxNumber
+        this.bit = resJ.the_stack.bit
+        this.queues = resJ.the_stack.queues
+        this.stack = resJ.the_stack.stack
+      })
+      .catch(err => this.popUpBoxWithContent(err))
+    } else {
+      // load from localStorage into data.
+      let boxNumGrab = localStorage.getItem("boxNumber");
+      this.boxNumber = boxNumGrab == null ? 0 : boxNumGrab;
 
-    let stackGrab = JSON.parse(localStorage.getItem("stack"));
-    this.stack = stackGrab == null ? { content: emptyText } : stackGrab;
+      let bitGrab = localStorage.getItem("bit");
+      this.bit = bitGrab == null ? 1 : bitGrab;
+
+      let queuesGrab = JSON.parse(localStorage.getItem("queues"));
+      let queuesDefault = [];
+      queuesDefault.push([]);
+      queuesDefault.push([]);
+      this.queues = queuesGrab == null ? queuesDefault : queuesGrab;
+
+      // Sort such that empties are at the end.
+      for (let i = 0; i < this.queues.length; i++) {
+        this.queues[i].sort((one, other) => {
+          if (other.content == emptyText) {
+            return -1;
+          } else {
+            return 0;
+          }
+        });
+      }
+
+      let stackGrab = JSON.parse(localStorage.getItem("stack"));
+      this.stack = stackGrab == null ? { content: emptyText } : stackGrab;
+    }
   },
   methods: {
     setUpQueues(e) {

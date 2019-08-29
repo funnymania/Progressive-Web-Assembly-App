@@ -4,6 +4,8 @@ const express = require('express')
 const mCcEvents = require('./apis/mCclureEvents')
 const emails = require('./apis/emails')
 
+const baseUrl = 'https://shinepickaw.rip/#/'
+
 mCcEvents.api.connectToDb()
 
 // const client = redis.createClient({
@@ -93,6 +95,57 @@ app.post('/forgot-pass', (req, res) => {
     .catch(err => res.json({ msg: err }))
 })
 
+app.get('/seeSharedStack/:user/:id', (req, res) => {
+  let uuid = req.params.id
+  let userOrPub = req.params.user
+
+  if (userOrPub == 'p') {
+    mCcEvents.api.getPublicSharedStack(uuid)
+      .then(getRes => {
+        console.log(getRes.rows)
+        if (getRes.rows.length > 0) {
+          res.json({
+            the_stack: {
+              stack: getRes.rows[0].stack,
+              queues: getRes.rows[0].queue,
+              bit: getRes.rows[0].bit,
+              boxNumber: getRes.rows[0].boxnumber,
+            }
+          })
+        } else {
+          res.json({ error: 1, msg: 'Stack no longer exists.' })
+        }
+      })
+      .catch(err => {
+        console.log(err)
+        res.json({ msg: err })
+      })
+  } else if (userOrPub == 'u') {
+    mCcEvents.api.getUserSharedStack(uuid)
+      .then(getRes => {
+        console.log(getRes.rows)
+        if (getRes.rows.length > 0) {
+          res.json({
+            the_stack: {
+              stack: getRes.rows[0].stack,
+              queues: getRes.rows[0].queue,
+              bit: getRes.rows[0].bit,
+              boxNumber: getRes.rows[0].boxnumber,
+            }
+          })
+        } else {
+          res.json({ error: 1, msg: 'Stack no longer exists.' })
+        }
+      })
+      .catch(err => {
+        console.log(err)
+        res.json({ msg: err })
+      })
+  } else {
+    res.json({ msg: 'Invalid url' })
+  }
+})
+
 // This gets sent on submitting updated password from the clientside forgot-my-password route  
 app.post('/amnesia/*', (req, res) => {
   let url = 'https://' + 'shinepickaw.rip' + req.originalUrl
@@ -145,7 +198,7 @@ app.post('/share-stack', (req, res) => {
           mCcEvents.api.getStack(sessRes.rows[0].uid)
             .then(stackRes => {
               console.log(stackRes)
-              res.json({ url: stackRes.rows[0].share_url })
+              res.json({ url: baseUrl + 'mCclureEvents/u/' + stackRes.rows[0].share_url })
             })
         } else {
           res.json({ error: 1, msg: 'Your session has ended, please log-in.' })
@@ -154,7 +207,7 @@ app.post('/share-stack', (req, res) => {
   } else {
     mCcEvents.api.insertPubStackShareUrl(req.body)
       .then(stackRes => res.json({
-        url: stackRes.rows[0].share_url,
+        url: baseUrl + 'mCclureEvents/p/' + stackRes.rows[0].share_url,
         msg: 'Not a user.'
       })).catch(() => res.status(500).send({ error: 1, msg: 'Something went wrong :dizzyface:' }))
   }
@@ -181,6 +234,16 @@ app.post('/become-ghost', (req, res) => {
     .catch(err => {
       res.json({ error: 1, msg: 'Something peculiar has happened on the other side' })
     })
+})
+
+app.get('/mCclureEvents/*/*', (req, res) => {
+  console.log('Getting vue from mCcEvents')
+  res.set('Content-Type', 'text/html')
+  fs.readFile('./client/dist/index.html', (err, data) => {
+    err != null
+      ? console.log(err)
+      : res.send(data)
+  })
 })
 
 app.get('/', (req, res) => {
