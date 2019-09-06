@@ -3,6 +3,7 @@ const redis = require('redis')
 const express = require('express')
 const mCcEvents = require('./apis/mCclureEvents')
 const emails = require('./apis/emails')
+const shrinkray = require('shrink-ray')
 
 const baseUrl = 'https://shinepickaw.rip/#/'
 
@@ -25,8 +26,10 @@ const app = express()
 
 const port = process.env.PORT || 3000;
 
+app.use(shrinkray({
+  cacheSize: 64,
+}))
 app.use(express.static('./client/dist'))
-
 app.use(express.json())
 
 app.post('/gather', (req, res) => {

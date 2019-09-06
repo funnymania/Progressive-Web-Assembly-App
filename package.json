@@ -10,14 +10,16 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "nodemon": "latest",
-    "body-parser": "1.16.1",
-    "nconf": "0.10.0",
-    "express": "latest",
-    "nodemailer": "latest",
-    "pg": "latest",
     "bcrypt": "latest",
-    "uuid": "latest",
-    "redis": "latest"
+    "body-parser": "1.16.1",
+    "express": "latest",
+    "iltorb": "^2.4.3",
+    "nconf": "0.10.0",
+    "nodemailer": "latest",
+    "nodemon": "latest",
+    "pg": "latest",
+    "redis": "latest",
+    "shrink-ray": "latest",
+    "uuid": "latest"
   }
 }
