@@ -19,7 +19,7 @@
     "nodemon": "latest",
     "pg": "latest",
     "redis": "latest",
-    "shrink-ray": "latest",
+    "compression": "latest",
     "uuid": "latest"
   }
 }
