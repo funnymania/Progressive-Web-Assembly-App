@@ -14,6 +14,7 @@ Fixes
 use application code to piece together where the user should go
 
 Design
+[] - Remove squares / vue logo thing (replace with global logo.)
 [] - Need a global logo / something to click back to home
 [] - black fade out when modal for Sharing stack and help explanations
       pop up
