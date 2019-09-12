@@ -216,6 +216,32 @@ app.post('/share-stack', (req, res) => {
   }
 })
 
+app.get('/load-stack', (req, res) => {
+  let cookie = req.get('Cookie')
+  if (cookie != undefined) {
+    let sessId = cookie.slice(cookie.indexOf('=') + 1)
+    mCcEvents.api.getUserSession(sessId)
+      .then(sessRes => {
+        if (sessRes.rows.length > 0) {
+          mCcEvents.api.getStack(sessRes.rows[0].uid)
+            .then(stackRes => {
+              console.log(stackRes)
+              res.json({
+                the_stack: {
+                  stack: stackRes.rows[0].stack,
+                  queues: stackRes.rows[0].queue,
+                  bit: stackRes.rows[0].bit,
+                  boxNumber: stackRes.rows[0].boxnumber,
+                }
+              })
+            })
+        } else {
+          res.json({ error: 1, msg: 'Your session has ended, please log-in.' })
+        }
+      })
+  }
+})
+
 app.post('/become-ghost', (req, res) => {
   // Check if email exists.
   mCcEvents.api.getUserEmail(req.body.email)

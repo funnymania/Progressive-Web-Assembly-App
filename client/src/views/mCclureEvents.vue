@@ -77,6 +77,10 @@
       <span class="butt-yes" @click="popUpDialogChoice">It's gone.</span>
       <span class="butt-no" @click="popUpDialogChoice">It's not.</span>
     </span>
+    <span id="generic-pop-up-info">
+      <h3>{{ genPopUpTitle}}</h3>
+      <span>{{genPopUpText }}</span>
+    </span>
     <span id="share-url-box">
       <h3>Ghost Stack Url</h3>
       <span id="copy-field">{{ popUpText }}</span>
@@ -99,6 +103,8 @@ export default {
         content: emptyText
       },
       popUpText: "",
+      genPopUpTitle: "",
+      genPopUpText: "",
       verbosePopUpText: ""
     };
   },
@@ -106,6 +112,7 @@ export default {
     userState: Object
   },
   mounted() {
+    console.log(this.userState);
     // if user comes from sharedStack link, bring in the corresponding stack
     // else, if user not logged in, load from local storage
     // otherwise, if user is logged in, pull from server.
@@ -133,7 +140,7 @@ export default {
       !this.userState.userName ||
       this.userState.newChanges.mccEvents
     ) {
-      // load from localStorage into data.
+      console.log("Loading from storage...");
       this.loadStackFromStorage();
     } else {
       console.log("Phone home...");
@@ -157,14 +164,16 @@ export default {
     }
   },
   watch: {
-    userData(newVal) {
-      if (newVal.userData.userName != "" && !newVal.newChanges.mccEvents) {
+    userState(newVal) {
+      console.log(newVal);
+      if (newVal.userName != "" && !newVal.newChanges.mccEvents) {
         console.log("Phone home...");
         fetch("load-stack", {
           credentials: "include"
         })
           .then(res => res.json())
           .then(resJ => {
+            console.log(resJ);
             if (resJ.error) {
               throw resJ.msg;
             }
@@ -329,24 +338,50 @@ export default {
       let queueNum = document.querySelector('input[name="status-1"]:checked')
         .value;
 
-      // Add to end.
-      this.queues[queueNum].push({
-        content: stackContent.innerHTML
-      });
+      if (queueNum == 1) {
+        this.popUpInfoBoxWithContent(
+          "Can't Do THAT!!",
+          `
+            Can only shift Conflicts to the queue. 
+            Incomplete items MUST be taken care of in the stack. 
+          `
+        );
+      } else {
+        // Add to end.
+        this.queues[queueNum].push({
+          content: stackContent.innerHTML
+        });
 
-      // Sort such that empties are at the end.
-      this.queues[queueNum].sort((one, other) => {
-        if (other.content == emptyText) {
-          return -1;
-        } else {
-          return 0;
-        }
-      });
+        // Sort such that empties are at the end.
+        this.queues[queueNum].sort((one, other) => {
+          if (one.content == emptyText) {
+            if (other.content != emptyText) {
+              return 1;
+            } else {
+              return 0;
+            }
+          } else if (other.content == emptyText) {
+            if (one.content != emptyText) {
+              return -1;
+            } else {
+              return 0;
+            }
+          } else {
+            return 0;
+          }
+        });
 
-      // now use bit to add to stack from correct queue
-      // if one queue is empty, the other is, by virtue of above, necessarily non-empty
-      // Flip bit if necessary.
-      this.moveToStack();
+        // now use bit to add to stack from correct queue
+        // if one queue is empty, the other is, by virtue of above, necessarily non-empty
+        // Flip bit if necessary.
+        this.moveToStack();
+      }
+    },
+    popUpInfoBoxWithContent(title, content) {
+      this.genPopUpTitle = title;
+      this.genPopUpText = content;
+      let modal = document.getElementById("generic-pop-up-info");
+      modal.classList.toggle("show-modal");
     },
     moveToStack() {
       if (this.queues[this.bit].every(el => el.content == emptyText)) {
@@ -412,7 +447,7 @@ export default {
           this.saveYourStack();
         }
       } else {
-        this.toast("You've already got yours hands full.");
+        this.popUpBoxWithContent("You've already got yours hands full.");
       }
     },
     saveYourStack() {
@@ -445,7 +480,7 @@ export default {
         .then(res => res.json())
         .then(json => {
           if (json.error) {
-            console.log(json.error);
+            throw json.error;
           }
           if (
             this.userState.userName != null &&
@@ -841,6 +876,7 @@ input[type="radio"] {
   animation: toast-up 2s;
 }
 #share-url-box,
+#generic-pop-up-info,
 #popup-dialog {
   visibility: hidden;
   opacity: 0;
@@ -855,6 +891,7 @@ input[type="radio"] {
   padding: 0 10px 20px;
 }
 #share-url-box.show-modal,
+#generic-pop-up-info.show-modal,
 #verbose-text-box.show-modal,
 #popup-dialog.show-modal {
   visibility: visible;

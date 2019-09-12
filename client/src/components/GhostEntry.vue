@@ -29,7 +29,7 @@
           name="ghost-pass"
           placeholder="Ghost pass here."
           autocomplete="on"
-          @keyup.enter="validateForm"
+          @keyup.enter="phaseIn"
         />
         <br />
         <div id="button-row">

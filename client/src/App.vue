@@ -39,7 +39,8 @@ export default {
     },
     changeToPhaseUi(uname) {
       localStorage.setItem("userName", uname);
-      this.userState.userName = uname;
+      let copy = { ...this.userState, userName: uname };
+      this.userState = copy;
       this.logInText = "WELCOME, " + this.userState.userName;
       this.ghostCalled = false;
     },

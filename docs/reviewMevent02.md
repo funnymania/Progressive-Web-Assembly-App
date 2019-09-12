@@ -2,7 +2,7 @@
 
 Fixes
 [X] - saveYourStack: saving stack on changes should only occur when logged in 
-[] - Because we are dealing with multiple devices, with potentially different local storage representing stacks, we must get directly from DB on mounted. We can have a loading spinner, and reveal stack when a connection is made.  
+[X] - test stack load flow 
 [] - 'Conflicts' does not (visibally?) move to queue from stack
       Instead, when cycling, 'I am empty' moves to stack. 
       Popping 'I am empty' does nothing
@@ -18,7 +18,6 @@ use application code to piece together where the user should go
 Marketing
 [] - attract more users via dev.to, hackernews... ig?
 
-
 Design
 [] - New Thing clears contents on 'Add'
 [] - Remove squares / vue logo thing (replace with global logo.)
@@ -26,7 +25,7 @@ Design
 [] - black fade out when modal for Sharing stack and help explanations pop up
 [] - New Thing text box needs sleeker styling
 [] - Add 'Why' explanation url for why this only provides limited options
-[] - 'You are Offline.' onclick="changes will not be persisted until we are connected"
+[] - 'You are Working Offline.' onclick="changes will not be persisted until we are connected"
 [] - Limit capacity from 3 - 5
 [] - Stylize scrollbar on explanationbox
 [] - Stylize scrollbars an queue items
@@ -36,6 +35,11 @@ Design
 [] - queue entry should not grow completely freely (will take up most of screen if other entries are empty
 [] - might need to set character limit on textarea?
 []- better launcher flow for pwa on native
+[] - Stack: colorcode stack with incomplete / conflicts state
+[] - Stack: bubble choice should align with state of task in stack
+[X] - Stack: should not be allowed to move incomplete back to stack
+[] - Howdoesthiswork, cantdothat: Click outside modals should hide them
+
 
 Code
 [] - Push updates to user from PWA
@@ -43,6 +47,7 @@ Code
 [] - share-url-box should be a general box for pop-up dialogs
 [] - scss for setting variables (like background-color = black, etc)
 []- create swap partition in localcache for stack in case one is working offline (prob thru service worker)
+[] - if offline, periodically run heartbeats to server. on reconnect, flip offline, persist data. 
 
 Cloud
 [] - vue apps should not need to be shipped from our backend. They should be shipped in something like S3
