@@ -1,5 +1,5 @@
 <template>
-  <div id="app-root">
+  <div id="app-root" @click="handleOutsideClicks">
     <span id="help-top" @click="popUpBoxOnElementClick">How does this work?</span>
     <h2>mCclure's task loop</h2>
     <div id="flex-top">
@@ -79,7 +79,7 @@
     </span>
     <span id="generic-pop-up-info">
       <h3>{{ genPopUpTitle}}</h3>
-      <span>{{genPopUpText }}</span>
+      <span>{{ genPopUpText }}</span>
     </span>
     <span id="share-url-box">
       <h3>Ghost Stack Url</h3>
@@ -105,7 +105,8 @@ export default {
       popUpText: "",
       genPopUpTitle: "",
       genPopUpText: "",
-      verbosePopUpText: ""
+      verbosePopUpText: "",
+      modalUp: false
     };
   },
   props: {
@@ -190,6 +191,13 @@ export default {
     }
   },
   methods: {
+    handleOutsideClicks(e) {
+      // Hide all modals showing.
+      let modals = document.getElementsByClassName("show-modal");
+      for (let i = 0; i < modals.length; i++) {
+        modals[i].classList.toggle("show-modal");
+      }
+    },
     loadStackFromStorage() {
       let boxNumGrab = localStorage.getItem("boxNumber");
       this.boxNumber = boxNumGrab == null ? 0 : boxNumGrab;
@@ -256,6 +264,7 @@ export default {
     popUpDialog() {
       let modal = document.getElementById("popup-dialog");
       modal.classList.toggle("show-modal");
+      this.modalUp = true;
     },
     popUpDialogChoice(e) {
       let modal = document.getElementById("popup-dialog");
@@ -280,8 +289,10 @@ export default {
         }
 
         modal.classList.toggle("show-modal");
+        this.modalUp = false;
       } else {
         modal.classList.toggle("show-modal");
+        this.modalUp = false;
       }
     },
     taskComplete(e) {
@@ -332,6 +343,7 @@ export default {
       }
     },
     moveToQueue(e) {
+      e.stopPropagation();
       let stackContent = document.getElementById("stack-content");
 
       // grab value of status-1
@@ -526,6 +538,7 @@ export default {
       );
     },
     popUpBoxOnElementClick(e) {
+      e.stopPropagation();
       this.verbosePopUpText = `This is a simple personal task management solution built with a focus on providing only limited control over its behavior.
         <br><br><h4><u><b>In short</b>:</u></h4> Add to queue, only work on what/s in the stack, pop off the stack when something is finished.
         <br><br><h4><u><b>More Detail</b></u></h4>Add any <b>New Thing</b> you come up with. If the <b>Stack</b> is empty, then your <b>New Thing</b> is added to it, otherwise it goes into one of the 2 <b>Queues</b>.
@@ -545,11 +558,13 @@ export default {
 
       let modal = document.getElementById("verbose-text-box");
       modal.classList.toggle("show-modal");
+      this.modalUp = true;
     },
     popUpBoxWithContent(text) {
       this.popUpText = text;
       let modal = document.getElementById("share-url-box");
       modal.classList.toggle("show-modal");
+      this.modalUp = true;
     },
     copyToClipboard() {
       let toCopy = document.createElement("INPUT");
@@ -561,6 +576,7 @@ export default {
 
       let modal = document.getElementById("share-url-box");
       modal.classList.toggle("show-modal");
+      this.modalUp = false;
     },
     toast(msg) {
       let toastEl = document.getElementById("toast");

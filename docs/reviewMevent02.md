@@ -3,11 +3,11 @@
 Fixes
 [X] - saveYourStack: saving stack on changes should only occur when logged in 
 [X] - test stack load flow 
-[] - 'Conflicts' does not (visibally?) move to queue from stack
+[X] - 'Conflicts' does not (visibally?) move to queue from stack
       Instead, when cycling, 'I am empty' moves to stack. 
       Popping 'I am empty' does nothing
-[] - ExplainationBox: Click outside to hide
-[] - capacity should be displaying current capacity
+[X] - ExplainationBox: Click outside to hide
+[X] - capacity should be displaying current capacity
 [] - do not store hardcoded urls in db, only store the unique UUID,
 use application code to piece together where the user should go
 [] - Sessions will persist until they are cleared by cronjob. 
@@ -38,7 +38,6 @@ Design
 [] - Stack: colorcode stack with incomplete / conflicts state
 [] - Stack: bubble choice should align with state of task in stack
 [X] - Stack: should not be allowed to move incomplete back to stack
-[] - Howdoesthiswork, cantdothat: Click outside modals should hide them
 
 
 Code
