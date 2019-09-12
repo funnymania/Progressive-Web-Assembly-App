@@ -8,7 +8,7 @@
       </div>
       <div id="input-segment">
         <label>Enter your capacity:</label>
-        <input id="capacity-input" type="text" @keyup.enter="setUpQueues" />
+        <input :value="this.boxNumber" id="capacity-input" type="text" @keyup.enter="setUpQueues" />
       </div>
     </div>
     <div id="queue-enclosure">
