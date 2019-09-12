@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view />
+    <router-view :userState="this.userState" />
     <div id="footer">
       <!-- <div id="footer-branding">the shinepickaw creative ecosystem @ omon art</div> -->
       <div id="ghost-entry-link" @click="callGhost">{{ logInText }}</div>
@@ -24,7 +24,9 @@ export default {
     return {
       ghostCalled: false,
       logInText: "Ghosts enter here.",
-      userName: ""
+      userState: {
+        userName: ""
+      }
     };
   },
   methods: {
@@ -34,15 +36,15 @@ export default {
     },
     changeToPhaseUi(uname) {
       localStorage.setItem("userName", uname);
-      this.userName = uname;
-      this.logInText = "WELCOME, " + this.userName;
+      this.userState.userName = uname;
+      this.logInText = "WELCOME, " + this.userState.userName;
       this.ghostCalled = false;
     }
   },
   mounted() {
-    this.userName = localStorage.getItem("userName");
-    if (this.userName != null) {
-      this.logInText = "WELCOME, " + this.userName;
+    this.userState.userName = localStorage.getItem("userName");
+    if (this.userState.userName != null) {
+      this.logInText = "WELCOME, " + this.userState.userName;
     }
   }
 };

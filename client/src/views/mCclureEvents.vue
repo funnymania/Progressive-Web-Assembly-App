@@ -102,8 +102,10 @@ export default {
       verbosePopUpText: ""
     };
   },
+  props: {
+    userState: Object
+  },
   mounted() {
-    console.log(this.$route.params);
     if (this.$route.params.id && this.$route.params.user) {
       let reqStr =
         "seeSharedStack/" +
@@ -111,19 +113,19 @@ export default {
         "/" +
         this.$route.params.id;
       fetch(reqStr, {
-        credentials: "include",
+        credentials: "include"
       })
-      .then(res => res.json())
-      .then(resJ => {
-        if (resJ.error) {
-          throw resJ.msg
-        }
-        this.boxNumber = resJ.the_stack.boxNumber
-        this.bit = resJ.the_stack.bit
-        this.queues = resJ.the_stack.queues
-        this.stack = resJ.the_stack.stack
-      })
-      .catch(err => this.popUpBoxWithContent(err))
+        .then(res => res.json())
+        .then(resJ => {
+          if (resJ.error) {
+            throw resJ.msg;
+          }
+          this.boxNumber = resJ.the_stack.boxNumber;
+          this.bit = resJ.the_stack.bit;
+          this.queues = resJ.the_stack.queues;
+          this.stack = resJ.the_stack.stack;
+        })
+        .catch(err => this.popUpBoxWithContent(err));
     } else {
       // load from localStorage into data.
       let boxNumGrab = localStorage.getItem("boxNumber");
@@ -175,12 +177,16 @@ export default {
       localStorage.setItem("boxNumber", this.boxNumber);
 
       // Persist change to server
-      this.saveYourStack();
+      if (this.userState.userName) {
+        this.saveYourStack();
+      }
     },
     removeContentFromEntry(entry, event) {
       entry.content = emptyText;
       localStorage.setItem("queues", JSON.stringify(this.queues));
-      this.saveYourStack();
+      if (this.userState.userName) {
+        this.saveYourStack();
+      }
     },
     clearEverything() {
       // Are you sure?
@@ -208,7 +214,9 @@ export default {
         );
 
         // and then save this.
-        this.saveYourStack();
+        if (this.userState.userName) {
+          this.saveYourStack();
+        }
 
         modal.classList.toggle("show-modal");
       } else {
@@ -232,7 +240,9 @@ export default {
       localStorage.setItem("stack", JSON.stringify(this.stack));
 
       // Persist change to server
-      this.saveYourStack();
+      if (this.userState.userName) {
+        this.saveYourStack();
+      }
     },
     queueToStack() {
       if (this.queues[this.bit].every(el => el.content == emptyText)) {
@@ -256,7 +266,9 @@ export default {
       localStorage.setItem("bit", this.bit);
 
       // Persist change to server
-      this.saveYourStack();
+      if (this.userState.userName) {
+        this.saveYourStack();
+      }
     },
     moveToQueue(e) {
       let stackContent = document.getElementById("stack-content");
@@ -299,7 +311,9 @@ export default {
       localStorage.setItem("bit", this.bit);
 
       // Persist change to server
-      this.saveYourStack();
+      if (this.userState.userName) {
+        this.saveYourStack();
+      }
     },
     addToQueue(e) {
       if (this.stack.content == emptyText) {
@@ -307,7 +321,9 @@ export default {
         localStorage.setItem("stack", JSON.stringify(this.stack));
 
         // Persist change to server
-        this.saveYourStack();
+        if (this.userState.userName) {
+          this.saveYourStack();
+        }
       } else if (!this.isCapacityAtMax()) {
         let queueNum = document.querySelector('input[name="status-2"]:checked')
           .value;
@@ -340,12 +356,15 @@ export default {
         localStorage.setItem("queues", JSON.stringify(this.queues));
 
         // Persist change to server
-        this.saveYourStack();
+        if (this.userState.userName) {
+          this.saveYourStack();
+        }
       } else {
         this.toast("You've already got yours hands full.");
       }
     },
     saveYourStack() {
+      console.log("Saving Stack...");
       // grab everything.
       let theStack = {
         stack: JSON.parse(localStorage.getItem("stack")),

@@ -186,6 +186,8 @@ app.post('/save-stack', (req, res) => {
           res.json({ error: 1, msg: 'Your session has ended, please log-in.' })
         }
       })
+  } else {
+    res.json({ error: 1, msg: 'Session cookie not found' })
   }
 })
 

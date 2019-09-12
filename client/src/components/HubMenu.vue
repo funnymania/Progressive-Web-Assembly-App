@@ -35,7 +35,8 @@
 export default {
   name: "HubMenu",
   props: {
-    msg: String
+    msg: String,
+    userState: Object
   }
 };
 </script>
