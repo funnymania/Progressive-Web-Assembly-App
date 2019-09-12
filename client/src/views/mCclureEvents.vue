@@ -106,6 +106,9 @@ export default {
     userState: Object
   },
   mounted() {
+    // if user comes from sharedStack link, bring in the corresponding stack
+    // else, if user not logged in, load from local storage
+    // otherwise, if user is logged in, pull from server.
     if (this.$route.params.id && this.$route.params.user) {
       let reqStr =
         "seeSharedStack/" +
@@ -126,8 +129,59 @@ export default {
           this.stack = resJ.the_stack.stack;
         })
         .catch(err => this.popUpBoxWithContent(err));
-    } else {
+    } else if (
+      !this.userState.userName ||
+      this.userState.newChanges.mccEvents
+    ) {
       // load from localStorage into data.
+      this.loadStackFromStorage();
+    } else {
+      console.log("Phone home...");
+      fetch("load-stack", {
+        credentials: "include"
+      })
+        .then(res => res.json())
+        .then(resJ => {
+          if (resJ.error) {
+            throw resJ.msg;
+          }
+          this.boxNumber = resJ.the_stack.boxNumber;
+          this.bit = resJ.the_stack.bit;
+          this.queues = resJ.the_stack.queues;
+          this.stack = resJ.the_stack.stack;
+        })
+        .catch(err => {
+          console.log(err);
+          this.loadStackFromStorage();
+        });
+    }
+  },
+  watch: {
+    userData(newVal) {
+      if (newVal.userData.userName != "" && !newVal.newChanges.mccEvents) {
+        console.log("Phone home...");
+        fetch("load-stack", {
+          credentials: "include"
+        })
+          .then(res => res.json())
+          .then(resJ => {
+            if (resJ.error) {
+              throw resJ.msg;
+            }
+            this.boxNumber = resJ.the_stack.boxNumber;
+            this.bit = resJ.the_stack.bit;
+            this.queues = resJ.the_stack.queues;
+            this.stack = resJ.the_stack.stack;
+          })
+          .catch(err => {
+            console.log(err);
+            this.loadStackFromStorage();
+          });
+      }
+    }
+  },
+  methods: {
+    loadStackFromStorage() {
       let boxNumGrab = localStorage.getItem("boxNumber");
       this.boxNumber = boxNumGrab == null ? 0 : boxNumGrab;
 
@@ -153,9 +207,7 @@ export default {
 
       let stackGrab = JSON.parse(localStorage.getItem("stack"));
       this.stack = stackGrab == null ? { content: emptyText } : stackGrab;
-    }
-  },
-  methods: {
+    },
     setUpQueues(e) {
       // only support growing
       if (e.target.value < this.boxNumber) {
@@ -365,6 +417,12 @@ export default {
     },
     saveYourStack() {
       console.log("Saving Stack...");
+
+      // If user logged in, note that these changes have yet to be persisted
+      if (this.userState.userName != null && this.userState.userName != "") {
+        this.$emit("unsavedChanges", { mccEvents: true });
+      }
+
       // grab everything.
       let theStack = {
         stack: JSON.parse(localStorage.getItem("stack")),
@@ -373,6 +431,7 @@ export default {
         boxNumber: JSON.parse(localStorage.getItem("boxNumber"))
       };
       console.log(theStack);
+
       // ship it.
       fetch("save-stack", {
         method: "POST",
@@ -387,6 +446,12 @@ export default {
         .then(json => {
           if (json.error) {
             console.log(json.error);
+          }
+          if (
+            this.userState.userName != null &&
+            this.userState.userName != ""
+          ) {
+            this.$emit("unsavedChanges", { mccEvents: false });
           }
         })
         .catch(err => console.log(err));

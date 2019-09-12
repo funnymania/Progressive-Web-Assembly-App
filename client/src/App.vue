@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view :userState="this.userState" />
+    <router-view :userState="this.userState" @unsavedChanges="newUnpersistedState" />
     <div id="footer">
       <!-- <div id="footer-branding">the shinepickaw creative ecosystem @ omon art</div> -->
       <div id="ghost-entry-link" @click="callGhost">{{ logInText }}</div>
@@ -25,7 +25,10 @@ export default {
       ghostCalled: false,
       logInText: "Ghosts enter here.",
       userState: {
-        userName: ""
+        userName: "",
+        newChanges: {
+          mccEvents: false
+        }
       }
     };
   },
@@ -39,11 +42,14 @@ export default {
       this.userState.userName = uname;
       this.logInText = "WELCOME, " + this.userState.userName;
       this.ghostCalled = false;
+    },
+    newUnpersistedState(state) {
+      Object.assign(this.userState.newChanges, state);
     }
   },
   mounted() {
     this.userState.userName = localStorage.getItem("userName");
-    if (this.userState.userName != null) {
+    if (this.userState.userName != null && this.userState.userName != "") {
       this.logInText = "WELCOME, " + this.userState.userName;
     }
   }
