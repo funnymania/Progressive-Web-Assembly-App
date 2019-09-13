@@ -51,7 +51,7 @@
       </div>
       <div id="new-thing-segment">
         <h3>New Thing</h3>
-        <textarea id="new-addon" />
+        <textarea id="new-addon" placeholder="Add new task here..." />
         <div>
           <input type="radio" id="first-queue" name="status-2" value="0" />
           <label for="first-queue" style="margin-right:35px;">Conflicts</label>
@@ -423,6 +423,8 @@ export default {
         if (this.userState.userName) {
           this.saveYourStack();
         }
+
+        document.getElementById("new-addon").value = "";
       } else if (!this.isCapacityAtMax()) {
         let queueNum = document.querySelector('input[name="status-2"]:checked')
           .value;
@@ -458,6 +460,8 @@ export default {
         if (this.userState.userName) {
           this.saveYourStack();
         }
+
+        document.getElementById("new-addon").value = "";
       } else {
         this.popUpBoxWithContent("You've already got yours hands full.");
       }

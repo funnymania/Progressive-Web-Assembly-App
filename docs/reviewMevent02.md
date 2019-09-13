@@ -8,7 +8,7 @@ Fixes
       Popping 'I am empty' does nothing
 [X] - ExplainationBox: Click outside to hide
 [X] - capacity should be displaying current capacity
-[] - do not store hardcoded urls in db, only store the unique UUID,
+[X] - do not store hardcoded urls in db, only store the unique UUID,
 use application code to piece together where the user should go
 [] - Sessions will persist until they are cleared by cronjob. 
     On Log-in, if we do NOT have the session cookie, we must create 
@@ -19,7 +19,7 @@ Marketing
 [] - attract more users via dev.to, hackernews... ig?
 
 Design
-[] - New Thing clears contents on 'Add'
+[X] - New Thing clears contents on 'Add'
 [] - Remove squares / vue logo thing (replace with global logo.)
 [] - Need a global logo / something to click back to home
 [] - black fade out when modal for Sharing stack and help explanations pop up
