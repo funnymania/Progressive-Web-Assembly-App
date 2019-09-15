@@ -398,9 +398,23 @@ export default {
     moveToStack() {
       if (this.queues[this.bit].every(el => el.content == emptyText)) {
         let checkInstead = this.bit == 0 ? 1 : 0;
-        this.stack = this.queues[checkInstead].shift();
+        let dequeue = this.queues[checkInstead].shift();
+        if (dequeue.content == this.stack.content) {
+          this.toast(
+            "This stays on the stack, since there are no other tasks left in the queue to switch out with."
+          );
+        } else {
+          this.stack = this.queues[checkInstead].shift();
+        }
       } else {
-        this.stack = this.queues[this.bit].shift();
+        let dequeue = this.queues[this.bit].shift();
+        if (dequeue.content == this.stack.content) {
+          this.toast(
+            "This stays on the stack, since there are no other tasks left in the queue to switch out with."
+          );
+        } else {
+          this.stack = this.queues[this.bit].shift();
+        }
         this.bit = this.bit == 0 ? 1 : 0;
       }
 
@@ -585,8 +599,6 @@ export default {
     toast(msg) {
       let toastEl = document.getElementById("toast");
 
-      toastEl.classList.remove("toast-up");
-
       // Remove all text nodes
       toastEl.childNodes.forEach(node => {
         if (node.nodeType == 3) {
@@ -595,7 +607,11 @@ export default {
       });
 
       toastEl.append(document.createTextNode(msg));
-      toastEl.classList.add("toast-up");
+
+      toastEl.classList.toggle("toast-up");
+      setTimeout(() => {
+        toastEl.classList.toggle("toast-up");
+      }, 5000);
     }
   }
 };
@@ -890,10 +906,13 @@ input[type="radio"] {
   background-color: rgba(0, 0, 0, 0.3);
   color: white;
   border: lightgrey 1px solid;
-  transition-timing-function: ease-in-out, linear;
+  /* transition-timing-function: ease-in-out, linear; */
 }
 #toast.toast-up {
-  animation: toast-up 2s;
+  animation: 2.5s toast-up;
+  animation-direction: alternate;
+  animation-timing-function: linear;
+  animation-iteration-count: 2;
 }
 #share-url-box,
 #generic-pop-up-info,
@@ -944,6 +963,21 @@ input[type="radio"] {
     transform: scale(1, 1) rotateZ(360deg);
   }
 }
+@keyframes toast-down {
+  0% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
 @keyframes toast-up {
   0% {
     opacity: 0;
@@ -956,8 +990,8 @@ input[type="radio"] {
     opacity: 1;
   }
   100% {
-    opacity: 0;
-    visibility: hidden;
+    opacity: 1;
+    visibility: visible;
   }
 }
 </style>

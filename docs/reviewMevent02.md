@@ -10,10 +10,9 @@ Fixes
 [X] - capacity should be displaying current capacity
 [X] - do not store hardcoded urls in db, only store the unique UUID,
 use application code to piece together where the user should go
-[] - Sessions will persist until they are cleared by cronjob. 
-    On Log-in, if we do NOT have the session cookie, we must create 
-    a new session. initially, we will allow countless sessions. 
-    But in the NEXT update, we will only allow one session per device. 
+[X] - Sessions will persist until they are cleared by cronjob. On Log-in, if we do NOT have the session cookie, we must create a new session. initially, we will allow countless sessions. But in the NEXT update, we will only allow one session per device. 
+[X] - callGhost: text of button changes on click to non-logged in
+[X] - Toast is only being called once...
 
 Marketing
 [] - attract more users via dev.to, hackernews... ig?
@@ -51,5 +50,4 @@ Code
 Cloud
 [] - vue apps should not need to be shipped from our backend. They should be shipped in something like S3
 [] - need some kind of metrics (like, req/s, time for serving when req received)
-
 [] - Run QA on This When Done

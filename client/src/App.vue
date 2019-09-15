@@ -35,7 +35,7 @@ export default {
   methods: {
     callGhost() {
       this.ghostCalled = true;
-      this.logInText = "Ghosts enter here.";
+      // this.logInText = "Ghosts enter here.";
     },
     changeToPhaseUi(uname) {
       localStorage.setItem("userName", uname);
@@ -46,12 +46,17 @@ export default {
     },
     newUnpersistedState(state) {
       Object.assign(this.userState.newChanges, state);
+    },
+    switchToNonUserUi() {
+      this.logInText = "Ghosts enter here.";
     }
   },
   mounted() {
     this.userState.userName = localStorage.getItem("userName");
     if (this.userState.userName != null && this.userState.userName != "") {
       this.logInText = "WELCOME, " + this.userState.userName;
+    } else {
+      this.logInText = "Ghosts enter here.";
     }
   }
 };
