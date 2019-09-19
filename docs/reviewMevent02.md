@@ -34,13 +34,14 @@ Design
 [] - queue entry should not grow completely freely (will take up most of screen if other entries are empty
 [] - might need to set character limit on textarea?
 []- better launcher flow for pwa on native
+[] - Queue: make each queue element able to be grouped with others (drag and drop)
+[] - '*)' text at beginning of line indicates that this is a task within a task.
 [] - Stack: colorcode stack with incomplete / conflicts state
 [] - Stack: bubble choice should align with state of task in stack
 [X] - Stack: should not be allowed to move incomplete back to stack
 
-
 Code
-[] - Push updates to user from PWA
+[/] - Push updates to user from PWA
 [] - Read from localStorage to save values, not the backingData. 
 [] - share-url-box should be a general box for pop-up dialogs
 [] - scss for setting variables (like background-color = black, etc)
