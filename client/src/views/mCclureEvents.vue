@@ -96,12 +96,12 @@
 </template>
 
 <script>
-const emptyText = "I am empty";
+const emptyText = "";
 export default {
   name: "mCclureEvents",
   data() {
     return {
-      processesAllowed: 0,
+      processesAllowed: 4,
       bit: 1,
       queues: [[], []],
       stack: {
@@ -219,7 +219,9 @@ export default {
       // Sort such that empties are at the end.
       for (let i = 0; i < this.queues.length; i++) {
         this.queues[i].sort((one, other) => {
-          if (other.content == emptyText) {
+          if (one.content == emptyText) {
+            return 1;
+          } else if (other.content == emptyText) {
             return -1;
           } else {
             return 0;
@@ -231,17 +233,35 @@ export default {
       this.stack = stackGrab == null ? { content: emptyText } : stackGrab;
     },
     setUpQueues(e) {
-      // only support growing
-      if (e.target.value < this.processesAllowed) {
-        alert(
-          "Only support growing capacity from this input. Individually remove boxes below."
-        );
+      // Enforce supported process amount
+      if (e.target.value < 3 || e.target.value > 5) {
+        this.toast("Only 3 - 5 processes supported.");
+        return;
       }
 
-      for (let i = 0; i < e.target.value - this.processesAllowed; i++) {
-        this.queues[0].push({
-          content: emptyText
-        });
+      let queuedProcesses =
+        this.queues[0].filter(el => el.content != emptyText).length +
+        this.queues[1].filter(el => el.content != emptyText).length;
+
+      // Cannot set processes allowed to less than processes extant
+      if (e.target.value < queuedProcesses) {
+        this.toast(
+          `There are more than ${e.target.value} processes currently active`
+        );
+        return;
+      }
+
+      // Draw boxes if needed.
+      let boxesToDraw = e.target.value - this.queues.flat().length;
+
+      if (boxesToDraw < 0) {
+        this.removeAnEntry(1);
+      } else {
+        for (let i = 0; i < boxesToDraw; i++) {
+          this.queues[1].push({
+            content: emptyText
+          });
+        }
       }
 
       this.processesAllowed = e.target.value;
@@ -278,8 +298,13 @@ export default {
       if (e.target.classList.contains("butt-yes")) {
         let initialState = this.$options.data.call(this);
 
-        // then Clear backing data to default
+        // Clear backing data to default
         Object.assign(this.$data, initialState);
+
+        // Set up queue from default.
+        this.setUpQueues({
+          target: { value: initialState.processesAllowed }
+        });
 
         // then clear local storage
         localStorage.setItem("queues", JSON.stringify(initialState.queues));
@@ -374,17 +399,9 @@ export default {
         // Sort such that empties are at the end.
         this.queues[queueNum].sort((one, other) => {
           if (one.content == emptyText) {
-            if (other.content != emptyText) {
-              return 1;
-            } else {
-              return 0;
-            }
+            return 1;
           } else if (other.content == emptyText) {
-            if (one.content != emptyText) {
-              return -1;
-            } else {
-              return 0;
-            }
+            return -1;
           } else {
             return 0;
           }
@@ -436,9 +453,43 @@ export default {
         this.saveYourStack();
       }
     },
+    // Returns either false, and a reason why; or true, and the trimmed string
+    validateNewTask(taskContent) {
+      let trimmedInput = taskContent.trim();
+      if (trimmedInput == "") {
+        return {
+          res: "",
+          msg: "Task cannot be empty."
+        };
+      }
+
+      if (trimmedInput.length > 12000) {
+        return {
+          res: "",
+          msg: "Task cannot be > 12000 characters"
+        };
+      }
+
+      return {
+        res: trimmedInput,
+        msg: "Task format valid."
+      };
+    },
     addToQueue(e) {
+      e.stopPropagation();
+
+      let validateRes = this.validateNewTask(
+        document.getElementById("new-addon").value
+      );
+
+      // If string invalid, return.
+      if (!validateRes.res) {
+        this.toast(validateRes.msg);
+        return;
+      }
+
       if (this.stack.content == emptyText) {
-        this.stack.content = document.getElementById("new-addon").value;
+        this.stack.content = validateRes.res;
         localStorage.setItem("stack", JSON.stringify(this.stack));
 
         // Persist change to server
@@ -448,29 +499,22 @@ export default {
 
         document.getElementById("new-addon").value = "";
       } else if (!this.isCapacityAtMax()) {
+        // Add to the proper queue.
         let queueNum = document.querySelector('input[name="status-2"]:checked')
           .value;
         this.queues[queueNum].push({
-          content: document.getElementById("new-addon").value
+          content: validateRes.res
         });
 
-        let emptyToRemove = this.queues[queueNum].findIndex(
-          el => el.content == emptyText
-        );
-        if (emptyToRemove == -1) {
-          queueNum = queueNum == 0 ? 1 : 0;
-          emptyToRemove = this.queues[queueNum].findIndex(
-            el => el.content == emptyText
-          );
-          this.queues[queueNum].splice(emptyToRemove, 1);
-        } else {
-          this.queues[queueNum].splice(emptyToRemove, 1);
-        }
+        // Remove the now uneccessary extra empty block from queue added to.
+        this.removeAnEntry(queueNum);
 
         // Sort such that empties are at the end.
         this.queues[queueNum].sort((one, other) => {
           if (one.content == emptyText) {
             return 1;
+          } else if (other.content == emptyText) {
+            return -1;
           } else {
             return 0;
           }
@@ -485,7 +529,24 @@ export default {
 
         document.getElementById("new-addon").value = "";
       } else {
-        this.popUpBoxWithContent("You've already got yours hands full.");
+        this.popUpInfoBoxWithContent(
+          "ONE ONLY HAS SO MANY HANDS",
+          "...and your's are all full!"
+        );
+      }
+    },
+    removeAnEntry(queueNum) {
+      let emptyToRemove = this.queues[queueNum].findIndex(
+        el => el.content == emptyText
+      );
+      if (emptyToRemove == -1) {
+        queueNum = queueNum == 0 ? 1 : 0;
+        emptyToRemove = this.queues[queueNum].findIndex(
+          el => el.content == emptyText
+        );
+        this.queues[queueNum].splice(emptyToRemove, 1);
+      } else {
+        this.queues[queueNum].splice(emptyToRemove, 1);
       }
     },
     saveYourStack() {

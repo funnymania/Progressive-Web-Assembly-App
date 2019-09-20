@@ -16,7 +16,9 @@ Marketing
 - [ ] attract more users via dev.to, hackernews... ig?
 
 Design
-- [ ] Design Overhaul: capcity no longer refers to boxNumber. Capacity refers to maximum processes alllowed. Consequentially, there are no longer 'empty text' boxes. Boxes can only grow to '5', as we are only allowing 5 processes. Processes can be grouped together by drag and drop. The behavior of queue-to-stack remains the same.  
+- [X] Design Overhaul: capcity no longer refers to boxNumber. Capacity refers to maximum processes alllowed. Consequentially, we are no longer using emptyText to define a boxes empty state. Boxes can only grow to '5', as we are only allowing 5 processes.  
+- [ ] Processes can be grouped together by drag and drop. The behavior of queue-to-stack remains the same.  
+- [ ] Placeholder / graphic backing for an empty stack and queue
 - [X] NewThing clears contents on 'Add'
 - [ ] implement new page design 
 - [ ] add about link to call ghost with card saying 'Simple apps and warts by michael d. mCclure' (twitter link)
@@ -45,6 +47,7 @@ Code
 - [ ] scss for setting variables (like background-color = black, etc)
 - [ ] create swap partition in localcache for stack in case one is working offline (prob thru service worker)
 - [ ] if offline, periodically run heartbeats to server. on reconnect, flip offline, persist data. 
+- [ ] validate on the backend
 - [ ] sql inject protect
 
 Cloud
