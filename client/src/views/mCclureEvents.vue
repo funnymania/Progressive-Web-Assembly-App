@@ -257,7 +257,9 @@ export default {
         this.saveYourStack();
       }
     },
-    clearEverything() {
+    clearEverything(e) {
+      e.stopPropagation();
+
       // Are you sure?
       this.popUpDialog();
     },
