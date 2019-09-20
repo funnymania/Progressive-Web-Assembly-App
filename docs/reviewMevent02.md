@@ -18,30 +18,31 @@ Marketing
 [] - attract more users via dev.to, hackernews... ig?
 
 Design
+[] - Design Overhaul: capcity no longer refers to boxNumber. Capacity refers to maximum processes alllowed. Consequentially, there are no longer 'empty text' boxes. Boxes can only grow to '5', as we are only allowing 5 processes. Processes can be grouped together by drag and drop. The behavior of queue-to-stack remains the same. 
 [X] - New Thing clears contents on 'Add'
-[] - Remove squares / vue logo thing (replace with global logo.)
-[] - Need a global logo / something to click back to home
-[] - black fade out when modal for Sharing stack and help explanations pop up
-[] - New Thing text box needs sleeker styling
-[] - Add 'Why' explanation url for why this only provides limited options
-[] - 'You are Working Offline.' onclick="changes will not be persisted until we are connected"
+[] - implement new page design 
+[] - add about link to call ghost with card saying 'Simple apps and warts by michael d. mCclure' (twitter link)
+[] - Small version of logo in footer which links to home.
+[] on lowering capcity, which will be via + and - buttons, capcity cannot be lowered unless there is something empty in the queue. 
+[] - Offline data flow. ontimeout => 'You are Working Offline.' @ topright onclick="Changes will not be saved until we are connected"
+[] - might need to set character limit on textarea?
+[]- better launcher flow for pwa on native, when screen opens, it just shows the icon + black screen + Text 'Ghosts'
+[] - Stack: colorcode stack with incomplete / conflicts state
 [] - Limit capacity from 3 - 5
-[] - Stylize scrollbar on explanationbox
-[] - Stylize scrollbars an queue items
+[] - Stylize scrollbar on explanationbox and queue items
 [] - Plasma lamp inside spinner
 [] - spinner timing is off, arrows don't look correct
-[] on lowering capcity, which will be via + and - buttons, capcity cannot be lowered unless there is something empty in the queue. 
 [] - queue entry should not grow completely freely (will take up most of screen if other entries are empty
-[] - might need to set character limit on textarea?
-[]- better launcher flow for pwa on native
-[] - Queue: make each queue element able to be grouped with others (drag and drop)
-[] - '*)' text at beginning of line indicates that this is a task within a task.
-[] - Stack: colorcode stack with incomplete / conflicts state
+[] - Queue item will now contain an array of tasks. When the item is selected for the stack, the first task in tasks will be sent to the stack. the project of this task will remain in the queue, the task will be in the stack, and not removed but highlighted in the queue by "pulsing" a background color in and out (kinda like cursor in vim). popping the stack when it contains a task will mark the task in the queue as complete by coloring the text grey-green and placing in front of the task a green circle with a white check mark inside it.
+[X] - Add 'Why' explanation url for why this only provides limited options
+[] - black fade out when modal for Sharing stack and help explanations pop up
 [] - Stack: bubble choice should align with state of task in stack
 [X] - Stack: should not be allowed to move incomplete back to stack
 
 Code
+[] - sql inject protect
 [/] - Push updates to user from PWA
+[] - Remove size change option (handle at bottom right corner) on New Thing text box
 [] - Read from localStorage to save values, not the backingData. 
 [] - share-url-box should be a general box for pop-up dialogs
 [] - scss for setting variables (like background-color = black, etc)
