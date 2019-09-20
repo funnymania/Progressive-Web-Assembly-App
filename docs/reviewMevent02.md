@@ -1,21 +1,22 @@
 [] - END MAIM: Ultimately transitioning to work on native ghost hub applications for mobile. (which is like directory for friends' warts)
 
 Fixes
-[X] - saveYourStack: saving stack on changes should only occur when logged in 
-[X] - test stack load flow 
-[X] - 'Conflicts' does not (visibally?) move to queue from stack
+
+- [X] - saveYourStack: saving stack on changes should only occur when logged in  
+- [X] - test stack load flow  
+- [X] - 'Conflicts' does not (visibally?) move to queue from stack
       Instead, when cycling, 'I am empty' moves to stack. 
-      Popping 'I am empty' does nothing
-[X] - ExplainationBox: Click outside to hide
-[X] - capacity should be displaying current capacity
-[X] - do not store hardcoded urls in db, only store the unique UUID,
+      Popping 'I am empty' does nothing\
+- [X] - ExplainationBox: Click outside to hide\
+- [X] - capacity should be displaying current capacity\
+- [X] - do not store hardcoded urls in db, only store the unique UUID,
 use application code to piece together where the user should go
-[X] - Sessions will persist until they are cleared by cronjob. On Log-in, if we do NOT have the session cookie, we must create a new session. initially, we will allow countless sessions. But in the NEXT update, we will only allow one session per device. 
-[X] - callGhost: text of button changes on click to non-logged in
-[X] - Toast is only being called once...
+- [X] - Sessions will persist until they are cleared by cronjob. On Log-in, if we do NOT have the session cookie, we must create a new session. initially, we will allow countless sessions. But in the NEXT update, we will only allow one session per device. 
+- [X] - callGhost: text of button changes on click to non-logged in  
+- [X] - Toast is only being called once...
 
 Marketing
-[] - attract more users via dev.to, hackernews... ig?
+- [ ] - attract more users via dev.to, hackernews... ig?
 
 Design
 [] - Design Overhaul: capcity no longer refers to boxNumber. Capacity refers to maximum processes alllowed. Consequentially, there are no longer 'empty text' boxes. Boxes can only grow to '5', as we are only allowing 5 processes. Processes can be grouped together by drag and drop. The behavior of queue-to-stack remains the same. 
