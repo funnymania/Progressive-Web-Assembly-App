@@ -27,7 +27,7 @@ Design
 - [ ] on lowering capcity, which will be via + and - buttons, capcity cannot be lowered unless there is something empty in the queue. 
 - [ ] Offline data flow. ontimeout => 'You are Working Offline.' @ topright onclick="Changes will not be saved until we are connected"
 - [ ] might need to set character limit on textarea?
-- [ ]better launcher flow for pwa on native, when screen opens, it just shows the icon + black screen + Text 'Ghosts'
+- [ ] better launcher flow for pwa on native, when screen opens, it just shows the icon + black screen + Text 'Ghosts'
 - [ ] Stack: colorcode stack with incomplete / conflicts state
 - [ ] Limit capacity from 3 - 5
 - [ ] Stylize scrollbar on explanationbox and queue items
@@ -41,16 +41,16 @@ Design
 - [X] Stack: should not be allowed to move incomplete back to stack
 
 Code
-[/] Push updates to user from PWA
-[ ] Remove size change option (handle at bottom right corner) on New Thing text box
-[ ] Read from localStorage to save values, not the backingData. 
-[ ] share-url-box should be a general box for pop-up dialogs
-[ ] scss for setting variables (like background-color = black, etc)
-[ ] create swap partition in localcache for stack in case one is working offline (prob thru service worker)
-[ ] if offline, periodically run heartbeats to server. on reconnect, flip offline, persist data. 
-[ ] sql inject protect
+- [/] Push updates to user from PWA
+- [ ] Remove size change option (handle at bottom right corner) on New Thing text box
+- [ ] Read from localStorage to save values, not the backingData. 
+- [ ] share-url-box should be a general box for pop-up dialogs
+- [ ] scss for setting variables (like background-color = black, etc)
+- [ ] create swap partition in localcache for stack in case one is working offline (prob thru service worker)
+- [ ] if offline, periodically run heartbeats to server. on reconnect, flip offline, persist data. 
+- [ ] sql inject protect
 
 Cloud
-[ ] vue apps should not need to be shipped from our backend. They should be shipped in something like S3
-[ ] need some kind of metrics (like, req/s, time for serving when req received)
-[ ] Run QA on This When Done
+- [ ] vue apps should not need to be shipped from our backend. They should be shipped in something like S3
+- [ ] need some kind of metrics (like, req/s, time for serving when req received)
+- [ ] Run QA on This When Done
