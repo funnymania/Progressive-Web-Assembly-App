@@ -7,8 +7,13 @@
         <div class="sm-heading">bit: {{ this.bit }}</div>
       </div>
       <div id="input-segment">
-        <label>Enter your capacity:</label>
-        <input :value="this.boxNumber" id="capacity-input" type="text" @keyup.enter="setUpQueues" />
+        <label>Maximum processes allowed:</label>
+        <input
+          :value="this.processesAllowed"
+          id="capacity-input"
+          type="text"
+          @keyup.enter="setUpQueues"
+        />
       </div>
     </div>
     <div id="queue-enclosure">
@@ -96,7 +101,7 @@ export default {
   name: "mCclureEvents",
   data() {
     return {
-      boxNumber: 0,
+      processesAllowed: 0,
       bit: 1,
       queues: [[], []],
       stack: {
@@ -131,7 +136,7 @@ export default {
           if (resJ.error) {
             throw resJ.msg;
           }
-          this.boxNumber = resJ.the_stack.boxNumber;
+          this.processesAllowed = resJ.the_stack.processesAllowed;
           this.bit = resJ.the_stack.bit;
           this.queues = resJ.the_stack.queues;
           this.stack = resJ.the_stack.stack;
@@ -153,7 +158,7 @@ export default {
           if (resJ.error) {
             throw resJ.msg;
           }
-          this.boxNumber = resJ.the_stack.boxNumber;
+          this.processesAllowed = resJ.the_stack.processesAllowed;
           this.bit = resJ.the_stack.bit;
           this.queues = resJ.the_stack.queues;
           this.stack = resJ.the_stack.stack;
@@ -178,7 +183,7 @@ export default {
             if (resJ.error) {
               throw resJ.msg;
             }
-            this.boxNumber = resJ.the_stack.boxNumber;
+            this.processesAllowed = resJ.the_stack.processesAllowed;
             this.bit = resJ.the_stack.bit;
             this.queues = resJ.the_stack.queues;
             this.stack = resJ.the_stack.stack;
@@ -199,8 +204,8 @@ export default {
       }
     },
     loadStackFromStorage() {
-      let boxNumGrab = localStorage.getItem("boxNumber");
-      this.boxNumber = boxNumGrab == null ? 0 : boxNumGrab;
+      let boxNumGrab = localStorage.getItem("processesAllowed");
+      this.processesAllowed = boxNumGrab == null ? 4 : boxNumGrab;
 
       let bitGrab = localStorage.getItem("bit");
       this.bit = bitGrab == null ? 1 : bitGrab;
@@ -227,23 +232,23 @@ export default {
     },
     setUpQueues(e) {
       // only support growing
-      if (e.target.value < this.boxNumber) {
+      if (e.target.value < this.processesAllowed) {
         alert(
           "Only support growing capacity from this input. Individually remove boxes below."
         );
       }
 
-      for (let i = 0; i < e.target.value - this.boxNumber; i++) {
+      for (let i = 0; i < e.target.value - this.processesAllowed; i++) {
         this.queues[0].push({
           content: emptyText
         });
       }
 
-      this.boxNumber = e.target.value;
+      this.processesAllowed = e.target.value;
 
       // Commit to localStorage
       localStorage.setItem("queues", JSON.stringify(this.queues));
-      localStorage.setItem("boxNumber", this.boxNumber);
+      localStorage.setItem("processesAllowed", this.processesAllowed);
 
       // Persist change to server
       if (this.userState.userName) {
@@ -281,8 +286,8 @@ export default {
         localStorage.setItem("stack", JSON.stringify(initialState.stack));
         localStorage.setItem("bit", JSON.stringify(initialState.bit));
         localStorage.setItem(
-          "boxNumber",
-          JSON.stringify(initialState.boxNumber)
+          "processesAllowed",
+          JSON.stringify(initialState.processesAllowed)
         );
 
         // and then save this.
@@ -496,7 +501,7 @@ export default {
         stack: JSON.parse(localStorage.getItem("stack")),
         queues: JSON.parse(localStorage.getItem("queues")),
         bit: JSON.parse(localStorage.getItem("bit")),
-        boxNumber: JSON.parse(localStorage.getItem("boxNumber"))
+        processesAllowed: JSON.parse(localStorage.getItem("processesAllowed"))
       };
       console.log(theStack);
 
@@ -530,7 +535,7 @@ export default {
         stack: this.stack,
         queues: this.queues,
         bit: this.bit,
-        boxNumber: this.boxNumber
+        processesAllowed: this.processesAllowed
       };
 
       // ship it.
@@ -555,7 +560,7 @@ export default {
     isCapacityAtMax() {
       return (
         this.queues.flat().filter(el => el.content != emptyText).length ==
-        this.boxNumber
+        this.processesAllowed
       );
     },
     popUpBoxOnElementClick(e) {

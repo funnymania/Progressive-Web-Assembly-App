@@ -1,5 +1,4 @@
 Fixes
-
 - [X] saveYourStack: saving stack on changes should only occur when logged in  
 - [X] test stack load flow  
 - [X] 'Conflicts' does not (visibally?) move to queue from stack

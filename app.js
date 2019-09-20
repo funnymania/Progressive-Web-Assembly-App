@@ -110,7 +110,7 @@ app.get('/seeSharedStack/:user/:id', (req, res) => {
               stack: getRes.rows[0].stack,
               queues: getRes.rows[0].queue,
               bit: getRes.rows[0].bit,
-              boxNumber: getRes.rows[0].boxnumber,
+              processesAllowed: getRes.rows[0].boxnumber,
             }
           })
         } else {
@@ -131,7 +131,7 @@ app.get('/seeSharedStack/:user/:id', (req, res) => {
               stack: getRes.rows[0].stack,
               queues: getRes.rows[0].queue,
               bit: getRes.rows[0].bit,
-              boxNumber: getRes.rows[0].boxnumber,
+              processesAllowed: getRes.rows[0].boxnumber,
             }
           })
         } else {
@@ -231,7 +231,7 @@ app.get('/load-stack', (req, res) => {
                   stack: stackRes.rows[0].stack,
                   queues: stackRes.rows[0].queue,
                   bit: stackRes.rows[0].bit,
-                  boxNumber: stackRes.rows[0].boxnumber,
+                  processesAllowed: stackRes.rows[0].boxnumber,
                 }
               })
             })
