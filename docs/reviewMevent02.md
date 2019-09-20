@@ -40,7 +40,6 @@ Design
 [X] - Stack: should not be allowed to move incomplete back to stack
 
 Code
-[] - sql inject protect
 [/] - Push updates to user from PWA
 [] - Remove size change option (handle at bottom right corner) on New Thing text box
 [] - Read from localStorage to save values, not the backingData. 
@@ -48,6 +47,7 @@ Code
 [] - scss for setting variables (like background-color = black, etc)
 []- create swap partition in localcache for stack in case one is working offline (prob thru service worker)
 [] - if offline, periodically run heartbeats to server. on reconnect, flip offline, persist data. 
+[] - sql inject protect
 
 Cloud
 [] - vue apps should not need to be shipped from our backend. They should be shipped in something like S3
