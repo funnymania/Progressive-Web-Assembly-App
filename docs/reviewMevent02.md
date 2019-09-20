@@ -4,7 +4,7 @@ Fixes
 - [X] test stack load flow  
 - [X] 'Conflicts' does not (visibally?) move to queue from stack
       Instead, when cycling, 'I am empty' moves to stack. 
-      Popping 'I am empty' does nothing\
+      Popping 'I am empty' does nothing 
 - [X] ExplainationBox: Click outside to hide\
 - [X] capacity should be displaying current capacity\
 - [X] do not store hardcoded urls in db, only store the unique UUID,
