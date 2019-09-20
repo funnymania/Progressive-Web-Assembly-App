@@ -41,7 +41,7 @@ Design
 - [X] Stack: should not be allowed to move incomplete back to stack
 
 Code
-- [/] Push updates to user from PWA
+- [ ] Push updates to user from PWA
 - [ ] Remove size change option (handle at bottom right corner) on New Thing text box
 - [ ] Read from localStorage to save values, not the backingData. 
 - [ ] share-url-box should be a general box for pop-up dialogs
