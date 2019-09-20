@@ -398,24 +398,25 @@ export default {
       modal.classList.toggle("show-modal");
     },
     moveToStack() {
+      let dequeue;
       if (this.queues[this.bit].every(el => el.content == emptyText)) {
         let checkInstead = this.bit == 0 ? 1 : 0;
-        let dequeue = this.queues[checkInstead].shift();
+        dequeue = this.queues[checkInstead].shift();
         if (dequeue.content == this.stack.content) {
           this.toast(
             "This stays on the stack, since there are no other tasks left in the queue to switch out with."
           );
         } else {
-          this.stack = this.queues[checkInstead].shift();
+          this.stack = dequeue;
         }
       } else {
-        let dequeue = this.queues[this.bit].shift();
+        dequeue = this.queues[this.bit].shift();
         if (dequeue.content == this.stack.content) {
           this.toast(
             "This stays on the stack, since there are no other tasks left in the queue to switch out with."
           );
         } else {
-          this.stack = this.queues[this.bit].shift();
+          this.stack = dequeue;
         }
         this.bit = this.bit == 0 ? 1 : 0;
       }
