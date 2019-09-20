@@ -1,5 +1,3 @@
-[] - END MAIM: Ultimately transitioning to work on native ghost hub applications for mobile. (which is like directory for friends' warts)
-
 Fixes
 
 - [X] saveYourStack: saving stack on changes should only occur when logged in  
