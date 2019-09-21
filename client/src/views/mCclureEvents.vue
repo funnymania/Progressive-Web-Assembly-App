@@ -18,13 +18,27 @@
     </div>
     <div id="queue-enclosure">
       <div class="queue-item" v-for="entry in queues[0]" :key="entry.id">
-        <div class="queue-content-box conflicts">{{ entry.content }}</div>
+        <div
+          draggable="true"
+          @dragstart="dragEntry(entry, $event)"
+          @dragover="dragOverEntry"
+          @drop="dropEntry($event)"
+          class="queue-content-box conflicts"
+          :class="{ 'empty-queue-entry': !entry.content }"
+        >{{ entry.content }}</div>
         <div class="queue-entry-tb">
           <span class="close-textbox" @click="removeContentFromEntry(entry, $event)"></span>
         </div>
       </div>
       <div class="queue-item" v-for="entry in queues[1]" :key="entry.id">
-        <div class="queue-content-box incomplete">{{ entry.content }}</div>
+        <div
+          draggable="true"
+          @dragstart="dragEntry(entry, $event)"
+          @dragover="dragOverEntry"
+          @drop="dropEntry($event)"
+          class="queue-content-box incomplete"
+          :class="{ 'empty-queue-entry': !entry.content }"
+        >{{ entry.content }}</div>
         <div class="queue-entry-tb">
           <span class="close-textbox" @click="removeContentFromEntry(entry, $event)"></span>
         </div>
@@ -202,6 +216,25 @@ export default {
       for (let i = 0; i < modals.length; i++) {
         modals[i].classList.toggle("show-modal");
       }
+    },
+    dragEntry(entry, event) {
+      event.dataTransfer.setData("text/plain", JSON.stringify(entry));
+      event.dataTransfer.dropEffect = "move";
+    },
+    dragOverEntry(ev) {
+      // This will cancel the dragover event, which makes dropping possible.
+      ev.preventDefault();
+    },
+    dropEntry(event) {
+      // Get data
+      let movedEntry = event.dataTransfer.getData("text/plain");
+      console.log(movedEntry);
+
+      // Create a grouping context for entry
+
+      let newGroup = [];
+
+      //
     },
     loadStackFromStorage() {
       let boxNumGrab = localStorage.getItem("processesAllowed");
@@ -776,7 +809,36 @@ input[type="radio"] {
 .queue-content-box {
   margin: 3px 4px 3px 4px;
   height: 100%;
+  position: relative;
 }
+.empty-queue-entry::after {
+  content: "EMPTY";
+  background-color: white;
+  color: black;
+  font-size: 1.4rem;
+  padding: 8px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: 2s linear infinite blink;
+  width: 90%;
+  position: absolute;
+  font-weight: 600;
+}
+/* .queue-content-box::after {
+  content: "EMPTY";
+  background-color: white;
+  color: black;
+  font-size: 1.4rem;
+  padding: 8px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: 2s linear infinite blink;
+  width: 90%;
+  position: absolute;
+  font-weight: 600;
+} */
 .incomplete {
   box-shadow: 0px 0px 12px 2px skyblue;
 }
@@ -1061,6 +1123,20 @@ input[type="radio"] {
   100% {
     opacity: 1;
     visibility: visible;
+  }
+}
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
   }
 }
 </style>

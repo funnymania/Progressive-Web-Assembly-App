@@ -17,8 +17,8 @@ Marketing
 
 Design
 - [X] Design Overhaul: capcity no longer refers to boxNumber. Capacity refers to maximum processes alllowed. Consequentially, we are no longer using emptyText to define a boxes empty state. Boxes can only grow to '5', as we are only allowing 5 processes.  
+- [X] Placeholder / graphic backing for an empty stack and queue
 - [ ] Processes can be grouped together by drag and drop. The behavior of queue-to-stack remains the same.  
-- [ ] Placeholder / graphic backing for an empty stack and queue
 - [X] NewThing clears contents on 'Add'
 - [ ] implement new page design 
 - [ ] add about link to call ghost with card saying 'Simple apps and warts by michael d. mCclure' (twitter link)
@@ -28,7 +28,7 @@ Design
 - [ ] might need to set character limit on textarea?
 - [ ] better launcher flow for pwa on native, when screen opens, it just shows the icon + black screen + Text 'Ghosts'
 - [ ] Stack: colorcode stack with incomplete / conflicts state
-- [ ] Limit capacity from 3 - 5
+- [X] Limit capacity from 3 - 5
 - [ ] Stylize scrollbar on explanationbox and queue items
 - [ ] Plasma lamp inside spinner
 - [ ] spinner timing is off, arrows don't look correct
