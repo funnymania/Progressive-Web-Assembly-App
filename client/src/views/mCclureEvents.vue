@@ -19,7 +19,7 @@
     <div id="queue-enclosure">
       <div class="queue-item" v-for="entry in queues[0]" :key="entry.id">
         <div
-          draggable="true"
+          draggable="false"
           @dragstart="dragEntry(entry, $event)"
           @dragover="dragOverEntry"
           @drop="dropEntry($event)"
@@ -32,7 +32,7 @@
       </div>
       <div class="queue-item" v-for="entry in queues[1]" :key="entry.id">
         <div
-          draggable="true"
+          draggable="false"
           @dragstart="dragEntry(entry, $event)"
           @dragover="dragOverEntry"
           @drop="dropEntry($event)"
@@ -228,13 +228,16 @@ export default {
     dropEntry(event) {
       // Get data
       let movedEntry = event.dataTransfer.getData("text/plain");
-      console.log(movedEntry);
 
       // Create a grouping context for entry
-
       let newGroup = [];
 
-      //
+      // Save to localstorage
+
+      // Persist change to server
+      if (this.userState.userName) {
+        this.saveYourStack();
+      }
     },
     loadStackFromStorage() {
       let boxNumGrab = localStorage.getItem("processesAllowed");
