@@ -908,6 +908,7 @@ input[type="radio"] {
   margin-left: 14px;
   padding: 8px;
   min-width: 300px;
+  min-height: 10px;
   display: inline-block;
   border: white 1px solid;
   white-space: pre-wrap;
