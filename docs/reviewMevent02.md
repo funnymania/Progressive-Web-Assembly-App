@@ -13,7 +13,6 @@ use application code to piece together where the user should go
 - [X] Toast is only being called once...
 
 Security
-- [ ] validate on the backend
 - [X] sql inject protect
 
 Mobile Render
