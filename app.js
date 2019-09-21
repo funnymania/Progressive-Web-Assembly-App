@@ -225,15 +225,19 @@ app.get('/load-stack', (req, res) => {
         if (sessRes.rows.length > 0) {
           mCcEvents.api.getStack(sessRes.rows[0].uid)
             .then(stackRes => {
-              console.log(stackRes)
-              res.json({
-                the_stack: {
-                  stack: stackRes.rows[0].stack,
-                  queues: stackRes.rows[0].queue,
-                  bit: stackRes.rows[0].bit,
-                  processesAllowed: stackRes.rows[0].boxnumber,
-                }
-              })
+              if (stackRes.rows.length > 0) {
+                console.log(stackRes)
+                res.json({
+                  the_stack: {
+                    stack: stackRes.rows[0].stack,
+                    queues: stackRes.rows[0].queue,
+                    bit: stackRes.rows[0].bit,
+                    processesAllowed: stackRes.rows[0].boxnumber,
+                  }
+                })
+              } else {
+                res.json({ error: 1, msg: 'User has no stack data yet.' })
+              }
             })
         } else {
           res.json({ error: 1, msg: 'Your session has ended, please log-in.' })

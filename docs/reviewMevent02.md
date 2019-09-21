@@ -14,7 +14,7 @@ use application code to piece together where the user should go
 
 Security
 - [ ] validate on the backend
-- [ ] sql inject protect
+- [X] sql inject protect
 
 Mobile Render
 - [ ] queue entry should not grow completely freely (will take up most of screen if other entries are empty
@@ -37,6 +37,7 @@ Little Fixes
 - [ ] black fade out when modal for Sharing stack and help explanations pop up
 - [ ] Stack: bubble choice should align with state of task in stack
 - [ ] Remove size change option (handle at bottom right corner) on New Thing text box
+- [ ] ghostentry: better validation on email
 
 Tasks
 - [ ] Queue item will now contain an array of tasks. When the item is selected for the stack, the first task in tasks will be sent to the stack. the project of this task will remain in the queue, the task will be in the stack, and not removed but highlighted in the queue by "pulsing" a background color in and out (kinda like cursor in vim). popping the stack when it contains a task will mark the task in the queue as complete by coloring the text grey-green and placing in front of the task a green circle with a white check mark inside it.

@@ -17,7 +17,10 @@ let api = (function () {
 
   let GetUserEmail = function (email) {
     console.log("adding user")
-    return pgClient.query("SELECT email from user_cred where email='" + email + "'")
+    return pgClient.query({
+      text: "SELECT email from user_cred where email = $1",
+      values: [email]
+    })
   }
 
   let GetUser = function (email) {
@@ -34,12 +37,12 @@ let api = (function () {
     // Hash up the pass, add a little salt.
     return bcrypt.genSalt(saltRounds)
       .then(salt => bcrypt.hash(pass, salt))
-      .then(hash => pgClient.query("INSERT INTO user_cred VALUES ("
-        + "'" + uid + "',"
-        + "'" + hash + "',"
-        + "'" + email + "',"
-        + "'" + name + "')"
-      )).then(insRes => {
+      .then(hash => pgClient.query({
+        text: "INSERT INTO user_cred VALUES ($1, $2, $3, $4)",
+        values: [uid, hash, email, name]
+      }))
+      .then(insRes => {
+        // Uuid already exits, re-roll.
         if (insRes.rowCount == 0) {
           InsertUser(email, pass)
         } else {
@@ -50,10 +53,13 @@ let api = (function () {
 
   let Authenticate = function (email, pass) {
     let userData
+    const query = {
+      text: 'SELECT phash,uid,name FROM user_cred WHERE email = $1',
+      values: [email]
+    }
+
     // Get hash, compare with user submitted pass. 
-    return pgClient.query("SELECT phash,uid,name FROM user_cred WHERE email = "
-      + "'" + email + "'"
-    )
+    return pgClient.query(query)
       .then(authRes => {
         if (authRes.rows.length > 0) {
           userData = authRes
@@ -69,19 +75,22 @@ let api = (function () {
   let InsertSession = function (userData) {
     const userToken = uuidv4()
     const hashToken = crypto.createHash('sha1').update(userToken).digest('hex')
-    return pgClient.query("SELECT sess_hash FROM sessions WHERE uid='" + userData.uid + "'")
+    const querySel = {
+      text: "SELECT sess_hash FROM sessions WHERE uid= $1",
+      values: [userData.uid],
+    }
+    const queryIns = {
+      text: "INSERT INTO sessions VALUES ($1, $2, $3, $4)",
+      values: ['true', new Date().toISOString(), userData.uid, hashToken],
+    }
+    return pgClient.query(querySel)
       .then(selRes => {
         if (selRes.rows.length == 1) {
           console.log('Session already exists')
           selRes.loggedIn = true
           // return selRes
         }
-        return pgClient.query("INSERT INTO sessions VALUES ("
-          + "'" + true + "',"
-          + "'" + new Date().toISOString() + "',"
-          + "'" + userData.uid + "',"
-          + "'" + hashToken + "')"
-        )
+        return pgClient.query(queryIns)
       })
       .then(selRes => {
         selRes.userToken = userToken
@@ -93,47 +102,53 @@ let api = (function () {
     return pgClient.query("SELECT * FROM pass_reset_urls where url="
       + "'" + url + "'")
   }
+
   let UpdateStack = function (stack, uid) {
-    console.log(uid)
-    return pgClient.query("UPDATE mccevents SET " +
-      "bit=" + stack.bit + "," +
-      "stack='" + JSON.stringify(stack.stack) + "'," +
-      "queue='" + JSON.stringify(stack.queues) + "'," +
-      "boxnumber=" + stack.boxNumber +
-      " WHERE uid='" + uid + "'" +
-      " RETURNING *"
-    )
+    return pgClient.query({
+      text: "UPDATE mccevents "
+        + "SET bit = $1, stack = $2, queue = $3, boxnumber = $4"
+        + "WHERE uid = $5 RETURNING *",
+      values: [
+        stack.bit,
+        JSON.stringify(stack.stack),
+        JSON.stringify(stack.queues),
+        stack.boxNumber,
+        uid
+      ]
+    })
       .then(upRes => {
         if (upRes.rows.length > 0) {
           return upRes
         } else {
-          return pgClient.query("INSERT INTO mccevents VALUES ("
-            + "'" + uid + "',"
-            + stack.bit + ","
-            + "'" + JSON.stringify(stack.stack) + "',"
-            + "'" + JSON.stringify(stack.queues) + "',"
-            + stack.boxNumber + ")"
-            + " RETURNING *"
-          )
+          return pgClient.query({
+            text: "INSERT INTO mccevents VALUES ($1, $2, $3, $4, $5) RETURNING *",
+            values: [
+              uid, stack.bit, JSON.stringify(stack.stack),
+              JSON.stringify(stack.queues),
+              stack.boxNumber
+            ]
+          })
         }
       })
   }
+
   let InsertPubStackShareUrl = function (stack) {
     let newUrl = uuidv4()
-    return pgClient.query("INSERT INTO mccevents_pub VALUES ("
-      + "'" + newUrl + "',"
-      + "'" + new Date().toISOString() + "',"
-      + stack.bit + ","
-      + "'" + JSON.stringify(stack.stack) + "',"
-      + "'" + JSON.stringify(stack.queues) + "',"
-      + "'" + stack.boxNumber + "'"
-      + " )"
-      + " RETURNING *"
-    )
+    return pgClient.query({
+      text: "INSERT INTO mccevents_pub VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+      values: [
+        newUrl,
+        new Date().toISOString(),
+        stack.bit,
+        JSON.stringify(stack.stack),
+        JSON.stringify(stack.queues),
+        stack.boxNumber
+      ]
+    })
   }
+
   let InsertPassResetUrl = function (uid) {
     let newUrl = baseUrl + 'amnesia/' + uuidv4()
-
     return pgClient.query("INSERT INTO pass_reset_urls VALUES (" +
       "'" + newUrl + "'," +
       "'" + uid + "'," +
@@ -153,34 +168,46 @@ let api = (function () {
         " WHERE uid='" + uid + "'"
       ))
   }
+
   let GetSession = function (sessid) {
     if (sessid == 0) {
       sessid = uuidv4()
     }
+
     const hashToken = crypto.createHash('sha1').update(sessid).digest('hex')
-    return pgClient.query("SELECT uid FROM sessions WHERE sess_hash = "
-      + "'" + hashToken + "'"
-      + " AND active=TRUE"
-    )
+    return pgClient.query({
+      text: "SELECT uid FROM sessions WHERE sess_hash = $1 AND active = TRUE",
+      values: [hashToken]
+    })
   }
+
   let GetStack = function (uid) {
-    return pgClient.query("SELECT * from mccevents WHERE uid="
-      + "'" + uid + "'")
+    return pgClient.query({
+      text: "SELECT * from mccevents WHERE uid = $1",
+      values: [uid]
+    })
   }
+
   let CreateStackShareUrl = function (uid) {
     let stackShareUrl = uuidv4()
-    return pgClient.query("UPDATE mccevents SET " +
-      "share_url='" + stackShareUrl + "'" +
-      " WHERE uid='" + uid + "'"
-    )
+    return pgClient.query({
+      text: "UPDATE mccevents SET share_url = $1 WHERE uid = $2",
+      values: [stackShareUrl, uid]
+    })
   }
+
   let GetPublicSharedStack = function (uuid) {
-    return pgClient.query("SELECT * from mccevents_pub WHERE share_url = "
-      + "'" + uuid + "'")
+    return pgClient.query({
+      text: "SELECT * from mccevents_pub WHERE share_url = ",
+      values: [uuid]
+    })
   }
+
   let GetUserSharedStack = function (uuid) {
-    return pgClient.query("SELECT * from mccevents WHERE share_url = "
-      + "'" + uuid + "'")
+    return pgClient.query({
+      text: "SELECT * from mccevents WHERE share_url = ",
+      values: [uuid]
+    })
   }
 
   return {
