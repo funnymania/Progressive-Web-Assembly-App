@@ -24,7 +24,10 @@ let api = (function () {
   }
 
   let GetUser = function (email) {
-    return pgClient.query("SELECT * from user_cred where email='" + email + "'")
+    return pgClient.query({
+      text: "SELECT * from user_cred where email = $1",
+      values: [email]
+    })
   }
 
   let InsertUser = function (email, pass) {
@@ -99,8 +102,10 @@ let api = (function () {
   }
 
   let GetPassUrl = function (url) {
-    return pgClient.query("SELECT * FROM pass_reset_urls where url="
-      + "'" + url + "'")
+    return pgClient.query({
+      text: "SELECT * FROM pass_reset_urls where url = $1",
+      values: [url]
+    })
   }
 
   let UpdateStack = function (stack, uid) {
