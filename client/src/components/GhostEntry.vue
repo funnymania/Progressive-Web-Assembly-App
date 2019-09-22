@@ -281,6 +281,7 @@ input:not(:focus) {
   width: 100%;
   position: absolute;
   top: 0%;
+  left: 0%;
   z-index: 1000;
   pointer-events: none;
 }
@@ -329,6 +330,7 @@ input:not(:focus) {
   position: absolute;
   top: 50%;
   left: 50%;
+  transform: translate(-50%, -50%) scale(0.6, 0.6);
 }
 
 #caring-ghost {

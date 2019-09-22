@@ -65,6 +65,7 @@ export default {
 <style lang="scss">
 html {
   height: 100%;
+  font-size: 24px;
 }
 
 body {
@@ -73,8 +74,8 @@ body {
 }
 
 #app {
-  font-family: "Monaco", "Fira Mono", "DejaVu Sans Mono", "Courier New", Courier,
-    monospace;
+  font-family: "Monaco", "Fira Mono", "DejaVu Sans Mono", "Consolas",
+    "Courier New", Courier, monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -139,6 +140,12 @@ body {
       border: white 1px dashed;
       cursor: pointer;
     }
+  }
+}
+
+@media (min-width: 1200px) {
+  html {
+    font-size: 16px;
   }
 }
 </style>

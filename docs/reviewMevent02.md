@@ -16,6 +16,10 @@ Security
 - [X] sql inject protect
 
 Mobile Render
+- [X] clear extra space to right of app
+- [X] text size is too small
+- [ ] New Thing: placeholder size, capacity size
+- [ ] large space between menu and ghosts enter here
 - [ ] queue entry should not grow completely freely (will take up most of screen if other entries are empty
 - [ ] better launcher flow for pwa on native, when screen opens, it just shows the icon + black screen + Text 'Ghosts'
 
@@ -23,6 +27,7 @@ New Page Design
 - [ ] implement new page design 
 - [ ] add about link to call ghost with card saying 'Simple apps and warts by michael d. mCclure' (twitter link)
 - [ ] Small version of logo in footer which links to home.
+
 Grouping
 - [ ] finish mobile render
 - [ ] Processes can be grouped together by drag and drop. The behavior of queue-to-stack remains the same.  
