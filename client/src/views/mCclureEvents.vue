@@ -74,13 +74,17 @@
       <div id="new-thing-segment">
         <h3>New Thing</h3>
         <textarea id="new-addon" placeholder="Add new task here..." />
-        <div>
-          <input type="radio" id="first-queue" name="status-2" value="0" />
-          <label for="first-queue" style="margin-right:35px;">Conflicts</label>
-          <input type="radio" id="second-queue" name="status-2" value="1" checked />
-          <label for="second-queue">Incomplete</label>
-          <div id="new-thing-submit" @click="addToQueue">Add to queue</div>
+        <div class="radio-options-flex">
+          <div>
+            <input type="radio" id="first-queue" name="status-2" value="0" />
+            <label for="first-queue" style="margin-right:35px;">Conflicts</label>
+          </div>
+          <div>
+            <input type="radio" id="second-queue" name="status-2" value="1" checked />
+            <label for="second-queue">Incomplete</label>
+          </div>
         </div>
+        <div id="new-thing-submit" @click="addToQueue">Add to queue</div>
         <div id="the-spinner" class="spinney glowing-green in-and-out-z">
           <span id="arrow-top"></span>
           <span id="arrow-bottom"></span>
@@ -759,7 +763,6 @@ input[type="radio"] {
   display: block;
   cursor: pointer;
 }
-#help-top:hover,
 #help-top:active,
 #help-top:focus {
   text-decoration: underline;
@@ -801,7 +804,6 @@ input[type="radio"] {
 #queue-enclosure {
   display: flex;
   flex-wrap: wrap;
-  height: 200px;
   margin-bottom: 10px;
 }
 .queue-item {
@@ -810,12 +812,14 @@ input[type="radio"] {
   min-width: 170px;
   overflow: hidden;
   height: 200px;
-  overflow-y: hidden;
+  overflow-y: auto;
   white-space: pre-wrap;
   position: relative;
 }
 .queue-content-box {
-  margin: 3px 4px 3px 4px;
+  margin: 0px 6px 0px 6px;
+  padding: 4px;
+  box-sizing: border-box;
   height: 100%;
   position: relative;
 }
@@ -848,10 +852,10 @@ input[type="radio"] {
   font-weight: 600;
 } */
 .incomplete {
-  box-shadow: 0px 0px 12px 2px skyblue;
+  box-shadow: 0px -14px 12px 2px skyblue;
 }
 .conflicts {
-  box-shadow: 0px 0px 12px 2px darkorange;
+  box-shadow: 0px -14px 12px 2px darkorange;
 }
 .queue-entry-tb {
   position: absolute;
@@ -887,16 +891,12 @@ input[type="radio"] {
   font-weight: bold;
   margin-bottom: 6px;
 }
-#stack-share-button:hover,
 #stack-share-button:focus,
 #stack-share-button:active,
-#clear-button:hover,
 #clear-button:focus,
 #clear-button:active,
-.butt-yes:hover,
 .butt-yes:focus,
 .butt-yes:active,
-.butt-no:hover,
 .butt-no:focus,
 .butt-no:active {
   color: black;
@@ -936,7 +936,6 @@ input[type="radio"] {
   border-radius: 10px;
   cursor: pointer;
 }
-#pop-it:hover,
 #pop-it:focus,
 #pop-it:active {
   color: black;
@@ -953,7 +952,6 @@ input[type="radio"] {
   border: white 1px solid;
   cursor: pointer;
 }
-#move-it:hover,
 #move-it:focus,
 #move-it:active {
   color: black;
@@ -983,7 +981,6 @@ input[type="radio"] {
   border-radius: 10px;
   cursor: pointer;
 }
-#new-thing-submit:hover,
 #new-thing-submit:focus,
 #new-thing-submit:active {
   color: black;
@@ -997,6 +994,7 @@ input[type="radio"] {
   color: white;
   padding: 10px;
   margin-bottom: 8px;
+  font-size: 0.9rem;
 }
 #new-addon::placeholder {
   font-size: 0.9rem;
@@ -1168,6 +1166,21 @@ input[type="radio"] {
   input[type="radio"] {
     width: 17px;
     height: 17px;
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  #pop-it:hover,
+  #stack-share-button:hover,
+  #clear-button:hover,
+  #new-thing-submit:hover,
+  .butt-yes:hover,
+  .butt-no:hover,
+  #move-it:hover {
+    color: black;
+    background-color: white;
+  }
+  #help-top:hover {
+    text-decoration: underline;
   }
 }
 </style>
