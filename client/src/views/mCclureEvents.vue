@@ -57,14 +57,17 @@
           <div>
             <span id="stack-content">{{ stack.content }}</span>
             <div id="pop-it" @click="taskComplete">Pop it!</div>
-          </div>
-          <div>
             <div id="move-it" @click="moveToQueue">Move to Queue...</div>
-            <br />
-            <input type="radio" id="first-queue-1" name="status-1" value="0" />
-            <label for="first-queue-1" style="margin-right:35px;">Conflicts</label>
-            <input type="radio" id="second-queue-1" name="status-1" value="1" checked />
-            <label for="second-queue-1">Incomplete</label>
+          </div>
+          <div class="radio-options-flex">
+            <div>
+              <input type="radio" id="first-queue-1" name="status-1" value="0" />
+              <label for="first-queue-1">Conflicts</label>
+            </div>
+            <div>
+              <input type="radio" id="second-queue-1" name="status-1" value="1" checked />
+              <label for="second-queue-1">Incomplete</label>
+            </div>
           </div>
         </div>
       </div>
@@ -729,13 +732,15 @@ input[type="text"] {
   border: none;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   outline: none;
+  font-size: 1rem;
   text-align: center;
 }
 input[type="radio"] {
   background-color: #222;
   color: #ddd;
-  height: 20px;
-  width: 20px;
+  margin: 0 10px 0 34px;
+  height: 25px;
+  width: 25px;
   cursor: pointer;
   outline: none;
   border-radius: 20%;
@@ -852,15 +857,15 @@ input[type="radio"] {
   position: absolute;
   height: 15px;
   right: 10px;
-  bottom: 10px;
+  bottom: 17px;
 }
 .close-textbox {
   cursor: pointer;
-  height: 17px;
-  width: 17px;
+  height: 25px;
+  width: 25px;
   display: inline-block;
   background-color: white;
-  border-radius: 50%;
+  border-radius: 27%;
   border: 1px solid black;
 }
 .close-textbox::before {
@@ -954,6 +959,12 @@ input[type="radio"] {
   color: black;
   background-color: white;
 }
+.radio-options-flex {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-top: 10px;
+}
 
 #new-thing-segment {
   display: flex;
@@ -987,7 +998,9 @@ input[type="radio"] {
   padding: 10px;
   margin-bottom: 8px;
 }
-
+#new-addon::placeholder {
+  font-size: 0.9rem;
+}
 #the-spinner {
   /* circle with four gaps, two of the gaps have a rotatedbox-shadow to represent the arrow */
   border: 9px solid transparent;
@@ -1141,6 +1154,20 @@ input[type="radio"] {
   }
   100% {
     opacity: 0;
+  }
+}
+
+@media (min-width: 1200px) {
+  .close-textbox {
+    height: 17px;
+    width: 17px;
+  }
+  .queue-entry-tb {
+    bottom: 14px;
+  }
+  input[type="radio"] {
+    width: 17px;
+    height: 17px;
   }
 }
 </style>

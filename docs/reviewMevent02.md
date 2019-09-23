@@ -18,7 +18,7 @@ Security
 Mobile Render
 - [X] clear extra space to right of app
 - [X] text size is too small
-- [ ] New Thing: placeholder size, capacity size
+- [X] New Thing: placeholder size, capacity size
 - [ ] large space between menu and ghosts enter here
 - [ ] queue entry should not grow completely freely (will take up most of screen if other entries are empty
 - [ ] better launcher flow for pwa on native, when screen opens, it just shows the icon + black screen + Text 'Ghosts'
