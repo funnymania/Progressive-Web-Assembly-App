@@ -91,6 +91,7 @@
         </div>
       </div>
     </div>
+    <div id="footer-spacer"></div>
     <span id="toast"></span>
     <span id="verbose-text-box">
       <h2>The Game</h2>
@@ -1082,6 +1083,9 @@ input[type="radio"] {
   visibility: visible;
   opacity: 1;
   transition: visibility 0s linear 0s, opacity 0.25s 0s;
+}
+#footer-spacer {
+  height: 8%;
 }
 @keyframes rotateZ {
   0%,

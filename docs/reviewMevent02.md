@@ -20,7 +20,6 @@ Mobile Render
 - [X] text size is too small
 - [X] New Thing: placeholder size, capacity size
 - [X] needs to be scroll bar on qeueue entry. rest of page needs to conform to flex wrap. 
-- [ ] New Thing: mobile need enter to leave
 - [ ] login button obscures move to qeueu when stack too large
 - [ ] better launcher flow for pwa on native, when screen opens, it just shows the icon + black screen + Text 'Ghosts'
 - [ ] render ghost entry: Ghost + card should be bigger on mobile. Sign up button is obscured by ghost. 

@@ -106,29 +106,17 @@ body {
   border-radius: 16px;
   padding: 6px;
   position: fixed;
-  bottom: 3%;
+  bottom: 2%;
   color: #efefef;
   background-color: black;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-content: center;
+  #ghost-entry-link,
   #footer-branding {
     font-weight: 600;
-    border: white 1px solid;
-    border-radius: 40px;
-    padding-top: 2px;
-    padding-right: 4px;
-    padding-left: 4px;
-    &:hover,
-    &:focus,
-    &:active {
-      border: white 1px dashed;
-      cursor: pointer;
-    }
-  }
-  #ghost-entry-link {
-    font-weight: 600;
+    font-size: 1.3rem;
     border: white 1px solid;
     border-radius: 40px;
     padding-left: 4px;
@@ -141,6 +129,9 @@ body {
       cursor: pointer;
     }
   }
+}
+#footer-spacer {
+  height: 2%;
 }
 
 @media (min-width: 1200px) {
