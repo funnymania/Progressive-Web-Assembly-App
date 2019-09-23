@@ -31,17 +31,16 @@
           autocomplete="on"
           @keyup.enter="phaseIn"
         />
-        <br />
         <div id="button-row">
-          <div>
+          <span class="id-button" @click="phaseIn">Phase on in!</span>
+          <div id="button-row-inner">
             <span class="id-button" @click="forgotPass">
               <s>Forgot Ghost Pass.</s>
             </span>
-            <br />
             <span class="id-button" @click="becomeGhost">Become a Ghost.</span>
           </div>
-          <span class="id-button" @click="phaseIn">Phase on in!</span>
         </div>
+        <div id="card-spacer"></div>
       </div>
     </div>
     <span id="ghost-canal"></span>
@@ -263,18 +262,12 @@ input:not(:focus) {
   box-shadow: 0px 0px 40px;
   padding: 3px 5px;
 }
-.id-button:hover {
-  color: darkmagenta;
-  border-color: lightgrey;
-  box-shadow: 0px 0px 60px;
-}
 
 #button-row {
   display: flex;
-  justify-content: space-between;
-  vertical-align: middle;
-  padding-top: 10px;
-  align-items: baseline;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 38px;
 }
 #ghost-overlay {
   height: 100%;
@@ -334,7 +327,7 @@ input:not(:focus) {
 }
 
 #caring-ghost {
-  top: 170px;
+  top: 328px;
   left: 50%;
   transform: translate(-50%, 0);
   position: absolute;
@@ -362,11 +355,6 @@ input:not(:focus) {
   display: block;
   cursor: pointer;
   /* border-radius: 100%; */
-}
-
-#ghost-close-button:hover {
-  box-shadow: 0px 0px 60px;
-  color: black;
 }
 
 .ghost-eye-right {
@@ -483,6 +471,31 @@ input:not(:focus) {
 
 #id-card {
   margin: 10px;
+  font-size: 29px;
+}
+
+.id-button:focus,
+.id-button:active {
+  color: darkmagenta;
+  border-color: lightgrey;
+  box-shadow: 0px 0px 60px;
+}
+
+#ghost-close-button:focus,
+#ghost-close-button:active {
+  box-shadow: 0px 0px 60px;
+  color: black;
+}
+
+#button-row-inner {
+  display: flex;
+  width: 100%;
+  margin-top: 29px;
+  justify-content: space-between;
+}
+
+#card-spacer {
+  height: 83px;
 }
 
 @keyframes fade-opacity-to-100 {
@@ -515,6 +528,31 @@ input:not(:focus) {
   }
   100% {
     transform: translate(-50%, -50%) scale(1, 1);
+  }
+}
+
+@media (min-width: 1200px) {
+  #ghost-and-card {
+    width: 46%;
+  }
+  #id-card {
+    font-size: 1rem;
+  }
+  #caring-ghost {
+    top: 170px;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .id-button:hover {
+    color: darkmagenta;
+    border-color: lightgrey;
+    box-shadow: 0px 0px 60px;
+  }
+
+  #ghost-close-button:hover {
+    box-shadow: 0px 0px 60px;
+    color: black;
   }
 }
 </style>
