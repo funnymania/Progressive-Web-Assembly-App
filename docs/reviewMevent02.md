@@ -24,13 +24,16 @@ Mobile Render
 - [X] render ghost entry: Ghost + card should be bigger on mobile. Sign up button is obscured by ghost. 
 - [X] render ghost entry: desktop - card is too wide (ghost is perfect)
 
+Import 2am WASM
+- [ ] playable unity->wasm in browser AND on PWA
+
 New Page Design
 - [ ] implement new page design 
 - [ ] add about link to call ghost with card saying 'Simple apps and warts by michael d. mCclure' (twitter link)
 - [ ] Small version of logo in footer which links to home.
 
 Grouping
-- [ ] finish mobile render
+- [X] finish mobile render
 - [ ] Processes can be grouped together by drag and drop. The behavior of queue-to-stack remains the same.  
 
 Little Fixes
