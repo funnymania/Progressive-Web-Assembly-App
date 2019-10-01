@@ -9,8 +9,8 @@
       IG:
       <a href="https://www.instagram.com/safewithleif" target="_blank">safewithleif</a>
     </p>
-    <video height="540" width="960" muted autoplay loop>
-      <source src="../assets/pano.mp4" type="video/mp4" />
+    <video height="960" width="540" muted autoplay loop>
+      <source src="../assets/LeifsArt.mp4" type="video/mp4" />
     </video>
   </div>
 </template>
