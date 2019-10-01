@@ -25,7 +25,10 @@ Mobile Render
 - [X] render ghost entry: desktop - card is too wide (ghost is perfect)
 
 Import 2am WASM
-- [ ] playable unity->wasm in browser AND on PWA
+- [ ] Correct rendering of credits + lines on startmenu. Do not worry about player movements. 
+- [ ] UI Element saying 'Player movements coming soon' in game
+- [ ] playable unity->wasm in browser, reference Builds/
+- [ ] playable unity->wasm in PWA
 
 New Page Design
 - [ ] implement new page design 
