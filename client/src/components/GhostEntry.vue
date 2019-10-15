@@ -272,7 +272,7 @@ input:not(:focus) {
 #ghost-overlay {
   height: 100%;
   width: 100%;
-  position: absolute;
+  position: fixed;
   top: 0%;
   left: 0%;
   z-index: 1000;
@@ -540,7 +540,21 @@ input:not(:focus) {
   }
 }
 
-@media (min-width: 200px) {
+@media (min-width: 825px) {
+  #ghost-and-card {
+    width: 46%;
+    top: 50%;
+  }
+  #caring-ghost {
+    top: 225px;
+    transform: translate(-50%, 0) scale(0.7, 0.7);
+  }
+}
+
+@media (min-width: 300px) {
+  #ghost-and-card {
+    top: 42%;
+  }
   #id-card {
     font-size: 1rem;
   }
