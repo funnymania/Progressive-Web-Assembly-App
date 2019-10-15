@@ -27,7 +27,7 @@ Mobile Render
 - [X] render ghost entry: desktop - card is too wide (ghost is perfect)
 - [X] maximum processes allowed bug on visiting shared stack
 - [X] when 'desktop site' unchecked looks blown up
-- [ ] Mobile: New Thing should be below Stack
+- [X] Mobile: New Thing should be below Stack
 - [ ] Mobile: Ghost overflows screen. Fields overflow card. Buttons hidden by gigantic ghost.
 - [ ] Mobile: The Game box is too large
 - [X] pwa looks blown up
