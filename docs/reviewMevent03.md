@@ -1,5 +1,6 @@
 Mobile Render
-- [ ] Improve mobile flow for viewing stack, priority list, and new thing reflexively
+- [ ] Mobile: Improve mobile flow for viewing stack, priority list, and new thing reflexively
+- [ ] Mobile: Improve ghost id-card button layout
 
 Priority List
 - [ ] Implement the priority List
