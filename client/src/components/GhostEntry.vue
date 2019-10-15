@@ -327,9 +327,9 @@ input:not(:focus) {
 }
 
 #caring-ghost {
-  top: 328px;
+  top: 299px;
   left: 50%;
-  transform: translate(-50%, 0);
+  transform: translate(-50%, 0) scale(0.5, 0.5);
   position: absolute;
   width: 400px;
 }
@@ -530,16 +530,19 @@ input:not(:focus) {
     transform: translate(-50%, -50%) scale(1, 1);
   }
 }
-
-@media (min-width: 200px) {
+@media (min-width: 1200px) {
   #ghost-and-card {
     width: 46%;
   }
-  #id-card {
-    font-size: 1rem;
-  }
   #caring-ghost {
     top: 170px;
+    transform: translate(-50%, 0) scale(1, 1);
+  }
+}
+
+@media (min-width: 200px) {
+  #id-card {
+    font-size: 1rem;
   }
 }
 
