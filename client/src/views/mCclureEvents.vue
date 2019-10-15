@@ -773,7 +773,7 @@ input[type="radio"] {
   opacity: 0;
   overflow-y: auto;
   height: 90%;
-  min-width: 480px;
+  min-width: 312px;
   margin: 0 auto;
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 1);
