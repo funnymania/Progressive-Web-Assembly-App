@@ -134,7 +134,7 @@ body {
   height: 2%;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 200px) {
   html {
     font-size: 16px;
   }

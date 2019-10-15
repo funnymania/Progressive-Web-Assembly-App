@@ -1159,7 +1159,7 @@ input[type="radio"] {
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 200px) {
   .close-textbox {
     height: 17px;
     width: 17px;
@@ -1172,6 +1172,7 @@ input[type="radio"] {
     height: 17px;
   }
 }
+
 @media (hover: hover) and (pointer: fine) {
   #pop-it:hover,
   #stack-share-button:hover,

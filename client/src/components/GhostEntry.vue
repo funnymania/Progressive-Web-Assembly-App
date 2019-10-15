@@ -531,7 +531,7 @@ input:not(:focus) {
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 200px) {
   #ghost-and-card {
     width: 46%;
   }
