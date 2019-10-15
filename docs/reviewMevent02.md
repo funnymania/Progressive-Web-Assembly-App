@@ -29,8 +29,8 @@ Mobile Render
 - [X] when 'desktop site' unchecked looks blown up
 - [X] Mobile: New Thing should be below Stack
 - [X] Mobile: Ghost does not appear in center of screen
-- [ ] Mobile: Ghost overflows screen. Fields overflow card. Buttons hidden by gigantic ghost.
-- [ ] Mobile: The Game box is too large
+- [X] Mobile: Ghost overflows screen. Fields overflow card. Buttons hidden by gigantic ghost.
+- [X] Mobile: The Game box is too large
 - [X] pwa looks blown up
 
 Import 2am WASM
