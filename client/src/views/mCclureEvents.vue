@@ -773,7 +773,7 @@ input[type="radio"] {
   opacity: 0;
   overflow-y: auto;
   height: 90%;
-  min-width: 480px;
+  min-width: 312px;
   margin: 0 auto;
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 1);
@@ -907,14 +907,18 @@ input[type="radio"] {
 #bottom-sect {
   display: flex;
   justify-content: space-around;
+  flex-wrap: wrap;
 }
 #the-stack {
+  width: 50%;
+  min-width: 336px;
+  margin-bottom: 10px;
 }
 #stack-content {
-  margin-left: 14px;
   padding: 8px;
   min-width: 300px;
   min-height: 10px;
+  margin-bottom: 2px;
   display: inline-block;
   border: white 1px solid;
   white-space: pre-wrap;
@@ -925,14 +929,13 @@ input[type="radio"] {
   flex-direction: column;
   width: 75%;
   margin: 0 auto;
-  min-width: 325px;
+  min-width: 336px;
 }
 #pop-it {
   color: white;
   background-color: black;
   padding: 5px 4px;
   font-weight: 600;
-  margin-left: 14px;
   border: white 1px solid;
   border-radius: 10px;
   cursor: pointer;
@@ -947,8 +950,7 @@ input[type="radio"] {
   background-color: black;
   padding: 5px 4px;
   font-weight: 600;
-  margin-top: 8px;
-  margin-left: 14px;
+  margin-top: 4px;
   border-radius: 10px;
   border: white 1px solid;
   cursor: pointer;
@@ -969,7 +971,8 @@ input[type="radio"] {
   display: flex;
   flex-direction: column;
   min-width: 300px;
-  width: 50%;
+  width: 37.5%;
+  margin: 0 auto;
 }
 #new-thing-submit {
   color: white;
@@ -1159,7 +1162,7 @@ input[type="radio"] {
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 200px) {
   .close-textbox {
     height: 17px;
     width: 17px;
@@ -1172,6 +1175,7 @@ input[type="radio"] {
     height: 17px;
   }
 }
+
 @media (hover: hover) and (pointer: fine) {
   #pop-it:hover,
   #stack-share-button:hover,

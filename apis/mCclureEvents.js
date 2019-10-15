@@ -203,14 +203,14 @@ let api = (function () {
 
   let GetPublicSharedStack = function (uuid) {
     return pgClient.query({
-      text: "SELECT * from mccevents_pub WHERE share_url = ",
+      text: "SELECT * from mccevents_pub WHERE share_url = $1",
       values: [uuid]
     })
   }
 
   let GetUserSharedStack = function (uuid) {
     return pgClient.query({
-      text: "SELECT * from mccevents WHERE share_url = ",
+      text: "SELECT * from mccevents WHERE share_url = $1",
       values: [uuid]
     })
   }

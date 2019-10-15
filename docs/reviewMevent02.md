@@ -1,3 +1,5 @@
+term atlas: { N } = New Thing Box, { emer } = emergency task
+
 Fixes
 - [X] saveYourStack: saving stack on changes should only occur when logged in  
 - [X] test stack load flow  
@@ -23,6 +25,19 @@ Mobile Render
 - [X] login button obscures move to qeueu when stack too large
 - [X] render ghost entry: Ghost + card should be bigger on mobile. Sign up button is obscured by ghost. 
 - [X] render ghost entry: desktop - card is too wide (ghost is perfect)
+- [X] maximum processes allowed bug on visiting shared stack
+- [X] when 'desktop site' unchecked looks blown up
+- [X] Mobile: New Thing should be below Stack
+- [X] Mobile: Ghost does not appear in center of screen
+- [X] Mobile: Ghost overflows screen. Fields overflow card. Buttons hidden by gigantic ghost.
+- [X] Mobile: The Game box is too large
+- [X] pwa looks blown up
+
+Import 2am WASM
+- [ ] Correct rendering of credits + lines on startmenu. Do not worry about player movements. 
+- [ ] UI Element saying 'Player movements coming soon' in game
+- [ ] playable unity->wasm in browser, reference Builds/
+- [ ] playable unity->wasm in PWA
 
 New Page Design
 - [ ] implement new page design 
@@ -30,8 +45,8 @@ New Page Design
 - [ ] Small version of logo in footer which links to home.
 
 Grouping
-- [ ] finish mobile render
-- [ ] Processes can be grouped together by drag and drop. The behavior of queue-to-stack remains the same.  
+- [X] finish mobile render
+- [ ] Processes/Projects can be grouped together by drag and drop. The behavior of queue-to-stack remains the same.  
 
 Little Fixes
 - [ ] might need to set character limit on textarea?
@@ -43,9 +58,12 @@ Little Fixes
 - [ ] Stack: bubble choice should align with state of task in stack
 - [ ] Remove size change option (handle at bottom right corner) on New Thing text box
 - [ ] ghostentry: better validation on email
+- [ ] ShareYourStack should cache stack_url if already requested. 
+- [ ] ShareYourStack: If we are looking at a SHARED stack, url should be cache in similar manner.
 
 Tasks
 - [ ] Queue item will now contain an array of tasks. When the item is selected for the stack, the first task in tasks will be sent to the stack. the project of this task will remain in the queue, the task will be in the stack, and not removed but highlighted in the queue by "pulsing" a background color in and out (kinda like cursor in vim). popping the stack when it contains a task will mark the task in the queue as complete by coloring the text grey-green and placing in front of the task a green circle with a white check mark inside it.
+- [ ] Tasks can be dragged off the queue into N
 
 Marketing
 - [ ] attract more users via dev.to, hackernews... ig?
