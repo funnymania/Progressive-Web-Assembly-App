@@ -1,3 +1,6 @@
+Mobile Render
+- [ ] Improve mobile flow for viewing stack, priority list, and new thing reflexively
+
 Priority List
 - [ ] Implement the priority List
 - [ ] Priority Option on N.
