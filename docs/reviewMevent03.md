@@ -1,3 +1,7 @@
+Mobile Render
+- [ ] Mobile: Improve mobile flow for viewing stack, priority list, and new thing reflexively
+- [ ] Mobile: Improve ghost id-card button layout
+
 Priority List
 - [ ] Implement the priority List
 - [ ] Priority Option on N.
@@ -10,5 +14,10 @@ Emergency Mode
 - [ ] If 3 days pass, dialog pops up asking if Emer is over. 
 - [ ] ... 'Yes' removes E mode, 'No' resets the 3-day counter.
 
+Viewing Another's Stack
+- [ ] Text along top or bottom saying: 'You are viewing xyz's stack...' or 'You are viewing anon's stack...'
+- [ ] Below this text: If logged in, 'go to your stack...' else 'create stack from scratch'
+
 Development
+- [ ] update packages
 - [ ] set up jest for unit testing. see [here](https://vuejsdevelopers.com/2019/08/26/vue-what-to-unit-test-components/).
