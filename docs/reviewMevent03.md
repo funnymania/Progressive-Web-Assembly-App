@@ -20,4 +20,5 @@ Viewing Another's Stack
 
 Development
 - [ ] update packages
+- [ ] better approach to handling config files with sensitive info (emailing it around is neither efficient nor secure)
 - [ ] set up jest for unit testing. see [here](https://vuejsdevelopers.com/2019/08/26/vue-what-to-unit-test-components/).
