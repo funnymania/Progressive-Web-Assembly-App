@@ -23,6 +23,8 @@ Mobile Render
 - [X] login button obscures move to qeueu when stack too large
 - [X] render ghost entry: Ghost + card should be bigger on mobile. Sign up button is obscured by ghost. 
 - [X] render ghost entry: desktop - card is too wide (ghost is perfect)
+- [ ] when 'desktop site' unchecked looks blown up
+- [ ] pwa looks blown up
 
 Import 2am WASM
 - [ ] Correct rendering of credits + lines on startmenu. Do not worry about player movements. 
