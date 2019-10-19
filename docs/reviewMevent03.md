@@ -1,3 +1,6 @@
+Log-In with Ghost Id
+- [ ] Text on login-card dictating that Ghost Ids are also accepted.
+
 Mobile Render
 - [ ] Mobile: Improve mobile flow for viewing stack, priority list, and new thing reflexively
 - [ ] Mobile: Improve ghost id-card button layout
