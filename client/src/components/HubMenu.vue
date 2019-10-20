@@ -1,12 +1,15 @@
 <template>
   <div id="nav">
-    <router-link to="/events" class="menu-a">Capitol Hill Art Exhibition</router-link>
-    <br />
-    <br />
     <router-link to="/mCclureEvents" class="menu-a">Helpful Personal Task Management</router-link>
     <br />
     <br />
+    <router-link to="/hirable" class="menu-a">Hirable!</router-link>
+    <br />
+    <br />
     <router-link to="/warts" class="menu-a">web arts (warts)</router-link>
+    <br />
+    <br />
+    <router-link to="/events" class="menu-a">Capitol Hill Art Exhibition</router-link>
     <br />
     <br />
     <router-link to="/theauxts" class="menu-a">Control Theauxts</router-link>
@@ -15,14 +18,7 @@
     <router-link to="/jokL" class="menu-a">2 am Slekshun: jokL</router-link>
     <br />
     <br />
-    <a href="#" class="menu-a">
-      <s>Hirable!</s>
-      <br />Not Ready Yet!
-    </a>
-    <br />
-    <br />
     <!-- <router-link to="/ghosts" class="menu-a">Ghosts join room.</router-link> -->
-    <br />
     <!-- <div id="footer">
       <div id="footer-branding">the shinepickaw creative ecosystem @ omon art</div>
       <div id="ghost-entry-link" @click="callGhost">Ghosts enter here.</div>

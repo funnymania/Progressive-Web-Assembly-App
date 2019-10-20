@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     iconDisplay(e) {
-      return require("../assets/" + e.compName + ".svg");
+      return require(`../assets/${e.compName}.svg`);
     },
     unicornCapture(entry, event) {
       this.playAnimation(entry, event);

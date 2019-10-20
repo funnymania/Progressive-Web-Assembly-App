@@ -7,8 +7,8 @@
       <a href @click="popDescription">What is This?</a>
     </h3>
     <h1>Are You Hirable?</h1>
-    <h1>:unicorn:</h1>
-    <h2>you look to be a bit hirable.. :)</h2>
+    <h1>&#x1F984;</h1>
+    <h2>"You look to be a bit hirable..."</h2>
     <input
       class="search-field"
       type="text"
@@ -20,7 +20,7 @@
     <RangingSpinner :activate="this.activateSpinner"></RangingSpinner>
     <Chexbox :supportedGroups="this.supportedList"></Chexbox>
     <JobList :listOfJobs="this.jobList"></JobList>
-    <div id="footer">the shinepickaw creative ecosystem @ omon art</div>
+    <!-- <div id="footer">the shinepickaw creative ecosystem @ omon art</div> -->
   </div>
 </template>
 
@@ -65,7 +65,6 @@ export default {
 
       // Trigger spinner saying 'ranging...'
       let spinnerPromise = new Promise((spinnerResolve, reject) => {
-        // Activate spinner
         this.activateSpinner = true;
       }).then(() => {
         this.activateSpinner = false;
@@ -154,7 +153,14 @@ function popDescription() {
   font-size: 28px;
   transition: box-shadow 0.2s ease 0s;
   outline: currentcolor none medium;
+  text-align: center;
+  &::placeholder {
+    opacity: 0;
+  }
   &:not(:focus) {
+    &::placeholder {
+      opacity: 1;
+    }
     box-shadow: rgba(0, 251, 251, 0.3) 0px 1px;
   }
 }
