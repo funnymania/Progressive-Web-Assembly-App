@@ -1,10 +1,9 @@
 <template>
-  <div id="hirable-root">
+  <div id="hirable-root" @click="handleOutsideClicks">
     <h3 class="top-side-title">
       <span>Hirable!</span>
       ->
-      <!-- TODO: make this a pop up -->
-      <a href @click="popDescription">What is This?</a>
+      <span id="help-top" @click="popUpBoxOnElementClick">What is This?</span>
     </h3>
     <h1>Are You Hirable?</h1>
     <h1>&#x1F984;</h1>
@@ -20,6 +19,11 @@
     <RangingSpinner :activate="this.activateSpinner"></RangingSpinner>
     <Chexbox :supportedGroups="this.supportedList"></Chexbox>
     <JobList :listOfJobs="this.jobList"></JobList>
+    <VerboseTextBox
+      :title="this.popUpTitle"
+      :display="this.showVerbose"
+      :content="this.verboseContent"
+    ></VerboseTextBox>
     <!-- <div id="footer">the shinepickaw creative ecosystem @ omon art</div> -->
   </div>
 </template>
@@ -29,6 +33,7 @@ import Chexbox from "../components/Chexbox.vue";
 import JobList from "../components/JobRes.vue";
 import AboutBox from "../components/AboutBox.vue";
 import RangingSpinner from "../components/RangingSpinner.vue";
+import VerboseTextBox from "../components/VerboseTextBox.vue";
 
 export default {
   name: "Hirable",
@@ -36,13 +41,17 @@ export default {
     Chexbox,
     JobList,
     AboutBox,
-    RangingSpinner
+    RangingSpinner,
+    VerboseTextBox
   },
   data() {
     return {
       activateSpinner: false,
       supportedList: [],
-      jobList: []
+      jobList: [],
+      verboseContent: "",
+      showVerbose: false,
+      popUpTitle: ""
     };
   },
   methods: {
@@ -92,7 +101,26 @@ export default {
         })
         .catch(err => console.log(err.message));
     },
-    popDescription(e) {}
+    popUpBoxOnElementClick(e) {
+      e.stopPropagation();
+      this.verboseContent = `the goal is to get people
+      to stop applying for jobs obsessively
+      and companies to stop posting
+      jobs in the traditional fashion.
+      <br><br>by satirizing the pursuit
+      as a pokemon trading card game,
+      gachapon, or otherwise endless
+      quest to Catch 'em ALL!
+      <br><br>All cards die fast to reflect
+      the hopelessness in returned opportunities
+      for recently applied to positions.`;
+      this.popUpTitle = "The Answer Is...";
+      this.showVerbose = true;
+    },
+    handleOutsideClicks(e) {
+      // Hide all modals showing.
+      this.showVerbose = false;
+    }
   },
   mounted() {
     fetch("/supported-corns")
@@ -128,16 +156,22 @@ export default {
       .catch(err => console.log(err.message));
   }
 };
-
-function popDescription() {
-  // TODO: draw description box
-}
 </script>
 
 <style lang="scss" scoped>
 .top-side-title {
   text-align: left;
   margin-block-start: 0.5em;
+}
+#help-top {
+  font-weight: 600;
+  text-align: left;
+  // display: block;
+  cursor: pointer;
+}
+#help-top:active,
+#help-top:focus {
+  text-decoration: underline;
 }
 #hirable-root {
   color: white;
