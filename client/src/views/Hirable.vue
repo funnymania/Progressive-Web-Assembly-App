@@ -79,13 +79,13 @@ export default {
         this.activateSpinner = false;
       });
 
-      // Package these to fetch /gather
+      // Query with selected orgs
       fetch("gather", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(desiredCorns)
+        body: JSON.stringify(desiredCorns.filter(el => el.isSelected == true))
       })
         .then(res => {
           let cornsGathered = res.json();
@@ -127,16 +127,20 @@ export default {
       .then(res => {
         if (res.ok) {
           return res.json();
-        } else {
-          throw new Error("Response not OK.");
         }
+
+        throw "Response not OK.";
       })
       .then(json => json.orgs)
       .then(orgs => {
         let supportedGroups = JSON.parse(
           localStorage.getItem("supportedGroups")
         );
-        console.log(supportedGroups);
+
+        // FIXME: Very confusing. This tags each supportedGroup with 'isSelected' of
+        // corresponding localStorage entry, and if there is no corresponding entry,
+        // marks the value as True (aka checks the box). This is very unclear. Also is
+        // O(n**2)
         // Pull user's last searched for companies into chexbox.
         orgs.forEach(el => {
           if (supportedGroups != null) {
@@ -151,9 +155,10 @@ export default {
             el.isSelected = true;
           }
         });
+
         this.supportedList = orgs;
       })
-      .catch(err => console.log(err.message));
+      .catch(err => console.log(err));
   }
 };
 </script>

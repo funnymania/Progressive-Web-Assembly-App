@@ -30,6 +30,9 @@ app.use(compression())
 app.use(express.static('./client/dist'))
 app.use(express.json())
 
+/**
+ * Build a query to redis from request's isSelected properties.
+ */
 app.post('/gather', (req, res) => {
   console.log(req.body)
 
@@ -42,6 +45,16 @@ app.post('/gather', (req, res) => {
 })
 
 app.get('/supported-corns', (req, res) => {
+  const testRet = {
+    orgs: [
+      { name: "twitter" },
+      { name: "google" },
+      { name: "apple" },
+      { name: "twitch" },
+    ]
+  }
+
+  res.json(testRet)
   // client.get('supported-corns', (err, reply) => {
   // console.log("redis.get ", reply);
   // res.json(JSON.parse(reply))
