@@ -180,7 +180,7 @@ export default {
 #hirable-root {
   color: white;
   height: 100%;
-  overflow: auto;
+  // overflow: auto;
 }
 .search-field {
   background: black;
