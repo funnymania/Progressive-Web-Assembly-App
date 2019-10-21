@@ -64,10 +64,10 @@ export default {
           "Corn captured!"
       );
       popup.append(popupText);
-      event.target.append(popup);
+      document.body.append(popup);
 
-      popup.style.left = event.offsetX;
-      popup.style.top = event.offsetY;
+      popup.style.left = event.pageX + "px";
+      popup.style.top = event.pageY + "px";
 
       // Animate it
       popup.classList.add("animate");
