@@ -4,6 +4,8 @@
       <span>Hirable!</span>
       ->
       <span id="help-top" @click="popUpBoxOnElementClick">What is This?</span>
+      ->
+      <router-link to="/unicornRanch">Visit Your Ranch</router-link>
     </h3>
     <h1>Are You Hirable?</h1>
     <h1>&#x1F984;</h1>

@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
 import Hirable from "./views/Hirable.vue";
+import UnicornRanch from "./views/UnicornRanch.vue"
 import jokL from "./views/jokL.vue";
 import About from "./views/About.vue";
 import Ghosts from "./views/Ghosts.vue";
@@ -39,6 +40,11 @@ export default new Router({
       path: "/hirable",
       name: "Hirable",
       component: Hirable
+    },
+    {
+      path: "/unicornRanch",
+      name: "UnicornRanch",
+      component: UnicornRanch
     },
     {
       path: "/about",

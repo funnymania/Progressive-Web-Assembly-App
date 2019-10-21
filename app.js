@@ -44,6 +44,36 @@ app.post('/gather', (req, res) => {
   })
 })
 
+/**
+ * Get actives from 
+ */
+app.get('/captured-cards', (req, res) => {
+  const test = {
+    aliveCorns: [
+      { url_posting: 'https://www.google.com', compName: 'google' },
+      { url_posting: 'https://www.google.com', compName: 'twitch' },
+      { url_posting: 'https://www.google.com', compName: 'amazon' },
+      { url_posting: 'https://www.google.com', compName: 'amazon' },
+      { url_posting: 'https://www.google.com', compName: 'amazon' },
+      { url_posting: 'https://www.google.com', compName: 'amazon' },
+      { url_posting: 'https://www.google.com', compName: 'amazon' },
+    ],
+    deadCorns: [
+      { url_posting: 'https://www.google.com', compName: 'twitch' },
+      { url_posting: 'https://www.google.com', compName: 'amazon' },
+      { url_posting: 'https://www.google.com', compName: 'amazon' },
+      { url_posting: 'https://www.google.com', compName: 'amazon' },
+      { url_posting: 'https://www.google.com', compName: 'amazon' },
+      { url_posting: 'https://www.google.com', compName: 'amazon' },
+      { url_posting: 'https://www.google.com', compName: 'amazon' },
+      { url_posting: 'https://www.google.com', compName: 'amazon' },
+      { url_posting: 'https://www.google.com', compName: 'amazon' },
+    ]
+  }
+
+  res.json(test)
+})
+
 app.get('/supported-corns', (req, res) => {
   const testRet = {
     orgs: [

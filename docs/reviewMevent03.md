@@ -1,3 +1,7 @@
+Unicorn Ranch
+- [ ] AliveCorns: pseudo before to show sun shining behind living corns, confetti, and front profile unicron horn
+- [ ] DeadCorns: two red Xs for eyes and a broken horn at feet.
+
 Mobile Render
 - [ ] Mobile: Improve mobile flow for viewing stack, priority list, and new thing reflexively
 - [ ] Mobile: Improve ghost id-card button layout
