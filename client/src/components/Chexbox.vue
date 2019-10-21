@@ -28,7 +28,7 @@ export default {
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 40px;
   gap: 40px;
-  margin-top: 100px;
+  margin-top: 32px;
   margin-left: auto;
   margin-right: auto;
   width: 25%;

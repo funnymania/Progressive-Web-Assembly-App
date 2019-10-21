@@ -65,19 +65,10 @@ export default {
       let desiredCorns = this.supportedList;
 
       // Set spinner resolve, run when results have been generated.
-      let spinnerResolve = function() {
-        console.log("Spinner done");
-
-        // Persist Chexbox.supportedGroups to localstorage
-        localStorage.setItem("supportedGroups", JSON.stringify(desiredCorns));
-      };
+      let spinnerResolve = function() {};
 
       // Trigger spinner saying 'ranging...'
-      let spinnerPromise = new Promise((spinnerResolve, reject) => {
-        this.activateSpinner = true;
-      }).then(() => {
-        this.activateSpinner = false;
-      });
+      this.activateSpinner = true;
 
       // Query with selected orgs
       fetch("gather", {
@@ -94,12 +85,20 @@ export default {
         })
         .then(results => {
           searchedJobs = results;
-          spinnerResolve();
+
+          // Deactivate Spinner
+          this.activateSpinner = false;
+
+          // Persist Chexbox.supportedGroups to localstorage
+          localStorage.setItem("supportedGroups", JSON.stringify(desiredCorns));
 
           // Set listResults backing data to results
           this.jobList = searchedJobs;
         })
-        .catch(err => console.log(err.message));
+        .catch(err => {
+          this.activateSpinner = false;
+          console.log(err.message);
+        });
     },
     popUpBoxOnElementClick(e) {
       e.stopPropagation();

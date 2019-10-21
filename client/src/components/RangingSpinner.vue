@@ -1,11 +1,11 @@
 <template>
-  <div class="loader">
-    <div :class="activeObject">
+  <div class="loader" :class="activeObject">
+    <div class="circle-ranch">
       <div class="outer"></div>
       <div class="inner"></div>
       <div class="middle"></div>
-      <div>Ranging them 'corns!</div>
     </div>
+    <div>Ranging them 'corns!</div>
   </div>
 </template>
 
@@ -27,13 +27,17 @@ export default {
 </script>
 
 <style>
+.circle-ranch {
+  height: 5.5em;
+  position: relative;
+}
+
 .inactive {
   visibility: hidden;
 }
 
 .loader {
   position: relative;
-  margin: 60 auto;
 }
 
 .active {
@@ -52,7 +56,7 @@ export default {
   left: 50%;
 }
 
-.active.outer {
+.active .outer {
   width: 3.5em;
   height: 3.5em;
   margin-left: -1.75em;
@@ -60,7 +64,7 @@ export default {
   animation: spin 2s linear infinite;
 }
 
-.active.middle {
+.active .middle {
   width: 2.1em;
   height: 2.1em;
   margin-left: -1.05em;
@@ -68,7 +72,7 @@ export default {
   animation: spin 1.75s linear reverse infinite;
 }
 
-.active.inner {
+.active .inner {
   width: 0.8em;
   height: 0.8em;
   margin-left: -0.4em;
