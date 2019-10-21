@@ -125,7 +125,7 @@ export default {
   flex-wrap: wrap-reverse;
   justify-content: space-evenly;
   padding: 30px;
-  margin: 10px;
+  margin: 10px 0;
   border: 1px solid lightpink;
   position: relative;
   cursor: pointer;

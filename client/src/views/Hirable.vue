@@ -188,7 +188,7 @@ export default {
   padding: 0px 0px 8px;
   margin-top: 80px;
   border: none;
-  font-size: 28px;
+  font-size: 23px;
   transition: box-shadow 0.2s ease 0s;
   outline: currentcolor none medium;
   text-align: center;
