@@ -1,26 +1,14 @@
 const fs = require('fs')
-const redis = require('redis')
 const express = require('express')
 const mCcEvents = require('./apis/mCclureEvents')
+const hirable = require('./apis/hirable')
 const emails = require('./apis/emails')
 const compression = require('compression')
 
 const baseUrl = 'https://shinepickaw.rip/#/'
 
 mCcEvents.api.connectToDb()
-
-// const client = redis.createClient({
-// auth_pass: config.cacheAuth,
-// // tls: { checkServerIdentity: () => undefined }
-// })
-
-// client.on('connect', () => {
-// console.log('Redis connected')
-// })
-
-// client.on('error', (err) => {
-// console.log('Redis error: ' + err)
-// }
+hirable.connect()
 
 const app = express()
 

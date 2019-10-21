@@ -68,7 +68,6 @@ export default {
   margin-right: 20px;
   flex-shrink: 0;
 }
-
 .unicorn-imagery {
   height: 100%;
   width: 150px;
