@@ -1,14 +1,11 @@
 <template>
-  <!-- TODO: On click catchUnicorn() -->
   <div id="unicorn-harvest">
     <div v-for="entry in listOfJobs" :key="entry.id">
       <div class="cornCard" @click="unicornCapture(entry, $event)">
         <div class="iconSegment">
-          <div class="cornIcon">
-            <img :src="iconDisplay(entry)" />
-          </div>
-          <div class="cornHorn">
-            <img src="../assets/unicornHorn.svg" />
+          <div class="icon-and-horn">
+            <img class="cornIcon" :src="iconDisplay(entry)" />
+            <img class="cornHorn" src="../assets/unicornHorn.svg" />
           </div>
           <div
             class="declaration"
@@ -115,6 +112,9 @@ export default {
 </script>
 
 <style scoped>
+.icon-and-horn {
+  position: relative;
+}
 #unicorn-harvest {
   margin: 80px auto;
   width: 60%;
@@ -123,7 +123,7 @@ export default {
 .cornCard {
   display: flex;
   flex-wrap: wrap-reverse;
-  justify-content: center;
+  justify-content: space-evenly;
   padding: 30px;
   margin: 10px;
   border: 1px solid lightpink;
@@ -143,14 +143,16 @@ export default {
   animation: 0.5s visible-to-invisible;
 }
 
-.cornHorn img {
-  width: 12%;
+.cornHorn {
+  width: 100%;
   position: absolute;
-  top: -11px;
+  top: -31%;
+  left: 50%;
 }
 
 .cornIcon {
-  height: 80%;
+  /* height: 80%;
+  width: 23%; */
 }
 
 .iconSegment {
@@ -158,6 +160,9 @@ export default {
 }
 
 .cornDesc {
+  margin: 0 20px;
+  width: 50%;
+  min-width: 150px;
 }
 
 @keyframes visible-to-invisible {
