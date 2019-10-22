@@ -23,6 +23,7 @@ app.use(express.json())
  */
 app.post('/gather', (req, res) => {
   console.log(req.body)
+  hirable.search()
 
   fs.readFile('./test.json', 'utf8', (err, data) => {
     console.log(data)
