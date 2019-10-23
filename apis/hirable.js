@@ -4,7 +4,7 @@ const uuidv4 = require('uuid/v4')
 // const kv = require('kv')
 
 const pgClient = new Client()
-const kvClient = kv.startClient()
+// const kvClient = kv.startClient()
 
 const connect = () => {
   // kvClient.connect()
@@ -27,42 +27,37 @@ const search = async (queryFields, entityName) => {
 
   // If not found, generate parameterized query from entity
   const { text, values } = pgEntitySelectAll(queryFields, entityName)
-  let { rows } = await pgClient.query({ text, values })
-
-  return rows
+  return pgClient.query({ text, values })
 }
-
 
 const insertCorn = async (apiToken, url, location, role) => {
   // Authenticate...
   const { rows } = await pgClient.query({
-    text: 'SELECT sup_orgs.org_id from official_rights INNER JOIN sup_orgs on official_rights.orgid = sup_orgs.org_id WHERE official_rights.api_token = $1',
+    text: 'SELECT sup_orgs.org_id from official_rights INNER JOIN sup_orgs on official_rights.org_id = sup_orgs.org_id WHERE official_rights.api_token = $1',
     values: [apiToken]
   })
 
   if (rows.length == 0) {
-    return { msg: 'You are authorized to do this.' }
+    throw 'unauthorized'
   }
 
   // Build query from entity...
   const { text, values } = pgCardInsert(url, location, role, authRows.org_id)
 
   // Insert and return
-  await pgClient.query({
+  return pgClient.query({
     text: text,
     values: values
   })
-
-  return { msg: 'Unicorn has been added!' }
 }
 
 /**
  * create an API token, manually find comp in supported orgs or add if it doesnt exist 
  */
 const makeOfficial = async (orgid, orgname) => {
-  // Insert.
+  // Insert
   await pgClient.query({
-    text: 'INSERT INTO org_id VALUES($1, $2) ',
+    text: 'INSERT INTO sup_orgs VALUES($1, $2) ',
     values: [orgid, orgname]
   })
 
@@ -72,6 +67,11 @@ const makeOfficial = async (orgid, orgname) => {
   await pgClient.query({
     text: 'INSERT INTO official_orgs VALUES($1, $2)',
     values: [api_token, orgid]
+  })
+
+  return pgClient.query({
+    text: 'INSERT INTO official_rights VALUES($1, $2, $3)',
+    values: [api_token, 'TRUE', 'FALSE']
   })
 }
 
@@ -86,20 +86,20 @@ const insertSupportedOrg = async (org_id, org_name) => {
  */
 function pgEntitySelectAll(queryFields, entityName) {
   let entries = queryFields.entries()
-  let text = `SELECT * from ${entityName}`
+  let query = `SELECT * from ${entityName}`
   let values = []
   if (entries.length == 0) {
-    return { text, values }
+    return { text: query, values }
   }
 
-  text += ' where '
+  query += ' where '
   entries.forEach((el, i) => {
-    text += `${el[0]} = $${i + 1}, `
+    query += `${el[0]} = $${i + 1}, `
     values.add(el[1])
   })
 
   // Remove hanging comma and space
-  text.splice(-2, 2)
+  const text = query.slice(0, query.length - 2)
 
   return { text, values }
 }
@@ -120,15 +120,15 @@ function pgCardInsert(src_url, location, role, orgid) {
   }
 
   let entries = completeEntity.entries()
-  let text = `INSERT INTO cards VALUES(`
+  let query = `INSERT INTO cards VALUES(`
   let values = []
   entries.forEach((el, i) => {
-    text += `$${i + 1},`
+    query += `$${i + 1},`
     values.add(el[1])
   })
 
   // Remove hanging comma, add close
-  text.splice(-1, 1, ')')
+  const text = query.slice(0, query.length - 1) + ') RETURNING *'
 
   return { text, values }
 }

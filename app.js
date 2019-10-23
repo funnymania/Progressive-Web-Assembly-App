@@ -33,6 +33,12 @@ app.post('/gather', (req, res) => {
   })
 })
 
+
+app.post('/v1/insert-corn', (req, res) => {
+  return { msg: 'You are not authorized to do this.' }
+
+})
+
 /**
  * Get actives from 
  */

@@ -7,19 +7,21 @@
   "author": "M. M. Module",
   "license": "MIT",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "mocha"
   },
   "dependencies": {
     "bcrypt": "latest",
     "body-parser": "1.16.1",
+    "compression": "latest",
     "express": "latest",
     "iltorb": "^2.4.3",
+    "mocha": "^6.2.2",
     "nconf": "0.10.0",
     "nodemailer": "latest",
     "nodemon": "latest",
     "pg": "latest",
     "redis": "latest",
-    "compression": "latest",
     "uuid": "latest"
   }
 }
