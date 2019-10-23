@@ -50,7 +50,8 @@ function testRootUser() {
       it('should add the card, and find the unicorn via searching', async () => {
         try {
           const insRes = await hirable.insertCorn(ghostsToken, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
-          await hirable.search({ location: insRes.rows.location }, 'cards')
+          const searchRes = hirable.search({ location: insRes.rows.location }, 'cards')
+          assert.equals(insRes.rows[0] == searchRes.rows[0])
         } catch (err) {
           assert.fail(err)
         }
