@@ -1,16 +1,10 @@
 const { Client } = require('pg')
 const redis = require('redis')
 const uuidv4 = require('uuid/v4')
-// const kv = require('kv')
 
 const pgClient = new Client()
-// const kvClient = kv.startClient()
 
 const connect = () => {
-  // kvClient.connect()
-  //   .then(() => console.log(kvClient.greeting()))
-  //   .catch(err => console.log(err))
-
   pgClient.connect()
     .then(() => pgClient.query('SELECT $1::text as message', ['Hello world!']))
     .then(pgTest => console.log(pgTest.rows[0].message))
@@ -18,14 +12,6 @@ const connect = () => {
 }
 
 const search = async (queryFields, entityName) => {
-  // First search k-v
-  // let { results, report } = await kvClient.search(entity.location, entity.role, entity.compName)
-  // if (results !== '') {
-  //   console.log(report)
-  //   return results
-  // }
-
-  // If not found, generate parameterized query from entity
   const { text, values } = pgEntitySelectAll(queryFields, entityName)
   return pgClient.query({ text, values })
 }
@@ -33,7 +19,7 @@ const search = async (queryFields, entityName) => {
 const insertCorn = async (apiToken, url, location, role) => {
   // Authenticate...
   const { rows } = await pgClient.query({
-    text: 'SELECT sup_orgs.org_id from official_rights INNER JOIN sup_orgs on official_rights.org_id = sup_orgs.org_id WHERE official_rights.api_token = $1',
+    text: 'SELECT sup_orgs.org_id FROM official_orgs INNER JOIN sup_orgs on official_orgs.org_id = sup_orgs.org_id WHERE official_orgs.api_token = $1',
     values: [apiToken]
   })
 
@@ -42,7 +28,7 @@ const insertCorn = async (apiToken, url, location, role) => {
   }
 
   // Build query from entity...
-  const { text, values } = pgCardInsert(url, location, role, authRows.org_id)
+  const { text, values } = pgCardInsert(url, location, role, rows.org_id)
 
   // Insert and return
   return pgClient.query({

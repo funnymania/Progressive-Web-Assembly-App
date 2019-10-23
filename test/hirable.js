@@ -21,6 +21,7 @@ function testRootUser() {
         await pgClient.query('DELETE FROM cards')
         await pgClient.query('DELETE FROM official_rights')
         await pgClient.query('DELETE FROM official_orgs')
+        await pgClient.query('DELETE FROM sup_orgs')
       } catch (err) {
         console.log(err)
       }
@@ -28,6 +29,7 @@ function testRootUser() {
       // Create super user
       try {
         await pgClient.query(`INSERT INTO official_orgs VALUES ('${ghostsToken}', 0)`)
+        await pgClient.query(`INSERT INTO sup_orgs VALUES (0, 'Ghosts')`)
         await pgClient.query(`INSERT INTO official_rights VALUES ('${ghostsToken}', TRUE, TRUE)`)
       } catch (err) {
         console.log(err)
@@ -39,8 +41,7 @@ function testRootUser() {
         try {
           await hirable.makeOfficial(1, 'Mozilla Corporation')
         } catch (err) {
-          done(err)
-          console.log(err)
+          assert.fail(err)
         }
       })
     })
@@ -51,31 +52,26 @@ function testRootUser() {
           const insRes = await hirable.insertCorn(ghostsToken, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
           await hirable.search({ location: insRes.rows.location }, 'cards')
         } catch (err) {
-          console.log(err)
-          done(err)
+          assert.fail(err)
         }
       })
     })
   })
 }
 
-// As my API token...
-// Adding a card (twitter) and searching that card should result in said card returned
 
-// As another's...
-// Adding a card from a different orgid should not be allowed.
-// Adding a card from associated orgid should be allowed. 
-// Searching should be allowed. 
-
-// As public
-// Inserting should not be allowed.
-// Searching should be allowed. 
 
 const testOfficialOrg = () => {
-
+  // As another's...
+  // Adding a card from a different orgid should not be allowed.
+  // Adding a card from associated orgid should be allowed. 
+  // Searching should be allowed. 
 }
 
 const testPublic = () => {
+  // As public
+  // Inserting should not be allowed.
+  // Searching should be allowed. 
 
 }
 
