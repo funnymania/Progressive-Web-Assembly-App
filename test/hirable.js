@@ -36,10 +36,11 @@ function testRootUser() {
       }
     })
 
+    let offOrg
     describe('Create An Official Org', () => {
       it('should create official_org with insert access', async () => {
         try {
-          await hirable.makeOfficial(1, 'Mozilla Corporation')
+          offOrg = await hirable.makeOfficial(1, 'Mozilla Corporation')
         } catch (err) {
           assert.fail(err)
         }
@@ -49,8 +50,8 @@ function testRootUser() {
     describe('Add card and Query', () => {
       it('should add the card, and find the unicorn via searching', async () => {
         try {
-          const insRes = await hirable.insertCorn(ghostsToken, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
-          const searchRes = hirable.search({ location: insRes.rows.location }, 'cards')
+          const insRes = await hirable.adminInsertCorn(ghostsToken, offOrg.rows[0].org_id, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
+          const searchRes = hirable.search({ location: insRes.rows[0].location }, 'cards')
           assert.equals(insRes.rows[0] == searchRes.rows[0])
         } catch (err) {
           assert.fail(err)

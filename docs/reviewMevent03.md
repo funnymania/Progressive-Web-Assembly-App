@@ -1,3 +1,6 @@
+Hirable API 
+- [ ] Need to implement TRANSACTIONS, we have situations where multiple queries are called in succession. If one fails, the previous will likely need to be ROLLED BACK.
+
 Unicorn Ranch
 - [ ] AliveCorns: pseudo before to show sun shining behind living corns, confetti, and front profile unicron horn
 - [ ] DeadCorns: two red Xs for eyes and a broken horn at feet.
