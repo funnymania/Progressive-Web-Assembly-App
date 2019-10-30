@@ -4,6 +4,7 @@
 # Config files
 .config
 .ebextensions
+*.code-workspace
 
 # Scratch paper
 scratch
