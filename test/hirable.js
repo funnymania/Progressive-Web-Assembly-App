@@ -46,6 +46,8 @@ function testRootUser() {
       })
     })
 
+// FIXME: deepequal is deprecated, use deepStrictEqual which requires each compared
+// item as a separate arg
     describe('Add card and Query', () => {
       it('should add the card, and find the unicorn via searching', async () => {
         try {
