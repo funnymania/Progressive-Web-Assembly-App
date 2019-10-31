@@ -10,7 +10,6 @@ const connect = () => {
     .then(pgTest => console.log(pgTest.rows[0].message))
     .catch(err => console.log(err))
 }
-
 function testRootUser() {
   const ghostsToken = uuidv4()
 
@@ -51,8 +50,9 @@ function testRootUser() {
       it('should add the card, and find the unicorn via searching', async () => {
         try {
           const insRes = await hirable.adminInsertCorn(ghostsToken, offOrg.rows[0].org_id, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
-          const searchRes = hirable.search({ location: insRes.rows[0].location }, 'cards')
-          assert.equals(insRes.rows[0] == searchRes.rows[0])
+          const searchRes = await hirable.search({ location: insRes.rows[0].location }, 'cards')
+          console.log(searchRes)
+          assert.deepEqual(insRes.rows[0] == searchRes.rows[0])
         } catch (err) {
           assert.fail(err)
         }
