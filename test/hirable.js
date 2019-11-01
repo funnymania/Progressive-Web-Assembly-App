@@ -156,8 +156,7 @@ const testPublic = () => {
       it('should return a result matching the orgName', async () => {
         try {
           const searchRes = await hirable.search({ location: 'Seattle' }, 'cards')
-          assert.equal(sortAndBinarySearch(searchObj, rows[0]))
-          assert.deepStrictEqual(insRes.rows[0], searchRes.rows[0])
+          assert.strictEqual(sortAndBinarySearch(searchObj, rows[0]), true)
         } catch (err) {
           assert.fail(err)
         }
@@ -169,7 +168,7 @@ const testPublic = () => {
         try {
           const searchObj = { location: 'Seattle', role: 'Software Engineer', org_id: 1 }
           const { rows } = await hirable.search(searchObj, 'cards')
-          assert.strictEqual(sortAndBinarySearch(searchObj, rows[0]))
+          assert.strictEqual(sortAndBinarySearch(searchObj, rows[0]), true)
         } catch (err) {
           assert.fail(err)
         }
