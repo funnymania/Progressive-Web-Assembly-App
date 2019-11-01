@@ -46,15 +46,12 @@ function testRootUser() {
       })
     })
 
-// FIXME: deepequal is deprecated, use deepStrictEqual which requires each compared
-// item as a separate arg
     describe('Add card and Query', () => {
       it('should add the card, and find the unicorn via searching', async () => {
         try {
           const insRes = await hirable.adminInsertCorn(ghostsToken, offOrg.rows[0].org_id, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
           const searchRes = await hirable.search({ location: insRes.rows[0].location }, 'cards')
-          console.log(searchRes)
-          assert.deepEqual(insRes.rows[0] == searchRes.rows[0])
+          assert.deepStrictEqual(insRes.rows[0], searchRes.rows[0])
         } catch (err) {
           assert.fail(err)
         }
