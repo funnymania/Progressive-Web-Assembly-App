@@ -96,22 +96,11 @@ const testOfficialOrg = () => {
     describe('Add a card associated with correct org', () => {
       it('should add the card, and search for that card', async () => {
         try {
-          const insRes = await hirable.insertCorn(offOrg.rows[0].api_token, offOrg.rows[0].org_id, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
+          const insRes = await hirable.insertCorn(offOrg.rows[0].api_token, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
           const searchRes = await hirable.search({ location: insRes.rows[0].location }, 'cards')
           assert.deepStrictEqual(insRes.rows[0], searchRes.rows[0])
         } catch (err) {
           assert.fail(err)
-        }
-      })
-    })
-
-    describe('Add card of a different org', () => {
-      it('should return an error message', async () => {
-        try {
-          const insRes = await hirable.insertCorn(offOrg.rows[0].api_token, offOrg.rows[0].org_id - 1, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
-          assert.fail(insRes)
-        } catch (err) {
-          assert.ok(err)
         }
       })
     })
@@ -144,9 +133,9 @@ const testPublic = () => {
       }
 
     try {
-          await hirable.insertCorn(ghostsToken, 2, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
-          await hirable.insertCorn(ghostsToken, 1, 'https://mozilla.org', 'Seattle', 'Software Engineer')
-          await hirable.insertCorn(ghostsToken, 1, 'https://mozilla.org', 'Seattle', 'Systems Engineer')
+          await hirable.adminInsertCorn(ghostsToken, 2, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
+          await hirable.adminInsertCorn(ghostsToken, 1, 'https://mozilla.org', 'Seattle', 'Software Engineer')
+          await hirable.adminInsertCorn(ghostsToken, 1, 'https://mozilla.org', 'Seattle', 'Systems Engineer')
     } catch (err) {
         assert.fail(err)
     }
@@ -155,7 +144,7 @@ const testPublic = () => {
     describe('Add a card with incorrect api_token', () => {
       it('should return an error message', async () => {
         try {
-          const insRes = await hirable.insertCorn(genUUID, 0, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
+          const insRes = await hirable.insertCorn(genUUID, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
           assert.fail(insRes)
         } catch (err) {
           assert.ok(err)
