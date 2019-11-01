@@ -143,8 +143,14 @@ const testPublic = () => {
         console.log(err)
       }
 
-      // TODO: Add some cards for testing search
-    })
+    try {
+          await hirable.insertCorn(ghostsToken, 2, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
+          await hirable.insertCorn(ghostsToken, 1, 'https://mozilla.org', 'Seattle', 'Software Engineer')
+          await hirable.insertCorn(ghostsToken, 1, 'https://mozilla.org', 'Seattle', 'Systems Engineer')
+    } catch (err) {
+        assert.fail(err)
+    }
+})
 
     describe('Add a card with incorrect api_token', () => {
       it('should return an error message', async () => {
