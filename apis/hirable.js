@@ -109,12 +109,12 @@ function pgEntitySelectAll(queryFields, entityName) {
 
   query += ' where '
   entries.forEach((el, i) => {
-    query += `${el[0]} = $${i + 1}, `
+    query += `${el[0]} = $${i + 1} \nAND `
     values.push(el[1])
   })
 
-  // Remove hanging comma and space
-  const text = query.slice(0, query.length - 2)
+  // Remove hanging AND and whitespace
+  const text = query.slice(0, query.length - 5)
 
   return { text, values }
 }
