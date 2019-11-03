@@ -167,7 +167,7 @@ const testPublic = () => {
       })
     })
 
-    describe('search for a card via many fields', () => {
+    describe('search for a card which exists via many fields', () => {
       it('should return a result matching the fields searched for', async () => {
         try {
           const searchObj = { location: 'Seattle', role: 'Software Engineer', org_id: 1 }
@@ -181,6 +181,22 @@ const testPublic = () => {
         }
       })
     })
+
+    describe('search for a card which DOES NOT exist via many fields', () => {
+      it('should return an empty array', async () => {
+        try {
+          const searchObj = { location: 'Walmart', role: 'Software Engineer', org_id: 1 }
+          const { rows } = await hirable.search(searchObj, 'cards')
+          assert.strictEqual(
+            rows.length,
+            0
+          )
+        } catch (err) {
+          assert.fail(err)
+        }
+      })
+    })
+
   })
 }
 
