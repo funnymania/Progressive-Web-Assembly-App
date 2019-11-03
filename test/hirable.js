@@ -132,6 +132,7 @@ const testPublic = () => {
         console.log(err)
       }
 
+      // Add some cards
       try {
         await hirable.adminInsertCorn(ghostsToken, 2, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
         await hirable.adminInsertCorn(ghostsToken, 1, 'https://mozilla.org', 'Seattle', 'Software Engineer')
@@ -200,7 +201,8 @@ const testPublic = () => {
   })
 }
 
-connect().then(hirable.connect())
+connect()
+  .then(hirable.connect())
   .then(testRootUser())
   .then(testOfficialOrg())
   .then(testPublic())

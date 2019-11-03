@@ -19,18 +19,17 @@ app.use(express.static('./client/dist'))
 app.use(express.json())
 
 /**
- * Build a query to redis from request's isSelected properties.
+ * Query DB 
  */
-app.post('/gather', (req, res) => {
+app.post('/gather', async (req, res) => {
   console.log(req.body)
-  hirable.search()
-
-  fs.readFile('./test.json', 'utf8', (err, data) => {
-    console.log(data)
-    err != null
-      ? console.log(err)
-      : res.json(JSON.parse(data))
-  })
+  try {
+    const { rows } = await hirable.search(req.body)
+    res.json(rows[0])
+  } catch (err) {
+    console.log(err)
+    res.json({ error: 1, msg: 'Tool broke! Please contact dev.' })
+  }
 })
 
 

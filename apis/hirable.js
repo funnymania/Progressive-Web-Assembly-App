@@ -16,6 +16,15 @@ const search = async (queryFields, entityName) => {
   return pgClient.query({ text, values })
 }
 
+const searchWithOrgName = async (queryFields, entityName) => {
+  const { text, values } = pgEntitySelectAll(
+    queryFields,
+    entityName,
+    [{ name: 'sup_orgs', on: `sup_orgs.org_id = ${entityName}.org_id` }]
+  )
+  return pgClient.query({ text, values })
+}
+
 const adminInsertCorn = async (apiToken, orgID, url, location, role) => {
   // Authenticate...
   const { rows } = await pgClient.query({
@@ -99,11 +108,18 @@ const insertSupportedOrg = async (org_id, org_name) => {
  * ex. card: { location: 'seattle'} will generate a query to search card table
  * for locations matching seattle. 
  */
-function pgEntitySelectAll(queryFields, entityName) {
+function pgEntitySelectAll(queryFields, entityName, joinTables = []) {
   let entries = Object.entries(queryFields)
   let query = `SELECT * from ${entityName}`
   let values = []
-  if (entries.length == 0) {
+
+  if (joinTables.length !== 0) {
+    joinTables.forEach(join => {
+      query += ` INNER JOIN ${join.name} ON ${join.on} \n`
+    })
+  }
+
+  if (entries.length === 0) {
     return { text: query, values }
   }
 
@@ -151,6 +167,7 @@ function pgCardInsert(src_url, location, role, org_id) {
 module.exports = {
   connect,
   search,
+  searchWithOrgName,
   insertCorn,
   makeOfficial,
   adminInsertCorn,
