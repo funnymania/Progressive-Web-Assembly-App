@@ -19,7 +19,8 @@ app.use(express.static('./client/dist'))
 app.use(express.json())
 
 /**
- * Query DB 
+ * Query Cards for any user
+ * Accepts flat JSON of query fields
  */
 app.post('/gather', async (req, res) => {
   console.log(req.body)
@@ -32,10 +33,15 @@ app.post('/gather', async (req, res) => {
   }
 })
 
-
-app.post('/v1/insert-corn', (req, res) => {
+// TODO: Handle encrypting api token.
+app.post('/v1/insert-corn/:?[fields]/', (req, res) => {
+  try {
+  const {rows} = await hirable.insertCorn({...fields})
+res.json(
+}
+catch(err) {
   return { msg: 'You are not authorized to do this.' }
-
+}
 })
 
 /**
