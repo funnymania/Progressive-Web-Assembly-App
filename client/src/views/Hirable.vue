@@ -72,6 +72,7 @@ export default {
       // Trigger spinner saying 'ranging...'
       this.activateSpinner = true;
 
+      // TODO: Delete all isSelected fields.
       // Query with selected orgs
       fetch("gather", {
         method: "POST",

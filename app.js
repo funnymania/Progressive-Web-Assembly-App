@@ -25,7 +25,7 @@ app.use(express.json())
 app.post('/gather', async (req, res) => {
   console.log(req.body)
   try {
-    const { rows } = await hirable.search(req.body)
+    const { rows } = await hirable.searchWithOrgName(req.body.flat())
     res.json(rows[0])
   } catch (err) {
     console.log(err)
@@ -34,14 +34,14 @@ app.post('/gather', async (req, res) => {
 })
 
 // TODO: Handle encrypting api token.
-app.post('/v1/insert-corn/:?[fields]/', (req, res) => {
+app.post('/v1/insert-corn/:?[fields]/', async (req, res) => {
   try {
-  const {rows} = await hirable.insertCorn({...fields})
-res.json(
-}
-catch(err) {
-  return { msg: 'You are not authorized to do this.' }
-}
+    const { rows } = await hirable.insertCorn({ ...fields })
+    res.json(rows[0])
+  }
+  catch (err) {
+    return { msg: 'You are not authorized to do this.' }
+  }
 })
 
 /**
@@ -77,10 +77,10 @@ app.get('/captured-cards', (req, res) => {
 app.get('/supported-corns', (req, res) => {
   const testRet = {
     orgs: [
-      { name: "twitter" },
-      { name: "google" },
-      { name: "apple" },
-      { name: "twitch" },
+      { orgName: "twitter" },
+      { orgName: "google" },
+      { orgName: "apple" },
+      { orgName: "twitch" },
     ]
   }
 

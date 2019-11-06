@@ -16,13 +16,11 @@ const search = async (queryFields, entityName) => {
   return pgClient.query({ text, values })
 }
 
-const searchWithOrgName = async (queryFields, entityName) => {
-  const { text, values } = pgEntitySelectAll(
-    queryFields,
-    entityName,
-    [{ name: 'sup_orgs', on: `sup_orgs.org_id = ${entityName}.org_id` }]
-  )
-  return pgClient.query({ text, values })
+const searchWithOrgName = async (queryFields) => {
+  return pgClient.query({
+    text: 'SELECT * FROM cards WHERE org_id IN (SELECT org_id FROM sup_orgs WHERE org_name = $1)',
+    values: queryFields.org_name,
+  })
 }
 
 const adminInsertCorn = async (apiToken, orgID, url, location, role) => {
