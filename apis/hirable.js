@@ -16,6 +16,7 @@ const search = async (queryFields, entityName) => {
   return pgClient.query({ text, values })
 }
 
+// TODO: Revert to previous join approach on org_name = queryFields.orgName
 const searchWithOrgName = async (queryFields) => {
   return pgClient.query({
     text: 'SELECT * FROM cards WHERE org_id IN (SELECT org_id FROM sup_orgs WHERE org_name = $1)',
