@@ -4,6 +4,7 @@ const mCcEvents = require('./apis/mCclureEvents')
 const hirable = require('./apis/hirable')
 const emails = require('./apis/emails')
 const compression = require('compression')
+const { cards } = require('./apis/entities/cards')
 
 const baseUrl = 'https://shinepickaw.rip/#/'
 
@@ -23,15 +24,40 @@ app.use(express.json())
  * Accepts flat JSON of query fields
  */
 app.post('/gather', async (req, res) => {
-  console.log(req.body)
   try {
-    const { rows } = await hirable.searchWithOrgName(req.body.flat())
+    // TODO: generate queryFields from cards entity
+    const queryFields = createQueriedFields(req.body, cards)
+    console.log(queryFields)
+    const { rows } = await hirable.searchWithOrgName(queryFields, 'cards')
+    console.log(rows)
     res.json(rows[0])
   } catch (err) {
     console.log(err)
     res.json({ error: 1, msg: 'Tool broke! Please contact dev.' })
   }
 })
+
+/**
+ * Takes a list of search requests, strips props that are not properties on entity,
+ * returns an object where every property is [entityPropName]: [listOfValues]
+ */
+function createQueriedFields(queries, entity) {
+  // Create empty arrays for each field
+  let result = {}
+  Object.entries(entity).forEach(entry => {
+    result[entry[0]] = []
+  })
+
+  queries.forEach(el => {
+    Object.entries(el).forEach(entry => {
+      if (result[entry[0]] !== undefined) {
+        result[entry[0]].push(entry[1])
+      }
+    })
+  })
+
+  return result
+}
 
 // TODO: Handle encrypting api token.
 app.post('/v1/insert-corn/:?[fields]/', async (req, res) => {
@@ -74,21 +100,18 @@ app.get('/captured-cards', (req, res) => {
   res.json(test)
 })
 
+// TODO: Get from real data
 app.get('/supported-corns', (req, res) => {
   const testRet = {
     orgs: [
-      { orgName: "twitter" },
-      { orgName: "google" },
-      { orgName: "apple" },
-      { orgName: "twitch" },
+      { orgName: "ghosts", org_id: 0 },
+      { orgName: "mozilla", org_id: 1 },
+      { orgName: "apple", org_id: 2 },
+      { orgName: "twitch", org_id: 3 },
     ]
   }
 
   res.json(testRet)
-  // client.get('supported-corns', (err, reply) => {
-  // console.log("redis.get ", reply);
-  // res.json(JSON.parse(reply))
-  // });
 })
 
 app.post('/phase-in', (req, res) => {

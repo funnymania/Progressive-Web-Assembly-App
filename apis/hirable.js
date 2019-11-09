@@ -16,12 +16,13 @@ const search = async (queryFields, entityName) => {
   return pgClient.query({ text, values })
 }
 
-// TODO: Revert to previous join approach on org_name = queryFields.orgName
-const searchWithOrgName = async (queryFields) => {
-  return pgClient.query({
-    text: 'SELECT * FROM cards WHERE org_id IN (SELECT org_id FROM sup_orgs WHERE org_name = $1)',
-    values: queryFields.org_name,
-  })
+const searchWithOrgName = async (queryFields, entityName) => {
+  const { text, values } = pgEntitySelectAll(
+    queryFields,
+    entityName,
+    [{ name: 'sup_orgs', on: `sup_orgs.org_name = ${queryFields.orgName}` }]
+  )
+  return pgClient.query({ text, values })
 }
 
 const adminInsertCorn = async (apiToken, orgID, url, location, role) => {
@@ -130,6 +131,7 @@ function pgEntitySelectAll(queryFields, entityName, joinTables = []) {
 
   // Remove hanging AND and whitespace
   const text = query.slice(0, query.length - 5)
+  console.log(text)
 
   return { text, values }
 }

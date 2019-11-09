@@ -72,13 +72,15 @@ export default {
       // Trigger spinner saying 'ranging...'
       this.activateSpinner = true;
 
-      // Remove unchecked, delete all isSelected fields.
-      desiredCorns
-        .filter(el => el.isSelected == true)
-        .forEach(el => {
-          delete el.isSelected;
-        });
-      console.table(desiredCorns);
+      // Filter and change property name for API
+      let newEntity = [];
+      desiredCorns.forEach(el => {
+        if (el.isSelected) {
+          let { name, ...theRest } = el;
+          theRest.orgName = name;
+          newEntity.push(theRest);
+        }
+      });
 
       // Query with selected orgs
       fetch("gather", {
@@ -86,7 +88,7 @@ export default {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(desiredCorns.filter(el => el.isSelected == true))
+        body: JSON.stringify(newEntity)
       })
         .then(res => {
           let cornsGathered = res.json();
@@ -150,17 +152,18 @@ export default {
          * Pull user's last searched for companies into chexbox.
          */
         orgs.forEach(el => {
-          if (cachedGroups != null) {
+          el.name = el.orgName;
+          delete el.orgName; // Delete creates sparse memory performance issues at >55000 props
+          if (cachedGroups !== null) {
             for (let group of cachedGroups) {
-              el.name = el.orgName;
-              delete el.orgName; // Delete creates sparse memory performance issues at >55000 props
-              if (el.name == group.name) {
+              if (el.name === group.name) {
                 el.isSelected = group.isSelected;
                 break;
               }
             }
           }
-          if (el.isSelected == undefined) {
+
+          if (el.isSelected === undefined) {
             el.isSelected = true;
           }
         });
