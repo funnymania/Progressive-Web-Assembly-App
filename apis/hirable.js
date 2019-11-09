@@ -16,14 +16,10 @@ const search = async (queryFields, entityName) => {
   return pgClient.query({ text, values })
 }
 
-const searchWithOrgName = async (queryFields, entityName) => {
-  const { text, values } = pgEntitySelectAll(
-    queryFields,
-    entityName,
-    [{ name: 'sup_orgs', on: `sup_orgs.org_name = ${queryFields.orgName}` }]
-  )
-  return pgClient.query({ text, values })
-}
+// const searchWithOrgName = async (queryFields, entityName) => {
+//   const { text, values } = pgEntitySelectAll(queryFields, entityName)
+//   return pgClient.query({ text, values })
+// }
 
 const adminInsertCorn = async (apiToken, orgID, url, location, role) => {
   // Authenticate...
@@ -119,14 +115,17 @@ function pgEntitySelectAll(queryFields, entityName, joinTables = []) {
     })
   }
 
-  if (entries.length === 0) {
-    return { text: query, values }
-  }
-
+  // TODO: fields are now arrays, for each field, create a WHERE clause for each field index
   query += ' where '
-  entries.forEach((el, i) => {
-    query += `${el[0]} = $${i + 1} \nAND `
-    values.push(el[1])
+  let cnt = 1
+  entries.forEach((entry) => {
+    if (entry[1].length !== 0) {
+      entry[1].forEach(value => {
+        query += `${entry[0]} = $${cnt} \nAND `
+        values.push(value)
+        cnt += 1
+      })
+    }
   })
 
   // Remove hanging AND and whitespace

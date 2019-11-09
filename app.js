@@ -25,10 +25,9 @@ app.use(express.json())
  */
 app.post('/gather', async (req, res) => {
   try {
-    // TODO: generate queryFields from cards entity
     const queryFields = createQueriedFields(req.body, cards)
     console.log(queryFields)
-    const { rows } = await hirable.searchWithOrgName(queryFields, 'cards')
+    const { rows } = await hirable.search(queryFields, 'cards')
     console.log(rows)
     res.json(rows[0])
   } catch (err) {
