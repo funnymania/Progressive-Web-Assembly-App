@@ -72,7 +72,14 @@ export default {
       // Trigger spinner saying 'ranging...'
       this.activateSpinner = true;
 
-      // TODO: Delete all isSelected fields.
+      // Remove unchecked, delete all isSelected fields.
+      desiredCorns
+        .filter(el => el.isSelected == true)
+        .forEach(el => {
+          delete el.isSelected;
+        });
+      console.table(desiredCorns);
+
       // Query with selected orgs
       fetch("gather", {
         method: "POST",
@@ -125,6 +132,7 @@ export default {
     }
   },
   mounted() {
+    let cachedGroups = JSON.parse(localStorage.getItem("supportedGroups"));
     fetch("/supported-corns")
       .then(res => {
         if (res.ok) {
@@ -135,18 +143,17 @@ export default {
       })
       .then(json => json.orgs)
       .then(orgs => {
-        let supportedGroups = JSON.parse(
-          localStorage.getItem("supportedGroups")
-        );
-
-        // FIXME: Very confusing. This tags each supportedGroup with 'isSelected' of
-        // corresponding localStorage entry, and if there is no corresponding entry,
-        // marks the value as True (aka checks the box). This is very unclear. Also is
-        // O(n**2)
-        // Pull user's last searched for companies into chexbox.
+        /**
+         * This tags each org with 'isSelected' of
+         * corresponding localStorage entry, and if there is no corresponding entry,
+         * marks the value as True (aka checks the box).
+         * Pull user's last searched for companies into chexbox.
+         */
         orgs.forEach(el => {
-          if (supportedGroups != null) {
-            for (let group of supportedGroups) {
+          if (cachedGroups != null) {
+            for (let group of cachedGroups) {
+              el.name = el.orgName;
+              delete el.orgName; // Delete creates sparse memory performance issues at >55000 props
               if (el.name == group.name) {
                 el.isSelected = group.isSelected;
                 break;
