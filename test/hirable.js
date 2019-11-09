@@ -50,7 +50,8 @@ function testRootUser() {
       it('should add the card, and find the unicorn via searching', async () => {
         try {
           const insRes = await hirable.adminInsertCorn(ghostsToken, offOrg.rows[0].org_id, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
-          const searchRes = await hirable.search({ location: insRes.rows[0].location }, 'cards')
+          const query = { location: [insRes.rows[0].location] }
+          const searchRes = await hirable.search(query, 'cards')
           assert.deepStrictEqual(insRes.rows[0], searchRes.rows[0])
         } catch (err) {
           assert.fail(err)
@@ -97,7 +98,8 @@ const testOfficialOrg = () => {
       it('should add the card, and search for that card', async () => {
         try {
           const insRes = await hirable.insertCorn(offOrg.rows[0].api_token, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
-          const searchRes = await hirable.search({ location: insRes.rows[0].location }, 'cards')
+          const query = { location: [insRes.rows[0].location] }
+          const searchRes = await hirable.search(query, 'cards')
           assert.deepStrictEqual(insRes.rows[0], searchRes.rows[0])
         } catch (err) {
           assert.fail(err)
@@ -153,13 +155,13 @@ const testPublic = () => {
       })
     })
 
-    describe('search for a card via orgName', () => {
-      it('should return a result matching the orgName', async () => {
+    describe('search for a card via org_id', () => {
+      it('should return a result matching the org_id', async () => {
         try {
-          const searchObj = { location: 'Seattle' }
+          const searchObj = { org_id: [1] }
           const { rows } = await hirable.search(searchObj, 'cards')
           assert.strictEqual(
-            Object.entries(searchObj).every(entry => rows[0][entry[0]] === entry[1]),
+            Object.entries(searchObj).every(entry => rows[0][entry[0]] === 1),
             true
           )
         } catch (err) {
@@ -171,10 +173,10 @@ const testPublic = () => {
     describe('search for a card which exists via many fields', () => {
       it('should return a result matching the fields searched for', async () => {
         try {
-          const searchObj = { location: 'Seattle', role: 'Software Engineer', org_id: 1 }
+          const searchObj = { location: ['Seattle'], role: ['Software Engineer'], org_id: [1] }
           const { rows } = await hirable.search(searchObj, 'cards')
           assert.strictEqual(
-            Object.entries(searchObj).every(entry => rows[0][entry[0]] === entry[1]),
+            Object.entries(searchObj).every(entry => entry[1].includes(rows[0][entry[0]])),
             true
           )
         } catch (err) {
@@ -186,7 +188,7 @@ const testPublic = () => {
     describe('search for a card which DOES NOT exist via many fields', () => {
       it('should return an empty array', async () => {
         try {
-          const searchObj = { location: 'Walmart', role: 'Software Engineer', org_id: 1 }
+          const searchObj = { location: ['Walmart'], role: ['Software Engineer'], org_id: [1] }
           const { rows } = await hirable.search(searchObj, 'cards')
           assert.strictEqual(
             rows.length,
@@ -197,9 +199,6 @@ const testPublic = () => {
         }
       })
     })
-
-    //TODO: Test searches using orgName (the hirableUI usecase)
-
   })
 }
 

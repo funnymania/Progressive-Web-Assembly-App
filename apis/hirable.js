@@ -16,11 +16,6 @@ const search = async (queryFields, entityName) => {
   return pgClient.query({ text, values })
 }
 
-// const searchWithOrgName = async (queryFields, entityName) => {
-//   const { text, values } = pgEntitySelectAll(queryFields, entityName)
-//   return pgClient.query({ text, values })
-// }
-
 const adminInsertCorn = async (apiToken, orgID, url, location, role) => {
   // Authenticate...
   const { rows } = await pgClient.query({
@@ -115,16 +110,20 @@ function pgEntitySelectAll(queryFields, entityName, joinTables = []) {
     })
   }
 
-  // TODO: fields are now arrays, for each field, create a WHERE clause for each field index
+  // TODO: Fields will be OR'd if they are of the same value ex(twitter,google)
+  //       But different fields will be AND'd
   query += ' where '
   let cnt = 1
   entries.forEach((entry) => {
     if (entry[1].length !== 0) {
+      query += `${entry[0]} IN (`
       entry[1].forEach(value => {
-        query += `${entry[0]} = $${cnt} \nAND `
+        query += `$${cnt}, `
         values.push(value)
         cnt += 1
       })
+      query = query.slice(0, query.length - 2)
+      query += ') AND\n'
     }
   })
 
@@ -167,7 +166,6 @@ function pgCardInsert(src_url, location, role, org_id) {
 module.exports = {
   connect,
   search,
-  searchWithOrgName,
   insertCorn,
   makeOfficial,
   adminInsertCorn,
