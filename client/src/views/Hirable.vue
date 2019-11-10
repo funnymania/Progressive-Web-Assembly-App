@@ -92,7 +92,6 @@ export default {
       })
         .then(res => {
           let cornsGathered = res.json();
-          console.log(cornsGathered);
           return cornsGathered;
         })
         .then(results => {
@@ -151,9 +150,10 @@ export default {
          * marks the value as True (aka checks the box).
          * Pull user's last searched for companies into chexbox.
          */
+        console.table(orgs);
         orgs.forEach(el => {
-          el.name = el.orgName;
-          delete el.orgName; // Delete creates sparse memory performance issues at >55000 props
+          el.name = el.org_name;
+          delete el.org_name; // Delete creates sparse memory performance issues at >55000 props
           if (cachedGroups !== null) {
             for (let group of cachedGroups) {
               if (el.name === group.name) {

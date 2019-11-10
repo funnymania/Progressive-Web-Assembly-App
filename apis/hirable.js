@@ -11,6 +11,7 @@ const connect = () => {
     .catch(err => console.log(err))
 }
 
+// TODO: Join this (or card view) to provide to client
 const search = async (queryFields, entityName) => {
   const { text, values } = pgEntitySelectAll(queryFields, entityName)
   return pgClient.query({ text, values })
@@ -90,6 +91,10 @@ const makeOfficial = async (orgid, orgname) => {
   })
 }
 
+const getSupOrgs = async () => {
+  return pgClient.query('SELECT * from sup_orgs')
+}
+
 const insertSupportedOrg = async (org_id, org_name) => {
 
 }
@@ -110,8 +115,6 @@ function pgEntitySelectAll(queryFields, entityName, joinTables = []) {
     })
   }
 
-  // TODO: Fields will be OR'd if they are of the same value ex(twitter,google)
-  //       But different fields will be AND'd
   query += ' where '
   let cnt = 1
   entries.forEach((entry) => {
@@ -169,4 +172,5 @@ module.exports = {
   insertCorn,
   makeOfficial,
   adminInsertCorn,
+  getSupOrgs,
 }

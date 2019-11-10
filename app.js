@@ -98,17 +98,14 @@ app.get('/captured-cards', (req, res) => {
 })
 
 // TODO: Get from real data
-app.get('/supported-corns', (req, res) => {
-  const testRet = {
-    orgs: [
-      { orgName: "ghosts", org_id: 0 },
-      { orgName: "mozilla", org_id: 1 },
-      { orgName: "apple", org_id: 2 },
-      { orgName: "twitch", org_id: 3 },
-    ]
+app.get('/supported-corns', async (req, res) => {
+  try {
+    const getRes = await hirable.getSupOrgs()
+    res.json({ orgs: getRes.rows })
+  } catch (err) {
+    console.log(err)
+    res.json({ error: 1, msg: 'Server error!' })
   }
-
-  res.json(testRet)
 })
 
 app.post('/phase-in', (req, res) => {
