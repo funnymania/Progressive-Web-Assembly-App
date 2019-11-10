@@ -9,10 +9,10 @@
           </div>
           <div
             class="declaration"
-          >{{ entry.compName[0].toUpperCase() + entry.compName.substr(1) + 'Corn!' }}</div>
+          >{{ entry.name[0].toUpperCase() + entry.name.substr(1) + 'Corn!' }}</div>
         </div>
         <div class="cornDesc">
-          <h3>{{ entry.title }}</h3>
+          <h3>{{ entry.role }}</h3>
           <p>{{ entry.desc }}</p>
         </div>
       </div>
@@ -46,11 +46,13 @@ export default {
   },
   methods: {
     iconDisplay(e) {
-      return require(`../assets/${e.compName}.svg`);
+      return require(`../assets/${e.name}.svg`);
     },
     unicornCapture(entry, event) {
       this.playAnimation(entry, event);
       this.saveThisToLocalStorage(entry);
+      // TODO: Save to user's online storage
+      // this.saveToRanch(entry)
     },
 
     // Pop up little rectangle saying '+1 AppleCorn captured!' at cursor
@@ -58,10 +60,7 @@ export default {
       // Get popup element, move to cursor location
       let popup = document.getElementById("cornCaption");
       let popupText = document.createTextNode(
-        "+1 " +
-          e.compName[0].toUpperCase() +
-          e.compName.substr(1) +
-          "Corn captured!"
+        "+1 " + e.name[0].toUpperCase() + e.name.substr(1) + "Corn captured!"
       );
       popup.append(popupText);
       document.body.append(popup);
@@ -73,7 +72,7 @@ export default {
       popup.classList.add("animate");
 
       // Get url, pass to open after some time passes
-      setTimeout(() => window.open(e.url, "_blank"), 700);
+      setTimeout(() => window.open(e.src_url, "_blank"), 700);
     },
     animationEndListener(e) {
       e.classList.remove("animate");

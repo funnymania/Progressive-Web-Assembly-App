@@ -95,7 +95,12 @@ export default {
           return cornsGathered;
         })
         .then(results => {
-          searchedJobs = results;
+          let searchedJobs = [];
+          results.forEach(el => {
+            let { org_name, ...theRest } = el;
+            theRest.name = org_name;
+            searchedJobs.push(theRest);
+          });
 
           // Deactivate Spinner
           this.activateSpinner = false;
