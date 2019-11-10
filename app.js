@@ -97,7 +97,6 @@ app.get('/captured-cards', (req, res) => {
   res.json(test)
 })
 
-// TODO: Get from real data
 app.get('/supported-corns', async (req, res) => {
   try {
     const getRes = await hirable.getSupOrgs()

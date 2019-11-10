@@ -52,7 +52,8 @@ function testRootUser() {
           const insRes = await hirable.adminInsertCorn(ghostsToken, offOrg.rows[0].org_id, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
           const query = { location: [insRes.rows[0].location] }
           const searchRes = await hirable.search(query, 'cards')
-          assert.deepStrictEqual(insRes.rows[0], searchRes.rows[0])
+          assert.strictEqual(insRes.rows[0].scrapetime.toString(), searchRes.rows[0].scrapetime.toString())
+          assert.strictEqual(insRes.rows[0].src_url, searchRes.rows[0].src_url)
         } catch (err) {
           assert.fail(err)
         }
@@ -100,7 +101,8 @@ const testOfficialOrg = () => {
           const insRes = await hirable.insertCorn(offOrg.rows[0].api_token, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
           const query = { location: [insRes.rows[0].location] }
           const searchRes = await hirable.search(query, 'cards')
-          assert.deepStrictEqual(insRes.rows[0], searchRes.rows[0])
+          assert.strictEqual(insRes.rows[0].scrapetime.toString(), searchRes.rows[0].scrapetime.toString())
+          assert.strictEqual(insRes.rows[0].src_url, searchRes.rows[0].src_url)
         } catch (err) {
           assert.fail(err)
         }
@@ -134,6 +136,13 @@ const testPublic = () => {
         console.log(err)
       }
 
+      // Add official org to test
+      try {
+        offOrg = await hirable.makeOfficial(1, 'Mozilla Corporation')
+      } catch (err) {
+        console.log(err)
+      }
+
       // Add some cards
       try {
         await hirable.adminInsertCorn(ghostsToken, 2, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
@@ -161,7 +170,7 @@ const testPublic = () => {
           const searchObj = { org_id: [1] }
           const { rows } = await hirable.search(searchObj, 'cards')
           assert.strictEqual(
-            Object.entries(searchObj).every(entry => rows[0][entry[0]] === 1),
+            Object.entries(searchObj).every(entry => entry[1].includes(rows[0][entry[0]])),
             true
           )
         } catch (err) {
@@ -202,8 +211,38 @@ const testPublic = () => {
   })
 }
 
+const seedDB = async () => {
+  const ghostsToken = uuidv4()
+
+  // Create super user
+  try {
+    await pgClient.query(`INSERT INTO official_orgs VALUES ('${ghostsToken}', 0)`)
+    await pgClient.query(`INSERT INTO sup_orgs VALUES (0, 'Ghosts')`)
+    await pgClient.query(`INSERT INTO official_rights VALUES ('${ghostsToken}', TRUE, TRUE)`)
+  } catch (err) {
+    console.log(err)
+  }
+
+  // Add official org to test
+  try {
+    offOrg = await hirable.makeOfficial(1, 'Mozilla Corporation')
+  } catch (err) {
+    console.log(err)
+  }
+
+  // Add some cards
+  try {
+    await hirable.adminInsertCorn(ghostsToken, 2, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
+    await hirable.adminInsertCorn(ghostsToken, 1, 'https://mozilla.org', 'Seattle', 'Software Engineer')
+    await hirable.adminInsertCorn(ghostsToken, 1, 'https://mozilla.org', 'Seattle', 'Systems Engineer')
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 connect()
   .then(hirable.connect())
   .then(testRootUser())
   .then(testOfficialOrg())
   .then(testPublic())
+  .then(seedDB())

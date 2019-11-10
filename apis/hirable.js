@@ -13,7 +13,9 @@ const connect = () => {
 
 // TODO: Join this (or card view) to provide to client
 const search = async (queryFields, entityName) => {
-  const { text, values } = pgEntitySelectAll(queryFields, entityName)
+  const { text, values } = pgEntitySelectAll(queryFields, entityName,
+    { name: 'sup_orgs', using: 'org_id' }
+  )
   return pgClient.query({ text, values })
 }
 
@@ -67,7 +69,6 @@ const insertCorn = async (apiToken, url, location, role) => {
 
 /**
  * create an API token, manually find comp in supported orgs or add if it doesnt exist 
- * 
  */
 const makeOfficial = async (orgid, orgname) => {
   // Insert
@@ -101,18 +102,15 @@ const insertSupportedOrg = async (org_id, org_name) => {
 
 /**
  * Takes all the properties of some entity instance, constructs a query
- * ex. card: { location: 'seattle'} will generate a query to search card table
+ * ex. card: { location: ['seattle']} will generate a query to search card table
  * for locations matching seattle. 
  */
-function pgEntitySelectAll(queryFields, entityName, joinTables = []) {
+function pgEntitySelectAll(queryFields, entityName, join = {}) {
   let entries = Object.entries(queryFields)
   let query = `SELECT * from ${entityName}`
   let values = []
-
-  if (joinTables.length !== 0) {
-    joinTables.forEach(join => {
-      query += ` INNER JOIN ${join.name} ON ${join.on} \n`
-    })
+  if (join.name !== undefined) {
+    query += ` INNER JOIN ${join.name} USING (${join.using}) \n`
   }
 
   query += ' where '
@@ -125,6 +123,7 @@ function pgEntitySelectAll(queryFields, entityName, joinTables = []) {
         values.push(value)
         cnt += 1
       })
+
       query = query.slice(0, query.length - 2)
       query += ') AND\n'
     }
@@ -137,11 +136,6 @@ function pgEntitySelectAll(queryFields, entityName, joinTables = []) {
   return { text, values }
 }
 
-/**
- * Takes all the properties of some entity instance, constructs a query
- * ex. card: { location: 'seattle'} will generate a query to search card table
- * for locations matching seattle. 
- */
 function pgCardInsert(src_url, location, role, org_id) {
   let completeEntity = {
     scrapetime: new Date().toISOString(),
