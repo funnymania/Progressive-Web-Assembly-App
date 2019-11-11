@@ -153,6 +153,8 @@ const testPublic = () => {
       }
     })
 
+    after(async () => seedDB())
+
     describe('Add a card with incorrect api_token', () => {
       it('should return an error message', async () => {
         try {
@@ -211,8 +213,18 @@ const testPublic = () => {
   })
 }
 
-const seedDB = async () => {
+async function seedDB() {
   const ghostsToken = uuidv4()
+
+  // Clear relevant tables.
+  try {
+    await pgClient.query('DELETE FROM cards')
+    await pgClient.query('DELETE FROM official_rights')
+    await pgClient.query('DELETE FROM official_orgs')
+    await pgClient.query('DELETE FROM sup_orgs')
+  } catch (err) {
+    console.log(err)
+  }
 
   // Create super user
   try {
@@ -225,16 +237,17 @@ const seedDB = async () => {
 
   // Add official org to test
   try {
-    offOrg = await hirable.makeOfficial(1, 'Mozilla Corporation')
+    await hirable.makeOfficial(1, 'Twitter')
+    await hirable.makeOfficial(2, 'Google')
   } catch (err) {
     console.log(err)
   }
 
   // Add some cards
   try {
-    await hirable.adminInsertCorn(ghostsToken, 2, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
-    await hirable.adminInsertCorn(ghostsToken, 1, 'https://mozilla.org', 'Seattle', 'Software Engineer')
-    await hirable.adminInsertCorn(ghostsToken, 1, 'https://mozilla.org', 'Seattle', 'Systems Engineer')
+    await hirable.adminInsertCorn(ghostsToken, 2, 'https://mozilla.org', 'San Francisco', 'Software Engineer', 'Dream in sleeping')
+    await hirable.adminInsertCorn(ghostsToken, 1, 'https://mozilla.org', 'Seattle', 'Software Engineer', 'Telephone holes, you are the road')
+    await hirable.adminInsertCorn(ghostsToken, 1, 'https://mozilla.org', 'Seattle', 'Systems Engineer', 'I think I can')
   } catch (err) {
     console.log(err)
   }

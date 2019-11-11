@@ -11,7 +11,6 @@ const connect = () => {
     .catch(err => console.log(err))
 }
 
-// TODO: Join this (or card view) to provide to client
 const search = async (queryFields, entityName) => {
   const { text, values } = pgEntitySelectAll(queryFields, entityName,
     { name: 'sup_orgs', using: 'org_id' }
@@ -19,7 +18,15 @@ const search = async (queryFields, entityName) => {
   return pgClient.query({ text, values })
 }
 
-const adminInsertCorn = async (apiToken, orgID, url, location, role) => {
+// TODO: This doesn't work, just a stub. Should add to user's collection.
+const userAddCorn = async (cornFields) => {
+  return pgClient.query(`UPDATE hirable 
+    SET active_cards = array_append(active_cards, ${JSON.stringify(cornFields)})
+    WHERE uid = cornFields.uid
+  `)
+}
+
+const adminInsertCorn = async (apiToken, orgID, url, location, role, desc = '') => {
   // Authenticate...
   const { rows } = await pgClient.query({
     text: `SELECT COUNT(*)
@@ -34,7 +41,7 @@ const adminInsertCorn = async (apiToken, orgID, url, location, role) => {
   }
 
   // Build query from entity...
-  const { text, values } = pgCardInsert(url, location, role, orgID)
+  const { text, values } = pgCardInsert(url, location, role, orgID, desc)
 
   // Insert and return
   return pgClient.query({
@@ -136,7 +143,7 @@ function pgEntitySelectAll(queryFields, entityName, join = {}) {
   return { text, values }
 }
 
-function pgCardInsert(src_url, location, role, org_id) {
+function pgCardInsert(src_url, location, role, org_id, desc) {
   let completeEntity = {
     scrapetime: new Date().toISOString(),
     org_id,
@@ -144,6 +151,7 @@ function pgCardInsert(src_url, location, role, org_id) {
     uids: [],
     role,
     location,
+    desc,
   }
 
   let entries = Object.entries(completeEntity)
@@ -167,4 +175,5 @@ module.exports = {
   makeOfficial,
   adminInsertCorn,
   getSupOrgs,
+  userAddCorn,
 }

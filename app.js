@@ -68,33 +68,44 @@ app.post('/v1/insert-corn/:?[fields]/', async (req, res) => {
 })
 
 /**
- * Get actives from 
+ * TODO: Get from live data.
  */
 app.get('/captured-cards', (req, res) => {
   const test = {
     aliveCorns: [
-      { url_posting: 'https://www.google.com', compName: 'google' },
-      { url_posting: 'https://www.google.com', compName: 'twitch' },
-      { url_posting: 'https://www.google.com', compName: 'amazon' },
-      { url_posting: 'https://www.google.com', compName: 'amazon' },
-      { url_posting: 'https://www.google.com', compName: 'amazon' },
-      { url_posting: 'https://www.google.com', compName: 'amazon' },
-      { url_posting: 'https://www.google.com', compName: 'amazon' },
+      { url_posting: 'https://www.google.com', name: 'Google' },
+      { url_posting: 'https://www.google.com', name: 'Twitch' },
+      { url_posting: 'https://www.google.com', name: 'Amazon' },
+      { url_posting: 'https://www.google.com', name: 'Amazon' },
+      { url_posting: 'https://www.google.com', name: 'Amazon' },
+      { url_posting: 'https://www.google.com', name: 'Amazon' },
+      { url_posting: 'https://www.google.com', name: 'Amazon' },
     ],
     deadCorns: [
-      { url_posting: 'https://www.google.com', compName: 'twitch' },
-      { url_posting: 'https://www.google.com', compName: 'amazon' },
-      { url_posting: 'https://www.google.com', compName: 'amazon' },
-      { url_posting: 'https://www.google.com', compName: 'amazon' },
-      { url_posting: 'https://www.google.com', compName: 'amazon' },
-      { url_posting: 'https://www.google.com', compName: 'amazon' },
-      { url_posting: 'https://www.google.com', compName: 'amazon' },
-      { url_posting: 'https://www.google.com', compName: 'amazon' },
-      { url_posting: 'https://www.google.com', compName: 'amazon' },
+      { url_posting: 'https://www.google.com', name: 'Twitch' },
+      { url_posting: 'https://www.google.com', name: 'Amazon' },
+      { url_posting: 'https://www.google.com', name: 'Amazon' },
+      { url_posting: 'https://www.google.com', name: 'Amazon' },
+      { url_posting: 'https://www.google.com', name: 'Amazon' },
+      { url_posting: 'https://www.google.com', name: 'Amazon' },
+      { url_posting: 'https://www.google.com', name: 'Amazon' },
+      { url_posting: 'https://www.google.com', name: 'Amazon' },
+      { url_posting: 'https://www.google.com', name: 'Amazon' },
     ]
   }
 
   res.json(test)
+})
+
+// TODO: Add to users' live collection
+app.post('/capture-corn', async (req, res) => {
+  try {
+    const upRes = await hirable.userAddCorn(req.body)
+    res.json({ msg: 'Success!' })
+  } catch (err) {
+    console.log(err)
+    res.json({ error: 1, msg: 'Server error!' })
+  }
 })
 
 app.get('/supported-corns', async (req, res) => {
