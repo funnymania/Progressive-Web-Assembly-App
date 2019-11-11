@@ -52,7 +52,7 @@ export default {
       this.playAnimation(entry, event);
       this.saveThisToLocalStorage(entry);
       // TODO: Save to user's online storage
-      // this.saveToRanch(entry)
+      this.saveToRanch(entry);
     },
 
     // Pop up little rectangle saying '+1 AppleCorn captured!' at cursor
@@ -105,6 +105,20 @@ export default {
           localStorage.setItem("liveUnicorns", JSON.stringify(addMe));
         }
       }
+    },
+
+    saveToRanch(corn) {
+      fetch("/capture-corn", {
+        method: "POST",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(corn)
+      })
+        .then(res => res.json())
+        .then(resJ => console.log(resJ));
     }
   }
 };

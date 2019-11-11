@@ -18,17 +18,28 @@ const search = async (queryFields, entityName) => {
   return pgClient.query({ text, values })
 }
 
-// TODO: This doesn't work, just a stub. Should add to user's collection.
-const userAddCorn = async (cornFields) => {
+// TODO: If user does not exist in hirable, create entry for them
+const userAddCorn = async (uid, cornFields) => {
   return pgClient.query(`UPDATE hirable 
     SET active_cards = array_append(active_cards, ${JSON.stringify(cornFields)})
-    WHERE uid = cornFields.uid
+    WHERE uid = ${uid}
   `)
 }
 
-const userGetActiveCards = async () => { }
-const userGetInactiveCards = async () => { }
-const inactivateCards = async () => { }
+const userGetActiveCards = async (uid) => {
+  return pgClient.query(`
+    SELECT active_cards 
+    FROM hirable
+    WHERE uid = ${uid}
+  `)
+}
+const userGetInactiveCards = async (uid) => {
+  return pgClient.query(`
+    SELECT card_histories
+    FROM hirable
+    WHERE uid = ${uid}
+  `)
+}
 
 const adminInsertCorn = async (apiToken, orgID, url, location, role, desc = '') => {
   // Authenticate...
@@ -180,4 +191,6 @@ module.exports = {
   adminInsertCorn,
   getSupOrgs,
   userAddCorn,
+  userGetActiveCards,
+  userGetInactiveCards,
 }

@@ -68,43 +68,54 @@ app.post('/v1/insert-corn/:?[fields]/', async (req, res) => {
 })
 
 /**
- * TODO: Get from live data.
+ * Get active and inactive cards
  */
-app.get('/captured-cards', (req, res) => {
-  const test = {
-    aliveCorns: [
-      { url_posting: 'https://www.google.com', name: 'Google' },
-      { url_posting: 'https://www.google.com', name: 'Twitch' },
-      { url_posting: 'https://www.google.com', name: 'Amazon' },
-      { url_posting: 'https://www.google.com', name: 'Amazon' },
-      { url_posting: 'https://www.google.com', name: 'Amazon' },
-      { url_posting: 'https://www.google.com', name: 'Amazon' },
-      { url_posting: 'https://www.google.com', name: 'Amazon' },
-    ],
-    deadCorns: [
-      { url_posting: 'https://www.google.com', name: 'Twitch' },
-      { url_posting: 'https://www.google.com', name: 'Amazon' },
-      { url_posting: 'https://www.google.com', name: 'Amazon' },
-      { url_posting: 'https://www.google.com', name: 'Amazon' },
-      { url_posting: 'https://www.google.com', name: 'Amazon' },
-      { url_posting: 'https://www.google.com', name: 'Amazon' },
-      { url_posting: 'https://www.google.com', name: 'Amazon' },
-      { url_posting: 'https://www.google.com', name: 'Amazon' },
-      { url_posting: 'https://www.google.com', name: 'Amazon' },
-    ]
+app.get('/captured-cards', async (req, res) => {
+  let cookie = req.get('Cookie')
+  if (cookie !== undefined) {
+    let sessId = cookie.slice(cookie.indexOf('=') + 1)
+    try {
+      const sessRes = await mCcEvents.api.getUserSession(sessId)
+      if (sessRes.rows.length > 0) {
+        const actives = await hirable.userGetActiveCards().rows[0].active_cards
+        const inactives = await hirable.userGetInactiveCards().rows[0].card_histories
+        res.json({
+          actives,
+          inactives,
+        })
+      } else {
+        res.json({ error: 1, msg: 'Your session has ended, please log-in.' })
+      }
+    } catch (err) {
+      console.log(err)
+      res.json({ error: 1, msg: 'Server error!' })
+    }
+  } else {
+    res.json({ error: 1, msg: 'Session cookie not found' })
   }
-
-  res.json(test)
 })
 
-// TODO: Add to users' live collection
+/**
+ * Authorizes user then adds unicorn to their collection.
+ */
 app.post('/capture-corn', async (req, res) => {
-  try {
-    const upRes = await hirable.userAddCorn(req.body)
-    res.json({ msg: 'Success!' })
-  } catch (err) {
-    console.log(err)
-    res.json({ error: 1, msg: 'Server error!' })
+  let cookie = req.get('Cookie')
+  if (cookie != undefined) {
+    let sessId = cookie.slice(cookie.indexOf('=') + 1)
+    try {
+      const sessRes = await mCcEvents.api.getUserSession(sessId)
+      if (sessRes.rows.length > 0) {
+        await hirable.userAddCorn(sessRes.rows[0].uid, req.body.src_url)
+        res.json({ msg: 'Corn added' })
+      } else {
+        res.json({ error: 1, msg: 'Your session has ended, please log-in.' })
+      }
+    } catch (err) {
+      console.log(err)
+      res.json({ error: 1, msg: 'Server error!' })
+    }
+  } else {
+    res.json({ error: 1, msg: 'Session cookie not found' })
   }
 })
 

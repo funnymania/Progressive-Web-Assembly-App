@@ -43,8 +43,8 @@ export default {
     })
       .then(res => res.json())
       .then(resJ => {
-        this.aliveCorns = resJ.aliveCorns;
-        this.deadCorns = resJ.deadCorns;
+        this.aliveCorns = resJ.actives;
+        this.deadCorns = resJ.inactives;
       })
       .catch(err => console.log(err));
   },
