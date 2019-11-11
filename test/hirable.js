@@ -213,6 +213,80 @@ const testPublic = () => {
   })
 }
 
+// TODO: Finish this.
+const testUser = async () => {
+  const ghostsToken = uuidv4()
+  let genUUID = uuidv4()
+
+  describe('General User', function () {
+    before(async () => {
+      // Clear relevant tables.
+      try {
+        await pgClient.query('DELETE FROM cards')
+        await pgClient.query('DELETE FROM official_rights')
+        await pgClient.query('DELETE FROM official_orgs')
+        await pgClient.query('DELETE FROM sup_orgs')
+        await pgClient.query('DELETE FROM hirable')
+      } catch (err) {
+        console.log(err)
+      }
+
+      // Create super user
+      try {
+        await pgClient.query(`INSERT INTO official_orgs VALUES ('${ghostsToken}', 0)`)
+        await pgClient.query(`INSERT INTO sup_orgs VALUES (0, 'Ghosts')`)
+        await pgClient.query(`INSERT INTO official_rights VALUES ('${ghostsToken}', TRUE, TRUE)`)
+      } catch (err) {
+        console.log(err)
+      }
+
+      // Add official org to test
+      try {
+        offOrg = await hirable.makeOfficial(1, 'Mozilla Corporation')
+      } catch (err) {
+        console.log(err)
+      }
+
+      // Add some cards
+      try {
+        await hirable.adminInsertCorn(ghostsToken, 2, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
+        await hirable.adminInsertCorn(ghostsToken, 1, 'https://mozilla.org', 'Seattle', 'Software Engineer')
+        await hirable.adminInsertCorn(ghostsToken, 1, 'https://mozilla.org', 'Seattle', 'Systems Engineer')
+      } catch (err) {
+        assert.fail(err)
+      }
+    })
+
+    after(async () => seedDB())
+
+    describe('Add a card with incorrect credentials', () => {
+      it('should return an error message', async () => {
+        try {
+          const insRes = await hirable.insertCorn(genUUID, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
+          assert.fail(insRes)
+        } catch (err) {
+          assert.ok(err)
+        }
+      })
+    })
+
+    describe('Add a card with correct credentials', () => {
+      it('should be present in users active_cards', async () => {
+        try {
+          const searchObj = { org_id: [1] }
+          const { rows } = await hirable.search(searchObj, 'cards')
+          assert.strictEqual(
+            Object.entries(searchObj).every(entry => entry[1].includes(rows[0][entry[0]])),
+            true
+          )
+        } catch (err) {
+          assert.fail(err)
+        }
+      })
+    })
+  })
+}
+
 async function seedDB() {
   const ghostsToken = uuidv4()
 
@@ -258,4 +332,5 @@ connect()
   .then(testRootUser())
   .then(testOfficialOrg())
   .then(testPublic())
+  .then(testUser())
   .then(seedDB())
