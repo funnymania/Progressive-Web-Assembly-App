@@ -26,6 +26,10 @@ const userAddCorn = async (cornFields) => {
   `)
 }
 
+const userGetActiveCards = async () => { }
+const userGetInactiveCards = async () => { }
+const inactivateCards = async () => { }
+
 const adminInsertCorn = async (apiToken, orgID, url, location, role, desc = '') => {
   // Authenticate...
   const { rows } = await pgClient.query({
