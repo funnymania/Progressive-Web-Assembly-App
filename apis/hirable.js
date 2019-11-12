@@ -18,34 +18,92 @@ const search = async (queryFields, entityName) => {
   return pgClient.query({ text, values })
 }
 
-// TODO: If user does not exist in hirable, create entry for them
-/**
-INSERT INTO hirable (card-histories, active, uid)
-VALUES ([], [], uid)
-ON CONFLICT (uid) DO UPDATE 
-  SET actives = excluded.column_1, 
- */
-const userAddCorn = async (uid, cornFields) => {
-  `INSERT INTO hirable `
-return pgClient.query(`UPDATE hirable 
-    SET active_cards = array_append(active_cards, ${JSON.stringify(cornFields)})
-    WHERE uid = ${uid}
-  `)
+const userAddCorn = async (uid, src_url) => {
+  const insert = {
+    active: [src_url],
+    inactive: [],
+  }
+
+  try {
+    const insRes = await pgClient.query({
+      text: `INSERT INTO hirable (cards, uid)
+      VALUES($1, $2) RETURNING *`,
+      values: [JSON.stringify(insert), uid]
+    })
+
+    if (insRes.rows[0].cards == null) {
+      const upRes = await pgClient.query({
+        text: `UPDATE hirable
+          SET cards = jsonb_set(cards, '{active,0}', '$1', TRUE)
+          WHERE $2`,
+        values: [src_url, uid]
+      })
+
+      return { msg: 'Success!' }
+    } else {
+      return { msg: 'Success!' }
+    }
+  } catch (err) {
+    return { err: 1, msg: 'API error!' }
+  }
 }
 
 const userGetActiveCards = async (uid) => {
-  return pgClient.query(`
-    SELECT active_cards 
+  const selRes = await pgClient.query(`
+    SELECT cards 
     FROM hirable
-    WHERE uid = ${uid}
+    WHERE uid = '${uid}'
   `)
+
+  if (selRes.rows[0].cards.active.length !== 0) {
+    let activeCards = selRes.rows[0].cards.active
+
+    let text = 'SELECT * from cards INNER JOIN sup_orgs USING(org_id) WHERE src_url IN ('
+    let cnt = 1
+    activeCards.forEach(key => {
+      text += `$${cnt},`
+    })
+
+    text = text.slice(0, -1) + ')'
+
+    const selRes2 = await pgClient.query({
+      text,
+      values: [...activeCards]
+    })
+
+    return selRes2.rows
+  } else {
+    return selRes.rows[0].cards.active
+  }
 }
+
 const userGetInactiveCards = async (uid) => {
-  return pgClient.query(`
-    SELECT card_histories
+  const selRes = await pgClient.query(`
+    SELECT cards 
     FROM hirable
-    WHERE uid = ${uid}
+    WHERE uid = '${uid}'
   `)
+
+  if (selRes.rows[0].cards.inactive.length !== 0) {
+    let inactiveCards = selRes.rows[0].cards.inactive
+
+    let text = 'SELECT * from cards WHERE src_url IN ('
+    let cnt = 1
+    inactiveCards.forEach(key => {
+      text += `$${cnt},`
+    })
+
+    text = text.slice(0, -1) + ')'
+
+    const selRes2 = await pgClient.query({
+      text,
+      values: [...inactiveCards]
+    })
+
+    return selRes2.rows
+  } else {
+    return selRes.rows[0].cards.inactive
+  }
 }
 
 const adminInsertCorn = async (apiToken, orgID, url, location, role, desc = '') => {
@@ -139,14 +197,14 @@ function pgEntitySelectAll(queryFields, entityName, join = {}) {
   let query = `SELECT * from ${entityName}`
   let values = []
   if (join.name !== undefined) {
-    query += ` INNER JOIN ${join.name} USING (${join.using}) \n`
+    query += ` INNER JOIN ${join.name} USING(${join.using}) \n`
   }
 
   query += ' where '
   let cnt = 1
   entries.forEach((entry) => {
     if (entry[1].length !== 0) {
-      query += `${entry[0]} IN (`
+      query += `${entry[0]} IN(`
       entry[1].forEach(value => {
         query += `$${cnt}, `
         values.push(value)

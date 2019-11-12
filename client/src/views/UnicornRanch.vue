@@ -6,7 +6,7 @@
       <div class="alive-entry" v-for="entry in aliveCorns" :key="entry.id">
         <div class="unicorn-imagery">
           <div class="display-cont">
-            <a :href="entry.url_posting" target="_blank">
+            <a :href="entry.src_url" target="_blank">
               <img class="cornIcon" :src="iconDisplay(entry)" />
             </a>
             <img class="cornHorn" src="../assets/unicornHorn.svg" />
@@ -43,8 +43,17 @@ export default {
     })
       .then(res => res.json())
       .then(resJ => {
-        this.aliveCorns = resJ.actives;
-        this.deadCorns = resJ.inactives;
+        resJ.active.forEach(el => {
+          let { org_name, ...theRest } = el;
+          theRest.name = org_name;
+          this.aliveCorns.push(theRest);
+        });
+
+        resJ.inactive.forEach(el => {
+          let { org_name, ...theRest } = el;
+          theRest.name = org_name;
+          this.deadCorns.push(theRest);
+        });
       })
       .catch(err => console.log(err));
   },

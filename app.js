@@ -77,12 +77,9 @@ app.get('/captured-cards', async (req, res) => {
     try {
       const sessRes = await mCcEvents.api.getUserSession(sessId)
       if (sessRes.rows.length > 0) {
-        const actives = await hirable.userGetActiveCards().rows[0].active_cards
-        const inactives = await hirable.userGetInactiveCards().rows[0].card_histories
-        res.json({
-          actives,
-          inactives,
-        })
+        const activeCards = await hirable.userGetActiveCards(sessRes.rows[0].uid)
+        const inactiveCards = await hirable.userGetInactiveCards(sessRes.rows[0].uid)
+        res.json({ active: activeCards, inactive: inactiveCards })
       } else {
         res.json({ error: 1, msg: 'Your session has ended, please log-in.' })
       }
