@@ -19,8 +19,15 @@ const search = async (queryFields, entityName) => {
 }
 
 // TODO: If user does not exist in hirable, create entry for them
+/**
+INSERT INTO hirable (card-histories, active, uid)
+VALUES ([], [], uid)
+ON CONFLICT (uid) DO UPDATE 
+  SET actives = excluded.column_1, 
+ */
 const userAddCorn = async (uid, cornFields) => {
-  return pgClient.query(`UPDATE hirable 
+  `INSERT INTO hirable `
+return pgClient.query(`UPDATE hirable 
     SET active_cards = array_append(active_cards, ${JSON.stringify(cornFields)})
     WHERE uid = ${uid}
   `)
