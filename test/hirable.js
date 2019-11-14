@@ -153,8 +153,6 @@ const testPublic = () => {
       }
     })
 
-    after(async () => seedDB())
-
     describe('Add a card with incorrect api_token', () => {
       it('should return an error message', async () => {
         try {
@@ -213,10 +211,9 @@ const testPublic = () => {
   })
 }
 
-// TODO: Finish this.
 const testUser = async () => {
   const ghostsToken = uuidv4()
-  let genUUID = uuidv4()
+  let userUUID = uuidv4()
 
   describe('General User', function () {
     before(async () => {
@@ -259,24 +256,14 @@ const testUser = async () => {
 
     after(async () => seedDB())
 
-    describe('Add a card with incorrect credentials', () => {
-      it('should return an error message', async () => {
+    describe('Card adding to user collection, and viewing', () => {
+      it('should be able to add a card, and view that card in collection', async () => {
         try {
-          const insRes = await hirable.insertCorn(genUUID, 'https://mozilla.org', 'San Francisco', 'Software Engineer')
-          assert.fail(insRes)
-        } catch (err) {
-          assert.ok(err)
-        }
-      })
-    })
-
-    describe('Add a card with correct credentials', () => {
-      it('should be present in users active_cards', async () => {
-        try {
-          const searchObj = { org_id: [1] }
-          const { rows } = await hirable.search(searchObj, 'cards')
+          const testURL = 'https://mozilla.org'
+          const insRes = await hirable.userAddCorn(userUUID, testURL)
+          const selRes = await hirable.userGetActiveCards(userUUID)
           assert.strictEqual(
-            Object.entries(searchObj).every(entry => entry[1].includes(rows[0][entry[0]])),
+            selRes.some(row => testURL === row.src_url),
             true
           )
         } catch (err) {
