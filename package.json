@@ -14,7 +14,7 @@
     "body-parser": "1.16.1",
     "express": "latest",
     "iltorb": "^2.4.3",
-    "nconf": "0.10.0",
+    "nconf": "0.11.4",
     "nodemailer": "latest",
     "nodemon": "latest",
     "pg": "latest",
