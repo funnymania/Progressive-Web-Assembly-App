@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "bcrypt": "latest",
-    "body-parser": "1.16.1",
+    "body-parser": "1.20.1",
     "express": "latest",
     "iltorb": "^2.4.3",
     "nconf": "0.10.0",
